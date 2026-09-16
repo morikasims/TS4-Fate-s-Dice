@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Колесо Фортуны — Симы</title>
+    <link rel="icon" type="image/png" href="dsf.png">
+    <link rel="apple-touch-icon" href="dsf.png">
+    
+    <style>
+        :root {
+            --bg-color: #f6f0ea;
+            --container-bg: #ffffff;
+            --text-color: #4a403a;
+            --accent-color: #d48375;
+            --accent-hover: #bc6d60;
+            --border-color: #e3d5cb;
+            --panel-bg: #fdf8f5;
+            --shadow: 0 12px 35px rgba(107, 93, 85, 0.1);
+            --author-bg: #ffffff;
+            --author-border: #e3d5cb;
+        }
+
+        body.theme-focus {
+            --bg-color: #f0f2f5;
+            --container-bg: #ffffff;
+            --text-color: #434857;
+            --accent-color: #8c82db;
+            --accent-hover: #7368c7;
+            --border-color: #d8dce6;
+            --panel-bg: #f7f8fc;
+            --shadow: 0 12px 35px rgba(115, 104, 199, 0.12);
+            --author-bg: #ffffff;
+            --author-border: #d8dce6;
+        }
+
+        body.theme-forest {
+            --bg-color: #f0f4f1;
+            --container-bg: #ffffff;
+            --text-color: #3b4640;
+            --accent-color: #729a83;
+            --accent-hover: #5d826d;
+            --border-color: #d2ded7;
+            --panel-bg: #f5f9f6;
+            --shadow: 0 12px 35px rgba(93, 130, 109, 0.1);
+            --author-bg: #ffffff;
+            --author-border: #d2ded7;
+        }
+
+        body.theme-dark {
+            --bg-color: #16181c;
+            --container-bg: #21242c;
+            --text-color: #e4e6eb;
+            --accent-color: #d68276;
+            --accent-hover: #bd695d;
+            --border-color: #323742;
+            --panel-bg: #282c35;
+            --shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            --author-bg: #21242c;
+            --author-border: #323742;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .author-badge {
+            position: fixed;
+            left: 25px;
+            bottom: 25px;
+            background: var(--author-bg);
+            border: 1px solid var(--author-border);
+            padding: 10px 16px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 50;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .author-badge:hover {
+            border-color: var(--accent-color);
+        }
+
+        .author-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #8c7b73;
+            font-weight: 700;
+        }
+
+        body.theme-dark .author-title {
+            color: #9e9590;
+        }
+
+        .author-link {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 850px) {
+            .author-badge {
+                position: static;
+                margin-top: 20px;
+                width: 100%;
+                max-width: 580px;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        .wrapper {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 30px 35px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            max-width: 580px;
+            width: 100%;
+            position: relative;
+        }
+
+        .settings-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .settings-btn:hover {
+            transform: rotate(30deg);
+        }
+
+        .settings-menu {
+            position: absolute;
+            top: 75px;
+            right: 25px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+            text-align: left;
+            width: 335px;
+            display: none;
+            z-index: 30;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .settings-menu.active {
+            display: block;
+        }
+
+        .settings-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #8c7b73;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+            margin-top: 14px;
+        }
+
+        body.theme-dark .settings-title {
+            color: #9e9590;
+        }
+
+        .settings-title:first-child {
+            margin-top: 0;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-label.sub-option {
+            margin-left: 18px;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .checkbox-label input {
+            accent-color: var(--accent-color);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .theme-select, .preset-select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--panel-bg);
+            color: var(--text-color);
+            font-size: 13px;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        .custom-event-input, .sim-input-field {
+            width: 100%;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--panel-bg);
+            color: var(--text-color);
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .custom-event-input {
+            resize: vertical;
+            min-height: 45px;
+        }
+
+        .add-event-btn, .preset-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 4px;
+        }
+
+        .add-event-btn:hover, .preset-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .preset-delete-btn {
+            background: transparent;
+            color: #b89c94;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 4px;
+        }
+
+        .preset-delete-btn:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .preset-file-actions {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .preset-file-btn {
+            flex: 1;
+            background: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .preset-file-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .custom-events-manage-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 140px;
+            overflow-y: auto;
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+
+        .custom-event-manage-item {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .custom-event-manage-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex-grow: 1;
+        }
+
+        .custom-event-delete-single {
+            background: none;
+            border: none;
+            color: #b89c94;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+
+        .custom-event-delete-single:hover {
+            color: var(--accent-color);
+        }
+
+        .site-logo {
+            width: 54px;
+            height: 54px;
+            object-fit: contain;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
+        }
+
+        h1 {
+            font-size: 23px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #8c7b73;
+            margin-bottom: 20px;
+        }
+
+        body.theme-dark .subtitle {
+            color: #9e9590;
+        }
+
+        .family-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .family-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .family-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #8c7b73;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        body.theme-dark .family-title {
+            color: #9e9590;
+        }
+
+        .random-sim-btn {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-color);
+            cursor: pointer;
+        }
+
+        .random-sim-btn:hover {
+            border-color: var(--accent-color);
+        }
+
+        .sims-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .sim-card {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .sim-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .sim-card.disabled {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+
+        .sim-delete-btn {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            background: none;
+            border: none;
+            font-size: 10px;
+            color: #b89c94;
+            cursor: pointer;
+        }
+
+        .sim-delete-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .sim-avatar {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .sim-name {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .sim-action-btn {
+            background: var(--bg-color);
+            border: none;
+            border-radius: 6px;
+            padding: 3px 4px;
+            font-size: 9px;
+            color: var(--text-color);
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        .sim-action-btn:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .counter-box {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .counter-value {
+            font-weight: 700;
+            color: var(--accent-color);
+            font-size: 15px;
+        }
+
+        .reset-counter-btn {
+            background: none;
+            border: none;
+            color: #8c7b73;
+            font-size: 11px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        body.theme-dark .reset-counter-btn {
+            color: #9e9590;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 20px auto;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 24px solid var(--accent-color);
+            z-index: 20;
+            filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15));
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 7px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.15, 0.8, 0.15, 1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            background: conic-gradient(
+                #d48375 0deg 45deg,
+                #e0a96d 45deg 90deg,
+                #e3c37d 90deg 135deg,
+                #7b9e89 135deg 180deg,
+                #6b8cae 180deg 225deg,
+                #9b7bb4 225deg 270deg,
+                #c4769c 270deg 315deg,
+                #d99b82 315deg 360deg
+            );
+        }
+
+        .wheel-slice-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .slice-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+            margin-left: -20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transform-origin: center center;
+        }
+
+        .slice-label:nth-child(1) { transform: rotate(22.5deg) translate(0, -88px) rotate(-22.5deg); }
+        .slice-label:nth-child(2) { transform: rotate(67.5deg) translate(0, -88px) rotate(-67.5deg); }
+        .slice-label:nth-child(3) { transform: rotate(112.5deg) translate(0, -88px) rotate(-112.5deg); }
+        .slice-label:nth-child(4) { transform: rotate(157.5deg) translate(0, -88px) rotate(-157.5deg); }
+        .slice-label:nth-child(5) { transform: rotate(202.5deg) translate(0, -88px) rotate(-202.5deg); }
+        .slice-label:nth-child(6) { transform: rotate(247.5deg) translate(0, -88px) rotate(-247.5deg); }
+        .slice-label:nth-child(7) { transform: rotate(292.5deg) translate(0, -88px) rotate(-292.5deg); }
+        .slice-label:nth-child(8) { transform: rotate(337.5deg) translate(0, -88px) rotate(-337.5deg); }
+
+        .spin-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 13px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .spin-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .spin-btn:disabled {
+            background-color: #d0c5bf;
+            cursor: not-allowed;
+        }
+
+        .history-box {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px 16px;
+            text-align: left;
+        }
+
+        .history-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #8c7b73;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        body.theme-dark .history-title {
+            color: #9e9590;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 110px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .history-tag {
+            font-weight: 700;
+            color: var(--accent-color);
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(74, 64, 58, 0.45);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            border-radius: 24px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #8c7b73;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        body.theme-dark .modal-title {
+            color: #9e9590;
+        }
+
+        .modal-text {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal-btn {
+            background-color: var(--text-color);
+            color: var(--container-bg);
+            border: none;
+            border-radius: 12px;
+            padding: 11px 26px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="https://t.me/morikasims" target="_blank" class="author-badge">
+        <span class="author-title">Автор колеса</span>
+        <span class="author-link">telegram: morikasims</span>
+    </a>
+
+    <div class="wrapper">
+        <div class="settings-btn" onclick="toggleSettings(event)">⚙️</div>
+
+        <div class="settings-menu" id="settingsMenu" onclick="event.stopPropagation()">
+            <div class="settings-title">Внешний вид</div>
+            <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
+                <option value="cozy">🍂 Осенняя / Кофейная</option>
+                <option value="focus">💿 Фокус</option>
+                <option value="forest">🌿 Лесная пастель</option>
+                <option value="dark">🌑 Черная (ночная)</option>
+            </select>
+
+            <div class="settings-title">Пресеты семей</div>
+            <select class="preset-select" id="presetSelect" onchange="loadPreset(this.value)">
+                <option value="" disabled selected>Выберите сохраненную семью...</option>
+            </select>
+            <input type="text" class="sim-input-field" id="presetNameInput" placeholder="Название семьи (например: Морган)...">
+            <button class="preset-btn" onclick="saveCurrentPreset()">Сохранить текущую семью</button>
+            <button class="preset-delete-btn" onclick="deleteCurrentPreset()">Удалить этот пресет</button>
+            
+            <div class="preset-file-actions">
+                <button class="preset-file-btn" onclick="exportFamilyFile()">📥 Скачать файл</button>
+                <button class="preset-file-btn" onclick="document.getElementById('importFile').click()">📤 Загрузить</button>
+                <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importFamilyFile(event)">
+            </div>
+
+            <div class="settings-title">Режимы событий</div>
+            <label class="checkbox-label">
+                <input type="checkbox" id="enableDefaultEvents" checked onchange="toggleDefaultEventsCheckbox(this)"> 📜 Дефолтные события (база)
+            </label>
+            <label class="checkbox-label sub-option">
+                <input type="checkbox" id="modeCozy" checked onchange="updateEventsList()"> 🌱 Уютные и творческие
+            </label>
+            <label class="checkbox-label sub-option">
+                <input type="checkbox" id="modeChaos" checked onchange="updateEventsList()"> 🔥 Драма и форс-мажоры
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="enableCustomEvents" checked onchange="toggleCustomEventsCheckbox(this)"> Ваши кастомные события
+            </label>
+
+            <div class="settings-title">Добавить персонажа</div>
+            <input type="text" class="sim-input-field" id="newSimName" placeholder="Имя сима...">
+            <input type="text" class="sim-input-field" id="newSimAvatar" placeholder="Эмодзи (например: 🌸)" maxlength="2">
+            <button class="add-event-btn" onclick="addCustomSim()">Добавить в семью</button>
+
+            <div class="settings-title">+ Свое событие</div>
+            <textarea class="custom-event-input" id="customEventText" placeholder="Введите текст события..."></textarea>
+            <button class="add-event-btn" onclick="addCustomEvent()">Добавить в колесо</button>
+
+            <div class="settings-title">Управление кастомными</div>
+            <div class="custom-events-manage-list" id="customEventsManageList"></div>
+        </div>
+
+        <img src="dsf.png" alt="Иконка кубика" class="site-logo">
+        
+        <h1>Династийный генератор</h1>
+        <p class="subtitle">Разбавляй симсовскую рутину одним кликом</p>
+
+        <div class="family-panel">
+            <div class="family-header-row">
+                <div class="family-title" id="familyTitleDisplay">Список персонажей</div>
+                <button class="random-sim-btn" onclick="pickRandomSimAndRoll()">🎲 Случайный сим</button>
+            </div>
+            <div class="sims-grid" id="simsGrid"></div>
+        </div>
+
+        <div class="counter-box">
+            <span>Всего круток событий: <strong class="counter-value" id="daysCounter">0</strong></span>
+            <button class="reset-counter-btn" onclick="resetCounter()">сбросить</button>
+        </div>
+
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel">
+                <div class="wheel-slice-text">
+                    <div class="slice-label">🥞</div>
+                    <div class="slice-label">📸</div>
+                    <div class="slice-label">☕</div>
+                    <div class="slice-label">🎨</div>
+                    <div class="slice-label">🎉</div>
+                    <div class="slice-label">💌</div>
+                    <div class="slice-label">🌧️</div>
+                    <div class="slice-label">⚡</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="spin-btn" id="spinBtn" onclick="spinWheel()">Крутить колесо</button>
+
+        <div class="history-box">
+            <div class="history-title">
+                <span>Архив событий</span>
+                <span style="cursor: pointer; text-decoration: underline; font-weight: normal;" onclick="clearHistory()">очистить</span>
+            </div>
+            <div class="history-list" id="historyList">
+                <div style="font-size: 11px; color: #8c7b73; text-align: center; padding: 10px;">Здесь будут появляться выпавшие события</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalCategory">Выпало событие:</div>
+            <div class="modal-text" id="resultText">Текст события</div>
+            <button class="modal-btn" onclick="closeModal()">Интересно...</button>
+        </div>
+    </div>
+
+    <script>
+        let familyMembers = JSON.parse(localStorage.getItem('sims_family_members')) || [];
+        let currentFamilyName = "Список персонажей";
+        localStorage.removeItem('sims_current_family_name');
+        let savedPresets = JSON.parse(localStorage.getItem('sims_saved_presets')) || {};
+
+        const defaultCozy = [
+            "✨ Творческий порыв: Один из персонажей полностью уходит в искусство на весь день. Домашние поддерживают его и не отвлекают.",
+            "🥐 Аромат выпечки: Дом наполняется запахом корицы. Все собираются на кухне, чтобы вместе приготовить сложный десерт или домашний пирог.",
+            "🌳 Прогулка: Время сменить обстановку и отправиться всей семьей в парк на пикник, прогулку и семейную фотосессию.",
+            "🛋️ Уютная перестановка: Обновляем эстетику гнездышка! Выберите одну комнату или уголок и переделайте интерьер, добавив гирлянды и т.д.",
+            "📽️ Киномарафон: Весь вечер семья проводит в обнимку на диване за просмотром любимых фильмов с кучей вредных снэков и попкорна.",
+            "🕯️ Вечер без электричества: В доме выключают свет. Персонажи зажигают свечи, заваривают чай и делятся сокровенными воспоминаниями или страшными историями.",
+            "🌿 Домашний оранжерейный день: Семья ухаживает за растениями, обустраивает задний двор или вместе занимается садом.",
+            "💌 Письмо в будущее: Домочадцы записывают свои мечты, делают памятные снимки или прячут «капсулу времени», которую договариваются открыть спустя сезон.",
+            "🥞 Ленивое утро: Никто никуда не спешит. Взрослые и дети готовят поздний завтрак в пижамах и весь день наслаждаются неторопливым домашним ритмом.",
+            "💆‍♀️ Спа-день и полный релакс: Сегодня день заботы о себе и никакого труда. Возьмите отгул или притворитесь больными! Зажгите свечи, нанесите маску для лица, надушитесь любимым парфюмом или отправляйтесь отрываться в спа-салон.",
+            "🌲 Побег в Гранит Фоллз: Какая бы ни была погода за окном, пора отправиться в четырехдневный отпуск среди дикой природы, чтобы дышать свежим воздухом и отдыхать от суеты.",
+            "🏕️ Кемпинг с близкими: Время собирать рюкзаки! Берите палатки, вкусную еду, напитки и гитару или колонку. Отправляйтесь с семьей или друзьями на природу, чтобы провести незабываемый вечер у костра.",
+            "📖 Личный дневник: Лучшая терапия для души! Сим заводит свой дневник и всю неделю перед сном записывает туда мысли, переживания и главные события дня.",
+            "🎨 Новое хобби: Время выходить из зоны комфорта! Сим выбирает занятие, которым никогда раньше не увлекался, и пробует освоить новый навык."
+        ];
+
+        const defaultChaos = [
+            "✉️ Анонимная записка: Кто-то находит загадочное послание с намеком на секрет одного из домочадцев. Весь день в доме висит напряжение и подозрения. Что в той записке?",
+            "🚪 Таинственный побег: Один из персонажей не справляется с давлением и ночью тихо ускользает из дома, отключив телефон и оставив пустую комнату.",
+            "👤 Вспышка из прошлого: На пороге появляется старый знакомый или соперник, вызывая приступ ревности и громкую личную сцену посреди гостиной.",
+            "🍷 Слишком много правды: Обычный прием пищи выходит из-под контроля, когда кто-то случайно ляпает чужую тайну прямо на глазах у всех гостей.",
+            "🗝️ Забытый предмет: Кто-то из домочадцев находит чужую личную вещь (запертый дневник, странный чек или чужую одежду) и весь день пытается выяснить, кому она принадлежит.",
+            "🚪 Незваный визитер: На пороге без предупреждения появляется назойливый знакомый или сосед, который отказывается уходить и путает все планы семьи.",
+            "🗣️ Городские сплетни: Кто-то из персонажей возвращается домой сам не свой, услышав от соседей неприятный или шокирующий слух о своей семье.",
+            "💥 Сорванный план: Важная поездка, долгожданное свидание или рабочая встреча рушатся в последний момент.",
+            "🐣 Предоставлен самому себе: В течение 3 дней младший сим в семье живет в режиме полной свободы. Игроку запрещено напрямую управлять им — можно только «побуждать» к действиям. Посмотрим, как раскроется его характер!",
+            "💳 Потерянная карта: Кто-то из домочадцев роняет телефон или банковскую карту, и со счета списывается 15% семейного бюджета. Кажется, кому-то стоит внимательнее следить за своими карманами...",
+            "🔥 Ночь у костра и бессонница: Семья или друзья жарят еду на костре и травят байки. Но после страшной истории сим настолько напуган, что не может уснуть — играть придется до полного истощения, пока он не отключится сам."
+        ];
+
+        let customEvents = JSON.parse(localStorage.getItem('sims_custom_events')) || [];
+        let enableDefaultEvents = localStorage.getItem('sims_enable_default_events') !== 'false';
+        document.getElementById('enableDefaultEvents').checked = enableDefaultEvents;
+
+        let enableCustomEvents = localStorage.getItem('sims_enable_custom_events') !== 'false';
+        document.getElementById('enableCustomEvents').checked = enableCustomEvents;
+
+        let historyLog = JSON.parse(localStorage.getItem('sims_history_log')) || [];
+        let activeEvents = [];
+
+        const savedTheme = localStorage.getItem('sims_theme') || 'cozy';
+        document.getElementById('themeSelect').value = savedTheme;
+        changeTheme(savedTheme, false);
+
+        function changeTheme(theme, save = true) {
+            document.body.className = '';
+            if (theme === 'focus') document.body.classList.add('theme-focus');
+            if (theme === 'forest') document.body.classList.add('theme-forest');
+            if (theme === 'dark') document.body.classList.add('theme-dark');
+            if (save) localStorage.setItem('sims_theme', theme);
+        }
+
+        function updatePresetDropdown() {
+            const select = document.getElementById('presetSelect');
+            select.innerHTML = '<option value="" disabled selected>Выберите сохраненную семью...</option>';
+            for (let name in savedPresets) {
+                let opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                select.appendChild(opt);
+            }
+        }
+        updatePresetDropdown();
+
+        function saveCurrentPreset() {
+            const nameInput = document.getElementById('presetNameInput');
+            const name = nameInput.value.trim() || currentFamilyName;
+            if (familyMembers.length === 0) {
+                alert("Список пуст, нечего сохранять!");
+                return;
+            }
+            savedPresets[name] = {
+                members: JSON.parse(JSON.stringify(familyMembers)),
+                customEvents: JSON.parse(JSON.stringify(customEvents))
+            };
+            localStorage.setItem('sims_saved_presets', JSON.stringify(savedPresets));
+            updatePresetDropdown();
+            document.getElementById('presetSelect').value = name;
+            nameInput.value = '';
+            alert(`Семья "${name}" успешно сохранена в пресеты!`);
+        }
+
+        function loadPreset(name) {
+            if (savedPresets[name]) {
+                const data = savedPresets[name];
+                familyMembers = JSON.parse(JSON.stringify(data.members || data));
+                if (data.customEvents) {
+                    customEvents = JSON.parse(JSON.stringify(data.customEvents));
+                    localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+                    renderCustomEventsManager();
+                    updateEventsList();
+                }
+                saveAndRenderFamily();
+            }
+        }
+
+        function deleteCurrentPreset() {
+            const select = document.getElementById('presetSelect');
+            const name = select.value;
+            if (!name) {
+                alert("Выберите пресет из списка, который хотите удалить.");
+                return;
+            }
+            if (confirm(`Удалить пресет "${name}"?`)) {
+                delete savedPresets[name];
+                localStorage.setItem('sims_saved_presets', JSON.stringify(savedPresets));
+                updatePresetDropdown();
+                alert("Пресет удален.");
+            }
+        }
+
+        function exportFamilyFile() {
+            const dataToExport = {
+                familyName: currentFamilyName,
+                familyMembers: familyMembers,
+                customEvents: customEvents
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataToExport, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `sims_family_preset.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importFamilyFile(event) {
+            const fileReader = new FileReader();
+            if (event.target.files[0]) {
+                fileReader.readAsText(event.target.files[0], "UTF-8");
+                fileReader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        if (importedData.familyMembers) {
+                            familyMembers = importedData.familyMembers;
+                            if (importedData.customEvents) {
+                                customEvents = importedData.customEvents;
+                                localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+                                renderCustomEventsManager();
+                                updateEventsList();
+                            }
+                            saveAndRenderFamily();
+                            alert("Семья успешно загружена с компьютера!");
+                        } else {
+                            alert("Неверный формат файла.");
+                        }
+                    } catch (error) {
+                        alert("Ошибка при чтении файла JSON.");
+                    }
+                };
+            }
+        }
+
+        function toggleDefaultEventsCheckbox(checkbox) {
+            enableDefaultEvents = checkbox.checked;
+            localStorage.setItem('sims_enable_default_events', enableDefaultEvents);
+            updateEventsList();
+        }
+
+        function toggleCustomEventsCheckbox(checkbox) {
+            enableCustomEvents = checkbox.checked;
+            localStorage.setItem('sims_enable_custom_events', enableCustomEvents);
+            updateEventsList();
+        }
+
+        function renderCustomEventsManager() {
+            const container = document.getElementById('customEventsManageList');
+            container.innerHTML = '';
+            if (customEvents.length === 0) {
+                container.innerHTML = `<div style="font-size: 10px; color: var(--text-color); opacity: 0.6; text-align: center; padding: 4px;">Нет кастомных событий</div>`;
+                return;
+            }
+            customEvents.forEach((evText, index) => {
+                const item = document.createElement('div');
+                item.className = 'custom-event-manage-item';
+                const cleanText = evText.replace(/^⭐ Кастомное событие:\s*/, '');
+                item.innerHTML = `
+                    <span class="custom-event-manage-text" title="${cleanText}">${cleanText}</span>
+                    <button class="custom-event-delete-single" onclick="deleteCustomEvent(${index})" title="Удалить">✕</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function deleteCustomEvent(index) {
+            customEvents.splice(index, 1);
+            localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+            updateEventsList();
+            renderCustomEventsManager();
+        }
+
+        function updateEventsList() {
+            const defaultOn = document.getElementById('enableDefaultEvents').checked;
+            const cozyOn = document.getElementById('modeCozy').checked;
+            const chaosOn = document.getElementById('modeChaos').checked;
+            activeEvents = [];
+            if (defaultOn) {
+                if (cozyOn) activeEvents.push(...defaultCozy);
+                if (chaosOn) activeEvents.push(...defaultChaos);
+            }
+            if (enableCustomEvents) {
+                activeEvents.push(...customEvents);
+            }
+            if (activeEvents.length === 0) {
+                activeEvents.push("✨ Внимание: Все события отключены. Включите дефолтные события или добавьте свои кастомные в настройках!");
+            }
+        }
+        updateEventsList();
+        renderCustomEventsManager();
+
+        function addCustomEvent() {
+            const textInput = document.getElementById('customEventText');
+            const val = textInput.value.trim();
+            if (!val) return;
+            customEvents.push("⭐ Кастомное событие: " + val);
+            localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+            textInput.value = '';
+            updateEventsList();
+            renderCustomEventsManager();
+            alert("Событие успешно добавлено в колесо!");
+        }
+
+        function addCustomSim() {
+            const nameInput = document.getElementById('newSimName');
+            const avatarInput = document.getElementById('newSimAvatar');
+            const name = nameInput.value.trim();
+            const avatar = avatarInput.value.trim() || "👤";
+            if (!name) {
+                alert("Введите имя персонажа!");
+                return;
+            }
+            const newId = familyMembers.length > 0 ? Math.max(...familyMembers.map(s => s.id)) + 1 : 1;
+            familyMembers.push({ id: newId, name, avatar, active: true });
+            saveAndRenderFamily();
+            nameInput.value = '';
+            avatarInput.value = '';
+        }
+
+        function deleteSim(id, event) {
+            event.stopPropagation();
+            familyMembers = familyMembers.filter(s => s.id !== id);
+            saveAndRenderFamily();
+        }
+
+        function saveAndRenderFamily() {
+            localStorage.setItem('sims_family_members', JSON.stringify(familyMembers));
+            renderFamily();
+        }
+
+        const simsGrid = document.getElementById('simsGrid');
+        const familyTitleDisplay = document.getElementById('familyTitleDisplay');
+
+        function renderFamily() {
+            familyTitleDisplay.textContent = currentFamilyName;
+            simsGrid.innerHTML = '';
+            if (familyMembers.length === 0) {
+                simsGrid.innerHTML = `<div style="grid-column: span 4; font-size: 12px; color: var(--text-color); opacity: 0.7; text-align: center; padding: 10px;">Семья пока пуста. Добавьте персонажей через настройки (⚙️)!</div>`;
+                return;
+            }
+            familyMembers.forEach(sim => {
+                const card = document.createElement('div');
+                card.className = `sim-card ${sim.active ? '' : 'disabled'}`;
+                card.innerHTML = `
+                    <button class="sim-delete-btn" onclick="deleteSim(${sim.id}, event)" title="Удалить">✕</button>
+                    <div class="sim-avatar">${sim.avatar}</div>
+                    <div class="sim-name">${sim.name}</div>
+                    <button class="sim-action-btn" onclick="event.stopPropagation(); triggerSimRoll(${sim.id})">🎲 Бросок</button>
+                `;
+                card.onclick = () => {
+                    sim.active = !sim.active;
+                    saveAndRenderFamily();
+                };
+                simsGrid.appendChild(card);
+            });
+        }
+        renderFamily();
+
+        function toggleSettings(event) {
+            event.stopPropagation();
+            document.getElementById('settingsMenu').classList.toggle('active');
+        }
+
+        window.onclick = function() {
+            document.getElementById('settingsMenu').classList.remove('active');
+        }
+
+        const daysCounterEl = document.getElementById('daysCounter');
+        let daysWithoutChaos = localStorage.getItem('sims_days_counter') || 0;
+        daysCounterEl.textContent = daysWithoutChaos;
+
+        const wheel = document.getElementById('wheel');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultModal = document.getElementById('resultModal');
+        const resultText = document.getElementById('resultText');
+        const modalCategory = document.getElementById('modalCategory');
+
+        let currentRotation = 0;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSimsTickSound() {
+            if (!audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.03);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.03);
+            } catch(e) {}
+        }
+
+        function playSimsWinSound() {
+            if (!audioCtx) return;
+            try {
+                let now = audioCtx.currentTime;
+                let notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, index) => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + index * 0.06);
+                    gain.gain.setValueAtTime(0.12, now + index * 0.06);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.06 + 0.4);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + index * 0.06);
+                    osc.stop(now + index * 0.06 + 0.4);
+                });
+            } catch(e) {}
+        }
+
+        function addToHistory(tag, text) {
+            historyLog.unshift({ tag, text });
+            if (historyLog.length > 5) historyLog.pop();
+            localStorage.setItem('sims_history_log', JSON.stringify(historyLog));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const listEl = document.getElementById('historyList');
+            if (historyLog.length === 0) {
+                listEl.innerHTML = `<div style="font-size: 11px; color: var(--text-color); opacity: 0.7; text-align: center; padding: 10px;">Здесь будут появляться выпавшие события</div>`;
+                return;
+            }
+            listEl.innerHTML = '';
+            historyLog.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `<span class="history-tag">${item.tag}</span><span>${item.text}</span>`;
+                listEl.appendChild(div);
+            });
+        }
+        renderHistory();
+
+        function clearHistory() {
+            historyLog = [];
+            localStorage.removeItem('sims_history_log');
+            renderHistory();
+        }
+
+        function spinWheel() {
+            initAudio();
+            spinBtn.disabled = true;
+
+            const totalSectors = 8;
+            const randomSlice = Math.floor(Math.random() * totalSectors);
+            const degreesPerSlice = 360 / totalSectors;
+            const extraSpins = 360 * 6;
+
+            const sliceCenterAngle = (randomSlice * degreesPerSlice) + (degreesPerSlice / 2);
+            const targetRotation = extraSpins + (360 - sliceCenterAngle);
+
+            currentRotation += targetRotation - (currentRotation % 360);
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            let tickInterval = setInterval(() => {
+                playSimsTickSound();
+            }, 220);
+
+            setTimeout(() => {
+                clearInterval(tickInterval);
+                playSimsWinSound();
+
+                daysWithoutChaos++;
+                localStorage.setItem('sims_days_counter', daysWithoutChaos);
+                daysCounterEl.textContent = daysWithoutChaos;
+
+                const randomEvent = activeEvents[Math.floor(Math.random() * activeEvents.length)];
+                const activeSims = familyMembers.filter(s => s.active);
+                const simsNamesText = activeSims.length > 0 && activeSims.length < familyMembers.length 
+                    ? ` <span style="font-size: 12px; opacity: 0.8; display: block; margin-top: 6px;">(Участвуют: ${activeSims.map(s => s.name).join(', ')})</span>` 
+                    : "";
+
+                modalCategory.textContent = "✨ Общее событие для семьи:";
+                resultText.innerHTML = randomEvent + simsNamesText;
+                resultModal.classList.add('active');
+                spinBtn.disabled = false;
+
+                addToHistory("Общее событие", randomEvent);
+            }, 4000);
+        }
+
+        function triggerSimRoll(simId) {
+            initAudio();
+            playSimsWinSound();
+            const sim = familyMembers.find(s => s.id === simId);
+            if (!sim) return;
+
+            const randomEvent = activeEvents[Math.floor(Math.random() * activeEvents.length)];
+
+            modalCategory.textContent = `🎯 Персональный жребий: ${sim.avatar} ${sim.name}`;
+            resultText.innerHTML = randomEvent;
+            resultModal.classList.add('active');
+
+            addToHistory(`${sim.name} (${sim.avatar})`, randomEvent);
+        }
+
+        function pickRandomSimAndRoll() {
+            const available = familyMembers.filter(s => s.active);
+            if (available.length === 0) {
+                alert("Нет активных симов! Добавьте или включите хотя бы одного персонажа.");
+                return;
+            }
+            const randomSim = available[Math.floor(Math.random() * available.length)];
+            triggerSimRoll(randomSim.id);
+        }
+
+        function closeModal() {
+            resultModal.classList.remove('active');
+        }
+
+        function resetCounter() {
+            daysWithoutChaos = 0;
+            localStorage.setItem('sims_days_counter', 0);
+            daysCounterEl.textContent = 0;
+        }
+    </script>
+</body>
+</html>
