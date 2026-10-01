@@ -1,0 +1,4058 @@
+TYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fate's Dice — Симы</title>
+    <link rel="icon" type="image/png" href="dsf.png">
+    <link rel="apple-touch-icon" href="dsf.png">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-80F6YZDDL7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-80F6YZDDL7');
+    </script>
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "yokrxe1d9q");
+    </script>
+
+
+    <style>
+        @font-face {
+            font-family: 'Mintely Personal Use Only';
+            src: url('Mintely Personal Use Only.woff2') format('woff2'),
+                 url('Mintely Personal Use Only.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #f6f0ea;
+            --container-bg: #ffffff;
+            --text-color: #4a403a;
+            --muted: #6e5f58;
+            --accent-color: #d48375;
+            --accent-hover: #bc6d60;
+            --border-color: #e3d5cb;
+            --panel-bg: #fdf8f5;
+            --shadow: 0 12px 35px rgba(107, 93, 85, 0.1);
+            --author-bg: #ffffff;
+            --author-border: #e3d5cb;
+            --theme-transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+
+            --chevron-stroke: %236e5f58;
+            --chevron-down: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%236e5f58%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M1%201.5L6%206.5L11%201.5%22%2F%3E%3C%2Fsvg%3E");
+
+            --scrollbar-size: 6px;
+        }
+
+        body.theme-focus {
+            --bg-color: #f0f2f5;
+            --container-bg: #ffffff;
+            --text-color: #434857;
+            --muted: #5c6273;
+            --accent-color: #8c82db;
+            --accent-hover: #7368c7;
+            --border-color: #d8dce6;
+            --panel-bg: #f7f8fc;
+            --shadow: 0 12px 35px rgba(115, 104, 199, 0.12);
+            --author-bg: #ffffff;
+            --author-border: #d8dce6;
+        }
+
+        body.theme-forest {
+            --bg-color: #f0f4f1;
+            --container-bg: #ffffff;
+            --text-color: #3b4640;
+            --muted: #55645c;
+            --accent-color: #729a83;
+            --accent-hover: #5d826d;
+            --border-color: #d2ded7;
+            --panel-bg: #f5f9f6;
+            --shadow: 0 12px 35px rgba(93, 130, 109, 0.1);
+            --author-bg: #ffffff;
+            --author-border: #d2ded7;
+        }
+
+        body.theme-dark {
+            --bg-color: #16181c;
+            --container-bg: #21242c;
+            --text-color: #e4e6eb;
+            --muted: #b5ada8;
+            --accent-color: #d68276;
+            --accent-hover: #bd695d;
+            --border-color: #323742;
+            --panel-bg: #282c35;
+            --shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            --author-bg: #21242c;
+            --author-border: #323742;
+            --chevron-stroke: %23b5ada8;
+            --chevron-down: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20fill%3D%22none%22%20stroke%3D%22%23b5ada8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M1%201.5L6%206.5L11%201.5%22%2F%3E%3C%2Fsvg%3E");
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            transition: var(--theme-transition);
+        }
+
+        .wrapper,
+        .sim-card,
+        .top-icon-btn,
+        .history-item,
+        .family-panel,
+        .counter-box,
+        .history-box,
+        .settings-menu,
+        .modal-content,
+        .author-badge,
+        button,
+        input,
+        select,
+        textarea {
+            transition: var(--theme-transition);
+        }
+
+        :focus { outline: none; }
+        :focus-visible {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
+            border-radius: 6px;
+        }
+
+        .visually-hidden {
+            position: absolute !important;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0,0,0,0);
+            white-space: nowrap; border: 0;
+        }
+
+        .unified-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+        .unified-scroll::-webkit-scrollbar { width: var(--scrollbar-size); height: var(--scrollbar-size); }
+        .unified-scroll::-webkit-scrollbar-track { background: transparent; }
+        .unified-scroll::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        .unified-scroll::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+        .wrapper {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 30px 35px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            max-width: 580px;
+            width: 100%;
+            margin: auto;
+            position: relative;
+        }
+
+        .author-badge {
+            position: fixed;
+            left: 25px;
+            bottom: 25px;
+            background: var(--author-bg);
+            border: 1px solid var(--author-border);
+            padding: 10px 16px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 50;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .author-badge:hover { border-color: var(--accent-color); background: var(--panel-bg); }
+
+        .author-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .author-link { font-weight: 600; color: var(--accent-color); }
+
+        @media (max-width: 850px) {
+            .author-badge {
+                position: static;
+                margin-top: 20px;
+                width: 100%;
+                max-width: 580px;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        .top-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .top-icon-btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            user-select: none;
+            color: var(--text-color);
+            line-height: 1;
+        }
+
+        .top-icon-btn:hover { border-color: var(--accent-color); transform: scale(1.05); }
+        .top-icon-btn:active { transform: scale(0.95); }
+
+        .settings-menu {
+            top: 64px;
+            right: 12px;
+            width: min(370px, calc(100vw - 32px));
+            max-height: min(640px, calc(100dvh - 32px));
+            padding: 12px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            position: absolute;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            text-align: left;
+            display: none;
+            z-index: 30;
+        }
+
+        @media (max-width: 420px) {
+            .settings-menu {
+                top: 56px;
+                right: 8px;
+                width: calc(100vw - 16px);
+                max-height: calc(100dvh - 72px);
+            }
+        }
+
+        .settings-menu.active { display: block; }
+
+        .settings-section {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--panel-bg);
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        .settings-section:last-child { margin-bottom: 0; }
+
+        .settings-section > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 12px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            user-select: none;
+            background: var(--container-bg);
+        }
+
+        .settings-section > summary::-webkit-details-marker { display: none; }
+        .settings-section > summary::marker { display: none; content: ""; }
+
+        .settings-section > summary::after {
+            content: "";
+            width: 12px;
+            height: 8px;
+            background-image: var(--chevron-down);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .settings-section[open] > summary::after { transform: rotate(180deg); }
+
+        .settings-section > summary:hover {
+            background: var(--bg-color);
+        }
+
+        .settings-section-body { padding: 12px 14px 14px; }
+        .settings-section .settings-title { margin-top: 12px; margin-bottom: 6px; }
+        .settings-section .settings-title:first-child { margin-top: 0; }
+
+        .settings-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+            margin-top: 14px;
+        }
+
+        .settings-title:first-child { margin-top: 0; }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-label.sub-option { margin-left: 18px; font-size: 12px; opacity: 0.9; }
+
+        .checkbox-label input {
+            accent-color: var(--accent-color);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .preset-select, .sim-input-field {
+            width: 100%;
+            padding: 9px 36px 9px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--container-bg);
+            color: var(--text-color);
+            font-size: 13px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: var(--chevron-down);
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px 8px;
+            font-family: inherit;
+        }
+
+        .sim-input-field[type="text"] {
+            background-image: none;
+            padding-right: 12px;
+            cursor: text;
+        }
+
+        .emoji-picker-wrap {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .emoji-input-btn {
+            width: 100%;
+            padding: 9px 36px 9px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--container-bg);
+            color: var(--text-color);
+            font-size: 13px;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 6px;
+            position: relative;
+            min-height: 38px;
+        }
+
+        .emoji-input-btn::after {
+            content: "";
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            width: 12px;
+            height: 8px;
+            margin-top: -4px;
+            background-image: var(--chevron-down);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            transition: transform 0.2s ease;
+        }
+
+        .emoji-input-btn.open::after { transform: rotate(180deg); }
+
+        .emoji-input-btn:hover { border-color: var(--accent-color); }
+
+        .emoji-input-btn .emoji-current {
+            font-size: 18px;
+            line-height: 1;
+            margin-left: 2px;
+        }
+
+        .emoji-input-btn .emoji-placeholder {
+            color: var(--muted);
+            opacity: 0.7;
+        }
+
+        .emoji-picker {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 8px;
+            z-index: 60;
+            display: none;
+            max-height: 340px;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        .emoji-picker.open { display: flex; }
+
+        .emoji-tabs-wrap {
+            position: relative;
+            flex-shrink: 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .emoji-tabs-wrap::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 6px;
+            width: 24px;
+            background: linear-gradient(to right, transparent, var(--container-bg));
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        .emoji-tabs {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 2px 24px 8px 2px;
+            scrollbar-width: none;
+            align-items: center;
+            height: 46px;
+            flex-shrink: 0;
+        }
+
+        .emoji-tabs::-webkit-scrollbar { display: none; }
+
+        .emoji-tab {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            cursor: pointer;
+            line-height: 1;
+            font-family: inherit;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+            color: var(--text-color);
+        }
+
+        .emoji-tab:hover {
+            background: var(--bg-color);
+            transform: scale(1.05);
+        }
+
+        .emoji-tab.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .emoji-body {
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 6px;
+            flex: 1;
+            min-height: 0;
+            scrollbar-gutter: stable;
+        }
+
+        .emoji-category-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 10px 0 6px 2px;
+        }
+
+        .emoji-category-title:first-child { margin-top: 2px; }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            padding-bottom: 4px;
+        }
+
+        @media (max-width: 420px) {
+            .emoji-grid { grid-template-columns: repeat(7, 1fr); gap: 3px; }
+        }
+
+        .emoji-grid button {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 0;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+        }
+
+        .emoji-grid button:hover {
+            background: var(--bg-color);
+            border-color: var(--border-color);
+            transform: scale(1.08);
+        }
+
+        .emoji-grid button.selected {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .custom-event-input {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--container-bg);
+            color: var(--text-color);
+            font-size: 13px;
+            margin-bottom: 8px;
+            resize: vertical;
+            min-height: 45px;
+            font-family: inherit;
+        }
+
+        .add-event-btn, .preset-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+
+        .add-event-btn:hover, .preset-btn:hover { background: var(--accent-hover); }
+
+        .preset-delete-btn {
+            background: transparent;
+            color: var(--muted);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+
+        .preset-delete-btn:hover { color: var(--accent-color); border-color: var(--accent-color); }
+
+        .preset-file-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .preset-file-btn {
+            background: var(--container-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .preset-file-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+
+        .custom-events-manage-list,
+        .relations-manage-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .custom-event-manage-item,
+        .relation-manage-item {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .custom-event-manage-text,
+        .relation-manage-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .custom-event-actions,
+        .relation-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+        .custom-event-btn-small {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 6px;
+            border-radius: 6px;
+            min-width: 24px;
+            min-height: 24px;
+        }
+
+        .custom-event-btn-small:hover { color: var(--accent-color); background: var(--bg-color); }
+
+        .add-custom-toggle {
+            width: 100%;
+            background: transparent;
+            border: 1px dashed var(--border-color);
+            color: var(--muted);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 6px;
+            text-align: left;
+        }
+
+        .add-custom-toggle:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .custom-event-form {
+            display: none;
+            margin-top: 4px;
+        }
+
+        .custom-event-form.open { display: block; }
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .site-logo {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+            cursor: pointer;
+            user-select: none;
+        }
+
+        h1 {
+            font-family: 'Mintely Personal Use Only', sans-serif;
+            font-size: 42px;
+            font-weight: normal;
+            color: var(--accent-color);
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .family-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .family-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .family-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .family-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .random-sim-btn,
+        .clear-all-sims-btn {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-color);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .random-sim-btn:hover { border-color: var(--accent-color); }
+        .clear-all-sims-btn { color: #c26d63; }
+        .clear-all-sims-btn:hover { border-color: #c26d63; }
+
+        .sims-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding-right: 4px;
+        }
+
+        .sim-card {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .sim-card:hover { border-color: var(--accent-color); }
+        .sim-card.disabled { opacity: 0.4; filter: grayscale(1); }
+
+        .sim-delete-btn,
+        .sim-edit-btn {
+            position: absolute;
+            top: 2px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--container-bg);
+            border: 1px solid transparent;
+            border-radius: 50%;
+            font-size: 11px;
+            color: var(--muted);
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .sim-delete-btn { right: 2px; }
+        .sim-edit-btn { left: 2px; }
+
+        .sim-delete-btn:hover,
+        .sim-edit-btn:hover { color: var(--accent-color); border-color: var(--accent-color); }
+
+        .sim-avatar { font-size: 20px; margin-bottom: 2px; margin-top: 8px; }
+
+        .sim-name {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .sim-role-badge {
+            font-size: 9px;
+            color: var(--muted);
+            background: var(--panel-bg);
+            padding: 1px 4px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sim-action-btn {
+            background: var(--bg-color);
+            border: none;
+            border-radius: 6px;
+            padding: 3px 4px;
+            font-size: 9px;
+            color: var(--text-color);
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        .sim-action-btn:hover { background: var(--accent-color); color: white; }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 18px 10px;
+            text-align: center;
+            color: var(--muted);
+        }
+        .empty-state .empty-emoji {
+            font-size: 32px;
+            margin-bottom: 6px;
+            opacity: 0.85;
+        }
+        .empty-state .empty-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        .empty-state .empty-sub {
+            font-size: 11px;
+            line-height: 1.5;
+            opacity: 0.85;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .counter-box {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 8px 14px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .counter-value { font-weight: 700; color: var(--accent-color); font-size: 15px; }
+
+        .reset-counter-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 11px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: min(300px, 78vw);
+            height: min(300px, 78vw);
+            margin: 0 auto 15px auto;
+            --slice-radius: calc(min(300px, 78vw) * 0.29);
+        }
+
+        .pointer {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 24px solid var(--accent-color);
+            z-index: 20;
+            filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15));
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 7px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.15, 0.8, 0.15, 1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            background: conic-gradient(
+                #d48375 0deg 45deg,
+                #e0a96d 45deg 90deg,
+                #e3c37d 90deg 135deg,
+                #7b9e89 135deg 180deg,
+                #6b8cae 180deg 225deg,
+                #9b7bb4 225deg 270deg,
+                #c4769c 270deg 315deg,
+                #d99b82 315deg 360deg
+            );
+        }
+
+        .wheel-slice-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .slice-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+            margin-left: -20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transform-origin: center center;
+        }
+
+        .slice-label:nth-child(1) { transform: rotate(22.5deg)  translate(0, calc(var(--slice-radius) * -1)) rotate(-22.5deg); }
+        .slice-label:nth-child(2) { transform: rotate(67.5deg)  translate(0, calc(var(--slice-radius) * -1)) rotate(-67.5deg); }
+        .slice-label:nth-child(3) { transform: rotate(112.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-112.5deg); }
+        .slice-label:nth-child(4) { transform: rotate(157.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-157.5deg); }
+        .slice-label:nth-child(5) { transform: rotate(202.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-202.5deg); }
+        .slice-label:nth-child(6) { transform: rotate(247.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-247.5deg); }
+        .slice-label:nth-child(7) { transform: rotate(292.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-292.5deg); }
+        .slice-label:nth-child(8) { transform: rotate(337.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-337.5deg); }
+
+        .actions-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .spin-btn {
+            flex: 2;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 13px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+
+        .spin-btn:hover:not(:disabled) { background-color: var(--accent-hover); }
+        .spin-btn:disabled { background-color: #d0c5bf; cursor: not-allowed; opacity: 0.8; }
+
+        .today-idea-btn {
+            flex: 1.5;
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 13px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+
+        .today-idea-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+
+        .history-box {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px 16px;
+            text-align: left;
+        }
+
+        .history-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .link-button {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--muted);
+            cursor: pointer;
+            text-decoration: underline;
+            font: inherit;
+            font-weight: normal;
+        }
+
+        .link-button:hover { color: var(--accent-color); }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 140px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .history-meta { font-size: 10px; color: var(--muted); font-weight: 600; }
+        .history-tag { font-weight: 700; color: var(--accent-color); font-size: 11px; }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(74, 64, 58, 0.45);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+            padding: 16px;
+        }
+
+        .modal.active { opacity: 1; pointer-events: auto; }
+
+        .modal-content {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            border-radius: 24px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-content.wide {
+            max-width: 520px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-content.result-layout {
+            padding: 0;
+            max-width: 440px;
+            text-align: left;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--panel-bg);
+        }
+
+        .modal-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #fff;
+            background: var(--muted);
+            white-space: nowrap;
+        }
+
+        .modal-category.is-cozy   { background: #7b9e89; }
+        .modal-category.is-chaos  { background: #c26d63; }
+        .modal-category.is-custom { background: #8c82db; }
+
+        .modal-close-x {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        .modal-close-x:hover {
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        .modal-body {
+            padding: 20px 22px 18px;
+        }
+
+        .modal-event-title {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+
+        .modal-event-description {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--muted);
+            margin-bottom: 18px;
+        }
+
+        .modal-block-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .participants-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .participant-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .participant-chip .chip-avatar {
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .relation-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .relation-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--accent-color);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.92;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 8px;
+            padding: 14px 18px 16px;
+            border-top: 1px solid var(--border-color);
+            background: var(--panel-bg);
+        }
+
+        .modal-footer .modal-btn-reroll,
+        .modal-footer .modal-btn-primary {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-footer .modal-btn-reroll {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-footer .modal-btn-reroll:hover:not(:disabled) {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .modal-footer .modal-btn-reroll:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal-footer .modal-btn-primary {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .modal-footer .modal-btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .modal-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--muted);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .modal-text {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .full-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            max-height: 50vh;
+            margin-bottom: 20px;
+            padding-right: 4px;
+            text-align: left;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-btn {
+            background-color: var(--text-color);
+            color: var(--container-bg);
+            border: none;
+            border-radius: 12px;
+            padding: 11px 26px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-btn-cancel {
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 11px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-btn-cancel:hover { border-color: var(--accent-color); }
+
+        .toast-container {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 200;
+            pointer-events: none;
+            align-items: center;
+        }
+
+        .toast {
+            background: var(--container-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 90vw;
+        }
+
+        .toast.show { opacity: 1; transform: translateY(0); }
+
+        .toast .toast-undo-btn {
+            background: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        .toast .toast-undo-btn:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .empty-hint {
+            font-size: 11px;
+            color: var(--muted);
+            text-align: center;
+            padding: 6px;
+        }
+
+        .onboarding-steps {
+            text-align: left;
+            margin: 8px 0 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .onboarding-step {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 12px;
+        }
+        .onboarding-step .ob-emoji {
+            font-size: 22px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .onboarding-step .ob-text {
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--text-color);
+        }
+        .onboarding-step .ob-text b {
+            color: var(--accent-color);
+        }
+
+        .debug-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 50vh;
+            overflow-y: auto;
+            text-align: left;
+            padding-right: 4px;
+            margin-bottom: 16px;
+        }
+        .debug-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 12px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 10px;
+        }
+        .debug-row .debug-key {
+            color: var(--muted);
+            font-weight: 600;
+        }
+        .debug-row .debug-val {
+            color: var(--text-color);
+            font-weight: 700;
+            text-align: right;
+            word-break: break-word;
+        }
+        .debug-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .debug-stat {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 8px 10px;
+            text-align: center;
+        }
+        .debug-stat .ds-num {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-color);
+            line-height: 1.1;
+        }
+        .debug-stat .ds-label {
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-top: 4px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 420px) {
+            .wrapper { padding: 24px 18px; }
+            h1 { font-size: 34px; }
+            .top-icon-btn { width: 36px; height: 36px; font-size: 15px; }
+            .actions-buttons-row { flex-direction: column; }
+            .spin-btn, .today-idea-btn { flex: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="https://t.me/morikasims" target="_blank" rel="noopener" class="author-badge">
+        <span class="author-title">Автор колеса</span>
+        <span class="author-link">telegram: morikasims</span>
+    </a>
+
+    <div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+    <div class="wrapper">
+        <div class="top-controls">
+            <button type="button" class="top-icon-btn" id="soundToggleBtn" aria-label="Переключить звук" aria-pressed="true" title="Вкл/выкл звук">🔊</button>
+            <button type="button" class="top-icon-btn" id="themeToggleBtn" aria-label="Переключить тему" title="Переключить тему">☀️</button>
+            <button type="button" class="top-icon-btn" id="settingsBtn" aria-label="Открыть настройки" aria-expanded="false" title="Настройки">⚙️</button>
+        </div>
+
+        <div class="settings-menu unified-scroll" id="settingsMenu">
+            <details class="settings-section" open>
+                <summary>🎲 События</summary>
+                <div class="settings-section-body">
+                    <div class="settings-title">Что показывать</div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="enableDefaultEvents" checked> 📜 Дефолтные события
+                    </label>
+                    <label class="checkbox-label sub-option">
+                        <input type="checkbox" id="modeCozy" checked> 🌱 Уютные и творческие
+                    </label>
+                    <label class="checkbox-label sub-option">
+                        <input type="checkbox" id="modeChaos" checked> 🔥 Драма и форс-мажоры
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="enableCustomEvents" checked> ✏️ Свои события
+                    </label>
+
+                    <div class="settings-title">Своё событие</div>
+                    <button type="button" class="add-custom-toggle" id="toggleCustomForm">+ Добавить своё событие</button>
+                    <div class="custom-event-form" id="customEventForm">
+                        <textarea class="custom-event-input" id="customEventText" placeholder="Введите текст события..."></textarea>
+                        <button type="button" class="add-event-btn" id="customEventActionBtn">Добавить в колесо</button>
+                    </div>
+
+                    <div class="settings-title">Мои события (<span id="customEventsCount">0</span>)</div>
+                    <div class="custom-events-manage-list" id="customEventsManageList"></div>
+                </div>
+            </details>
+
+            <details class="settings-section">
+                <summary>💞 Отношения</summary>
+                <div class="settings-section-body">
+                    <div class="settings-title">Кто с кем</div>
+                    <select class="sim-input-field" id="relSimA" aria-label="Первый персонаж"></select>
+                    <select class="sim-input-field" id="relSimB" aria-label="Второй персонаж"></select>
+                    <select class="sim-input-field" id="relType" aria-label="Тип связи">
+                        <option value="partner">💖 Партнёры (муж/жена/пара)</option>
+                        <option value="parent-child">🏡 Родитель — ребёнок</option>
+                        <option value="sibling">👫 Братья/сёстры</option>
+                        <option value="friend">🤝 Друзья</option>
+                        <option value="rival">⚡ Соперники / враги</option>
+                    </select>
+                    <button type="button" class="add-event-btn" id="saveRelationBtn">Сохранить связь</button>
+
+                    <div class="settings-title">Существующие связи</div>
+                    <div class="relations-manage-list" id="relationsManageList"></div>
+                </div>
+            </details>
+
+            <details class="settings-section">
+                <summary>👥 Персонажи</summary>
+                <div class="settings-section-body">
+                    <div class="settings-title">Добавить</div>
+                    <input type="text" class="sim-input-field" id="newSimName" placeholder="Имя сима...">
+
+                    <select class="sim-input-field" id="newSimRole" aria-label="Роль персонажа">
+                        <option value="adult">👤 Взрослый</option>
+                        <option value="teen">🧑 Подросток</option>
+                        <option value="child">🧒 Ребёнок</option>
+                        <option value="elder">👴 Пожилой</option>
+                    </select>
+                    <button type="button" class="add-event-btn" id="addSimBtn">Добавить в семью</button>
+                </div>
+            </details>
+
+            <details class="settings-section">
+                <summary>💾 Пресеты семьи</summary>
+                <div class="settings-section-body">
+                    <div class="settings-title">Загрузить сохранённую</div>
+                    <div id="presetEmptyHint" class="empty-hint" style="display:none;">Пока нет сохранённых семей</div>
+                    <select class="preset-select" id="presetSelect" aria-label="Выбор сохранённой семьи">
+                        <option value="" disabled selected>Выберите сохранённую семью...</option>
+                    </select>
+
+                    <div class="settings-title">Сохранить текущую</div>
+                    <input type="text" class="sim-input-field" id="presetNameInput" placeholder="Название семьи (например: Морган)...">
+                    <button type="button" class="preset-btn" id="savePresetBtn">Сохранить семью</button>
+                    <button type="button" class="preset-delete-btn" id="deletePresetBtn">Удалить выбранный пресет</button>
+
+                    <div class="settings-title">Файл</div>
+                    <div class="preset-file-actions">
+                        <button type="button" class="preset-file-btn" id="exportFileBtn">⬇ Скачать</button>
+                        <button type="button" class="preset-file-btn" id="importFileBtn">⬆ Загрузить</button>
+                        <input type="file" id="importFile" class="visually-hidden" accept=".json">
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <div class="brand-header">
+            <img src="dsf.png" alt="Fate's Dice" class="site-logo" id="siteLogo" title="Тройной клик — debug-панель">
+            <h1>Fate's Dice</h1>
+        </div>
+        <p class="subtitle">Разбавляй симсовскую рутину одним кликом</p>
+
+        <div class="family-panel">
+            <div class="family-header-row">
+                <div class="family-title" id="familyTitleDisplay">Список персонажей</div>
+                <div class="family-actions">
+                    <button type="button" class="random-sim-btn" id="randomSimBtn">Случайный сим</button>
+                    <button type="button" class="clear-all-sims-btn" id="clearAllSimsBtn" title="Удалить всех персонажей">Удалить всех</button>
+                </div>
+            </div>
+            <div class="sims-grid unified-scroll" id="simsGrid"></div>
+        </div>
+
+        <div class="counter-box">
+            <span>Проведено событий: <strong class="counter-value" id="daysCounter">0</strong></span>
+            <button type="button" class="reset-counter-btn" id="resetCounterBtn">сбросить</button>
+        </div>
+
+        <div class="wheel-container">
+            <div class="pointer" aria-hidden="true"></div>
+            <div class="wheel" id="wheel" role="img" aria-label="Колесо событий">
+                <div class="wheel-slice-text" aria-hidden="true">
+                    <div class="slice-label">🥞</div>
+                    <div class="slice-label">📸</div>
+                    <div class="slice-label">☕</div>
+                    <div class="slice-label">🎨</div>
+                    <div class="slice-label">🎉</div>
+                    <div class="slice-label">💌</div>
+                    <div class="slice-label">🌧️</div>
+                    <div class="slice-label">⚡</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-buttons-row">
+            <button type="button" class="spin-btn" id="spinBtn">Крутить колесо</button>
+            <button type="button" class="today-idea-btn" id="todayIdeaBtn">⚡ Что сделать сегодня?</button>
+        </div>
+
+        <div class="history-box">
+            <div class="history-title">
+                <span>История событий</span>
+                <span style="display: flex; gap: 10px;">
+                    <button type="button" class="link-button" id="openFullHistoryBtn">всю историю</button>
+                    <button type="button" class="link-button" id="clearHistoryBtn">очистить</button>
+                </span>
+            </div>
+            <div class="history-list unified-scroll" id="historyList">
+                <div style="font-size: 11px; color: var(--text-color); opacity: 0.7; text-align: center; padding: 10px;">Здесь будут появляться выпавшие события</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="modalEventTitle">
+        <div class="modal-content result-layout" id="resultModalContent">
+            <div class="modal-header">
+                <span class="modal-category is-cozy" id="modalCategory">🌱 Уютное событие</span>
+                <button type="button" class="modal-close-x" id="closeResultX" aria-label="Закрыть">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-event-title" id="modalEventTitle">Название события</div>
+                <div class="modal-event-description" id="modalEventDescription">Описание события</div>
+
+                <div class="modal-block-title" id="modalParticipantsTitle">Участники</div>
+                <div class="participants-chips" id="modalParticipants"></div>
+
+                <div class="modal-block-title" id="modalRelationsTitle" style="display:none;">Связи</div>
+                <div class="relation-chips" id="modalRelationChips"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn-reroll" id="rerollBtn" title="Ещё раз">🔄 Другое</button>
+                <button type="button" class="modal-btn-primary" id="closeResultBtn">Интересно...</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="fullHistoryModal" role="dialog" aria-modal="true" aria-labelledby="fullHistoryTitle">
+        <div class="modal-content wide" id="fullHistoryModalContent">
+            <div class="modal-title" id="fullHistoryTitle">Вся история событий</div>
+            <div class="full-history-list unified-scroll" id="fullHistoryList"></div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn" id="closeFullHistoryBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+        <div class="modal-content" id="confirmModalContent">
+            <div class="modal-title" id="confirmTitle">Подтверждение</div>
+            <div class="modal-text" id="confirmModalText">Вы уверены?</div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn" id="confirmYesBtn">Удалить</button>
+                <button type="button" class="modal-btn-cancel" id="confirmCancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editSimModal" role="dialog" aria-modal="true" aria-labelledby="editSimTitle">
+        <div class="modal-content" id="editSimModalContent">
+            <div class="modal-title" id="editSimTitle">Редактирование персонажа</div>
+            <div style="text-align: left; margin-bottom: 14px;">
+                <label for="editSimNameInput" style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Имя:</label>
+                <input type="text" class="sim-input-field" id="editSimNameInput">
+
+                <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px; margin-top: 8px;">Эмодзи:</label>
+                <div class="emoji-picker-wrap">
+                    <button type="button" class="emoji-input-btn" id="editSimAvatarBtn" aria-haspopup="listbox">
+                        <span id="editSimAvatarLabel" class="emoji-placeholder">Выбери эмодзи…</span>
+                    </button>
+                    <div class="emoji-picker" id="editSimAvatarPicker" role="listbox">
+                    </div>
+                </div>
+
+                <label for="editSimRoleInput" style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px; margin-top: 8px;">Роль:</label>
+                <select class="sim-input-field" id="editSimRoleInput">
+                    <option value="adult">👤 Взрослый</option>
+                    <option value="teen">🧑 Подросток</option>
+                    <option value="child">🧒 Ребёнок</option>
+                    <option value="elder">👴 Пожилой</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn" id="saveEditSimBtn">Сохранить</button>
+                <button type="button" class="modal-btn-cancel" id="cancelEditSimBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="onboardingModal" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+        <div class="modal-content" id="onboardingModalContent">
+            <div class="modal-title" id="onboardingTitle">Добро пожаловать в Fate's Dice 🎲</div>
+            <div class="modal-text" style="text-align:left; margin-bottom: 6px;">
+                Разбавляй симсовскую рутину одним кликом. Начни с трёх шагов:
+            </div>
+            <div class="onboarding-steps">
+                <div class="onboarding-step">
+                    <div class="ob-emoji">👥</div>
+                    <div class="ob-text">Открой <b>⚙️ Настройки → 👥 Персонажи</b> и добавь членов семьи. Укажи роль: взрослый, подросток, ребёнок или пожилой.</div>
+                </div>
+                <div class="onboarding-step">
+                    <div class="ob-emoji">💞</div>
+                    <div class="ob-text">Свяжи их в <b>⚙️ Настройки → 💞 Отношения</b>: партнёры, родитель-ребёнок, братья/сёстры, друзья или соперники. Так события станут осмысленнее.</div>
+                </div>
+                <div class="onboarding-step">
+                    <div class="ob-emoji">🎡</div>
+                    <div class="ob-text">Нажми <b>«Крутить колесо»</b> — и получи случайное событие. <b>«Другое»</b> в модалке — повторный бросок, <b>«Интересно»</b> — закрыть.</div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn" id="onboardingGoBtn">Добавить первого сима</button>
+                <button type="button" class="modal-btn-cancel" id="onboardingSkipBtn">Пропустить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="debugModal" role="dialog" aria-modal="true" aria-labelledby="debugTitle">
+        <div class="modal-content wide" id="debugModalContent">
+            <div class="modal-title" id="debugTitle">🐞 Debug — статистика пула</div>
+            <div class="debug-stats" id="debugStats"></div>
+            <div class="debug-list unified-scroll" id="debugList"></div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn" id="closeDebugBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        const $ = (id) => document.getElementById(id);
+
+        const SCHEMA_VERSION = 4;
+        const SPIN_DURATION = 4000;
+        const THEMES = ['cozy', 'focus', 'forest', 'dark'];
+        const THEME_ICONS = { cozy: '☀️', focus: '🟣', forest: '🌲', dark: '🌙' };
+
+        const INTENSITY_WEIGHTS = { 1: 10, 2: 5, 3: 2 };
+        const TARGET_COZY_RATIO = 0.6;
+        const RECENT_BALANCE_WINDOW = 6;
+        const RECENT_BAN_WINDOW = 5;
+        const PARTICIPANT_COOLDOWN = 2;
+
+        const SECTOR_COUNT = 8;
+        const MIN_FULL_SPINS = 6;
+        const MAX_FULL_SPINS = 9;
+
+        const ROLE_LABELS = {
+            adult: '👤 Взрослый',
+            teen: '🧑 Подросток',
+            child: '🧒 Ребёнок',
+            elder: '👴 Пожилой'
+        };
+
+        const RELATION_LABELS = {
+            partner: '💖 Партнёры',
+            'parent-child': '🏡 Родитель — ребёнок',
+            sibling: '👫 Братья/сёстры',
+            friend: '🤝 Друзья',
+            rival: '⚡ Соперники'
+        };
+
+        const EMOJI_LIBRARY = {
+            'Эмоции':    ['😀','😊','😍','🥰','😎','🤗','😴','🥳','😜','🤔','😭','😡','😱','🤯','🥺','😇','🤠','😈','👻','💀'],
+            'Животные':  ['🐱','🐶','🐰','🦊','🐻','🐼','🐨','🦁','🐯','🐮','🐷','🐸','🐵','🐔','🐧','🦄','🐺','🐹','🐴','🦉'],
+            'Природа':   ['🌸','🌺','🌻','🌹','🌷','🌿','🍀','🌲','🌳','🌴','🍁','🍂','🌙','⭐','✨','☀️','🌈','❄️','🔥','⚡'],
+            'Еда':       ['🥐','🥞','🍕','🍔','🍟','🍩','🍰','🍦','🍫','🍿','🍎','🍓','🍇','🍒','🍑','🍋','🍉','🥗','🍜','🍣'],
+            'Активности':['🎨','🎭','🎬','🎵','🎸','🎹','🎮','📚','✏️','📸','🎲','🧩','⚽','🏀','🎾','🏊','🚴','🧘','💃','🕺'],
+            'Жизнь':     ['💖','💕','💌','💍','🏡','🏠','💰','💼','🎓','🚗','✈️','🌍','🕯️','📱','💻','🎁','🍼','👶','🐾','🩺'],
+            'Мистика':   ['🌙','⭐','🔮','🕯️','🧿','🍀','🦄','🐉','👻','💀','⚰️','🧛','🧝','🧜','🧚','🌌','🌠','🔱','✨']
+        };
+
+        const CATEGORY_ICON = {
+            'Все': '⭐',
+            'Эмоции': '😊',
+            'Животные': '🐱',
+            'Природа': '🌸',
+            'Еда': '🍕',
+            'Активности': '🎨',
+            'Жизнь': '💖',
+            'Мистика': '🔮'
+        };
+
+        const pickerState = {};
+
+        let wheelRotation = 0;
+
+        function buildEmojiPicker(pickerEl, stateKey, onPick, currentValue = '') {
+            pickerEl.innerHTML = '';
+
+            const tabsWrap = document.createElement('div');
+            tabsWrap.className = 'emoji-tabs-wrap';
+
+            const tabs = document.createElement('div');
+            tabs.className = 'emoji-tabs';
+
+            const body = document.createElement('div');
+            body.className = 'emoji-body unified-scroll';
+
+            const categories = ['Все', ...Object.keys(EMOJI_LIBRARY)];
+            let activeCategory = 'Все';
+
+            function renderBody() {
+                body.innerHTML = '';
+
+                if (activeCategory === 'Все') {
+                    Object.entries(EMOJI_LIBRARY).forEach(([cat, emojis]) => {
+                        const title = document.createElement('div');
+                        title.className = 'emoji-category-title';
+                        title.textContent = cat;
+                        body.appendChild(title);
+
+                        const grid = document.createElement('div');
+                        grid.className = 'emoji-grid';
+                        emojis.forEach(emoji => {
+                            grid.appendChild(createEmojiButton(emoji));
+                        });
+                        body.appendChild(grid);
+                    });
+                } else {
+                    const grid = document.createElement('div');
+                    grid.className = 'emoji-grid';
+                    (EMOJI_LIBRARY[activeCategory] || []).forEach(emoji => {
+                        grid.appendChild(createEmojiButton(emoji));
+                    });
+                    body.appendChild(grid);
+                }
+            }
+
+            function createEmojiButton(emoji) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = emoji;
+                btn.dataset.emoji = emoji;
+                if (emoji === currentValue) btn.classList.add('selected');
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    onPick(emoji);
+                });
+                return btn;
+            }
+
+            categories.forEach(cat => {
+                const tab = document.createElement('button');
+                tab.type = 'button';
+                tab.className = 'emoji-tab' + (cat === activeCategory ? ' active' : '');
+                tab.textContent = CATEGORY_ICON[cat] || cat.charAt(0);
+                tab.title = cat;
+                tab.dataset.category = cat;
+                tab.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    activeCategory = cat;
+                    tabs.querySelectorAll('.emoji-tab').forEach(t =>
+                        t.classList.toggle('active', t.dataset.category === cat)
+                    );
+                    renderBody();
+                    body.scrollTop = 0;
+                });
+                tabs.appendChild(tab);
+            });
+
+            tabsWrap.appendChild(tabs);
+            pickerEl.appendChild(tabsWrap);
+            pickerEl.appendChild(body);
+            renderBody();
+
+            pickerState[stateKey] = {
+                pickerEl,
+                updateSelected: (emoji) => {
+                    pickerEl.querySelectorAll('.emoji-grid button').forEach(btn => {
+                        btn.classList.toggle('selected', btn.dataset.emoji === emoji);
+                    });
+                }
+            };
+        }
+
+        function updateEmojiLabel(labelEl, emoji) {
+            if (emoji) {
+                labelEl.textContent = emoji;
+                labelEl.classList.remove('emoji-placeholder');
+                labelEl.classList.add('emoji-current');
+            } else {
+                labelEl.textContent = 'Выбери эмодзи…';
+                labelEl.classList.add('emoji-placeholder');
+                labelEl.classList.remove('emoji-current');
+            }
+        }
+
+        function markSelectedInPicker(pickerEl, emoji) {
+            pickerEl.querySelectorAll('.emoji-grid button').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.emoji === emoji);
+            });
+        }
+
+        function showNotification(message, opts = {}) {
+            const container = $('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = `✓ ${message}`;
+
+            if (opts.undoLabel && typeof opts.onUndo === 'function') {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'toast-undo-btn';
+                btn.textContent = opts.undoLabel;
+                btn.addEventListener('click', () => {
+                    try { opts.onUndo(); } catch (e) {}
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                });
+                toast.appendChild(btn);
+            }
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            const ttl = opts.undoLabel ? 6000 : 3500;
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, ttl);
+        }
+
+        let activeModalId = null;
+        let modalLastFocus = null;
+
+        const FOCUSABLE_SELECTOR = [
+            'a[href]',
+            'button:not([disabled])',
+            'input:not([disabled])',
+            'select:not([disabled])',
+            'textarea:not([disabled])',
+            '[tabindex]:not([tabindex="-1"])'
+        ].join(',');
+
+        function getFocusable(container) {
+            return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR))
+                .filter(el => el.offsetParent !== null || el === document.activeElement);
+        }
+
+        function activateFocusTrap(modalEl) {
+            modalLastFocus = document.activeElement;
+            const content = modalEl.querySelector('.modal-content') || modalEl;
+
+            requestAnimationFrame(() => {
+                const focusables = getFocusable(content);
+                if (focusables.length > 0) {
+                    focusables[0].focus();
+                } else {
+                    content.setAttribute('tabindex', '-1');
+                    content.focus();
+                }
+            });
+        }
+
+        function deactivateFocusTrap() {
+            if (modalLastFocus && typeof modalLastFocus.focus === 'function') {
+                try { modalLastFocus.focus(); } catch (e) {}
+            }
+            modalLastFocus = null;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Tab' || !activeModalId) return;
+            const modal = $(activeModalId);
+            if (!modal || !modal.classList.contains('active')) return;
+            const content = modal.querySelector('.modal-content') || modal;
+            const focusables = getFocusable(content);
+            if (focusables.length === 0) { e.preventDefault(); return; }
+
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        });
+
+        function openModalWithTrap(id) {
+            $(id).classList.add('active');
+            activeModalId = id;
+            activateFocusTrap($(id));
+        }
+
+        function closeModalWithTrap(id) {
+            $(id).classList.remove('active');
+            if (activeModalId === id) {
+                activeModalId = null;
+                deactivateFocusTrap();
+            }
+        }
+
+        (function runMigrations() {
+            const savedVersion = parseInt(localStorage.getItem('sims_schema_version') || '1', 10);
+
+            if (savedVersion < 2) {
+                localStorage.removeItem('sims_family_relationships');
+                localStorage.removeItem('sims_current_family_name');
+                const oldCounter = localStorage.getItem('sims_days_counter');
+                if (oldCounter !== null && localStorage.getItem('sims_counter') === null) {
+                    localStorage.setItem('sims_counter', oldCounter);
+                }
+                localStorage.removeItem('sims_days_counter');
+            }
+
+            if (savedVersion < 3) {
+                localStorage.setItem('sims_history_migrated_to_v3', 'true');
+            }
+
+            if (savedVersion < 4) {
+                try {
+                    const raw = JSON.parse(localStorage.getItem('sims_family_members') || '[]');
+                    const migrated = (Array.isArray(raw) ? raw : []).map(sim => {
+                        if (!sim || typeof sim !== 'object') return sim;
+                        if (!sim.role) sim.role = 'adult';
+                        return sim;
+                    });
+                    localStorage.setItem('sims_family_members', JSON.stringify(migrated));
+                } catch (e) {}
+
+                try {
+                    const rawP = JSON.parse(localStorage.getItem('sims_saved_presets') || '{}');
+                    Object.keys(rawP).forEach(k => {
+                        const p = rawP[k];
+                        if (!p || typeof p !== 'object') return;
+                        if (Array.isArray(p.members)) {
+                            p.members = p.members.map(sim => {
+                                if (!sim || typeof sim !== 'object') return sim;
+                                if (!sim.role) sim.role = 'adult';
+                                return sim;
+                            });
+                        }
+                    });
+                    localStorage.setItem('sims_saved_presets', JSON.stringify(rawP));
+                } catch (e) {}
+
+                if (localStorage.getItem('sims_family_relationships') === null) {
+                    localStorage.setItem('sims_family_relationships', '[]');
+                }
+            }
+
+            localStorage.setItem('sims_schema_version', String(SCHEMA_VERSION));
+        })();
+
+        function normalizeFamilyMembers(members) {
+            return (Array.isArray(members) ? members : []).map(sim => {
+                if (!sim || typeof sim !== 'object') return null;
+                const { focus, ...rest } = sim;
+                if (!rest.role) rest.role = 'adult';
+                return rest;
+            }).filter(Boolean);
+        }
+
+        let familyMembers = normalizeFamilyMembers(JSON.parse(localStorage.getItem('sims_family_members')) || []);
+
+        let familyRelationships = (() => {
+            try {
+                const raw = JSON.parse(localStorage.getItem('sims_family_relationships') || '[]');
+                return Array.isArray(raw) ? raw : [];
+            } catch { return []; }
+        })();
+
+        let currentFamilyName = localStorage.getItem('sims_current_family_name') || "Список персонажей";
+
+        let savedPresets = JSON.parse(localStorage.getItem('sims_saved_presets')) || {};
+        Object.keys(savedPresets).forEach(name => {
+            const preset = savedPresets[name];
+            if (!preset || typeof preset !== 'object') return;
+            if (Array.isArray(preset.members)) {
+                preset.members = normalizeFamilyMembers(preset.members);
+            }
+        });
+
+        const todayIdeasPool = [
+            { text: "🥐 Приготовь вкусный ужин для всей семьи и устрой совместный уютный вечер за столом без телефонов." },
+            { text: "📚 Выбери одного сима и удели весь день прокачке его текущего навыка до нового уровня." },
+            { text: "🗺️ Отправь сима в локацию или парк, в котором он давно не бывал, чтобы пофотографировать окрестности." },
+            { text: "📞 Позвони старому другу или родственнику и пригласи его в гости на настольные игры или чашечку кофе." },
+            { text: "🏡 Устрой день генеральной уборки: пусть симы сами помоют окна, сантехнику и наведут порядок во всех комнатах." },
+            { text: "💖 Устрой спонтанное свидание для пары: сходите в ресторан или устройте ужин при свечах дома." },
+            { text: "🎨 Купи мольберт, пианино или инструмент для творчества и подари его симу, который давно хотел попробовать себя в искусстве." },
+            { text: "🌳 Собери всю семью и отправься на пикник в городской парк или лес." },
+            { text: "🛍️ Отправляйтесь в торговый центр или на рынок: обновите гардероб хотя бы одному члену семьи." },
+            { text: "🍰 Устрой кулинарный марафон: пусть симы испекут три разных десерта и угостят ими соседей." },
+            { text: "💤 Объяви официальный «день лени»: никому нельзя выходить из дома и заниматься работой — только спать, смотреть фильмы и отдыхать." },
+            { text: "📸 Сделай красивые семейные фотографии и повесь их на самое видное место в гостиной." }
+        ];
+
+        const defaultCozy = [
+            { id: "cozy_1", text: "✨ Творческий порыв: Один из персонажей полностью уходит в искусство на весь день. Домашние поддерживают его и не отвлекают.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "single", requires: ["family"], tags: ["friendship", "family"] },
+            { id: "cozy_2", text: "🥐 Аромат выпечки: Дом наполняется запахом корицы. Все собираются на кухню, чтобы вместе приготовить сложный десерт или домашний пирог.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_3", text: "🌳 Прогулка: Время сменить обстановку и отправиться всей семьей в парк на пикник, прогулку и семейную фотосессию.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family", "friendship"] },
+            { id: "cozy_4", text: "🛋️ Уютная перестановка: Обновляем эстетику гнёздышка! Выберите одну комнату или уголок и переделайте интерьер, добавив гирлянды и уютные мелочи.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "group", requires: [], tags: ["family"] },
+            { id: "cozy_5", text: "📽️ Киномарафон: Весь вечер семья проводит в обнимку на диване за просмотром любимых фильмов с кучей вредных снэков и попкорна.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family", "friendship", "love"] },
+            { id: "cozy_6", text: "🕯️ Вечер без электричества: В доме выключают свет. Персонажи зажигают свечи, заваривают чай и делятся сокровенными воспоминаниями или страшными историями.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family", "friendship"] },
+            { id: "cozy_7", text: "🌿 Домашний оранжерейный день: Семья ухаживает за растениями, обустраивает задний двор или вместе занимается садом.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_8", text: "💌 Письмо в будущее: Домочадцы записывают свои мечты, делают памятные снимки или прячут «капсулу времени», которую договариваются открыть спустя сезон.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "pair", requires: ["family"], tags: ["family", "love"] },
+            { id: "cozy_9", text: "🥞 Ленивое утро: Никто никуда не спешит. Взрослые и дети готовят поздний завтрак в пижамах и весь день наслаждаются неторопливым домашним ритмом.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_10", text: "💆‍♀️ Спа-день и полный релакс: Сегодня день заботы о себе и никакого труда. Возьмите отгул или притворитесь больными! Зажгите свечи, нанесите маску для лица, надушитесь любимым парфюмом.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["friendship", "love"] },
+            { id: "cozy_11", text: "🌲 Побег в Гранит Фоллз: Какая бы ни была погода за окном, пора отправиться в четырёхдневный отпуск среди дикой природы, чтобы дышать свежим воздухом и отдыхать от суеты.", category: "cozy", subcategory: "cozy", intensity: 2, source: "default", targetType: "group", requires: ["family"], tags: ["love", "family", "friendship"], requiresPack: "Snowy Escape" },
+            { id: "cozy_12", text: "🏕️ Кемпинг с близкими: Время собирать рюкзаки! Берите палатки, вкусную еду, напитки и гитару или колонку. Отправляйтесь с близкими на природу, чтобы провести незабываемый вечер у костра.", category: "cozy", subcategory: "cozy", intensity: 2, source: "default", targetType: "group", requires: ["friend"], tags: ["friendship", "family"] },
+            { id: "cozy_13", text: "📖 Личный дневник: Лучшая терапия для души! Сим заводит свой дневник и всю неделю перед сном записывает туда мысли, переживания и главные события дня.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family", "friendship"] },
+            { id: "cozy_14", text: "🎨 Новое хобби: Время выходить из зоны комфорта! Сим выбирает занятие, которым никогда раньше не увлекался, и пробует освоить новый навык.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["friendship", "family"] },
+            { id: "cozy_15", text: "🍲 Семейный ужин по новому рецепту: Все собираются на кухне и вместе готовят блюдо, которое никогда не пробовали. Готовит самый младший, остальные помогают.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_16", text: "🎄 Украшаем дом к сезону: Семья достаёт коробку с украшениями и наряжает дом к празднику. Гирлянды, венки, свечи — всё идёт в ход.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_17", text: "🛁 Вечер спа для двоих: Пара устраивает друг другу расслабляющий вечер — ванна, массаж, любимая музыка. Никаких телефонов.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "pair", requires: ["partner"], tags: ["love"] },
+            { id: "cozy_18", text: "🌱 Огород на подоконнике: Сим покупает семена, горшки и заводит мини-огород. Наблюдает за первыми ростками каждый день.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family"] },
+            { id: "cozy_19", text: "📷 Семейный фотоальбом: Все ищут старые снимки, распечатывают новые и собирают настоящий альбом с подписями.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_20", text: "🧸 Уборка на чердаке: Сим разбирает старые вещи и находит что-то ценное — игрушку из детства, письмо, пластинку.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family"] },
+            { id: "cozy_21", text: "🪟 Утро с открытыми окнами: Впустить свежий воздух, заварить чай и просто посидеть у окна с книгой.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family"] },
+            { id: "cozy_22", text: "🍪 Печенье для соседей: Семья печёт печенье и разносит соседям. Заодно знакомится с новыми жителями района.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_23", text: "🎲 Настольная ночь: Все садятся играть в настолки. Проигравший моет посуду.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_24", text: "📖 Семейное чтение вслух: Один сим читает вслух, остальные слушают, затаив дыхание.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family"] },
+            { id: "cozy_25", text: "🎸 Джем-сейшн: Друзья собираются, играют на гитаре, поют, кто-то подыгрывает на пианино. Вечер, который запомнится.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "group", requires: ["friend"], tags: ["friendship"] },
+            { id: "cozy_26", text: "🏖️ Спонтанный выезд на пляж: Друзья бросают всё и едут на пляж: плавать, загорать, строить замки из песка.", category: "cozy", subcategory: "cozy", intensity: 2, source: "default", targetType: "group", requires: ["friend"], tags: ["friendship"] },
+            { id: "cozy_27", text: "🎬 Ночь плохих фильмов: Друзья смотрят максимально нелепые фильмы и ржут до утра.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["friend"], tags: ["friendship"] },
+            { id: "cozy_28", text: "🍕 Пицца-вечер у друга: Все заказывают пиццу, делятся историями и играют в видеоигры.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["friend"], tags: ["friendship"] },
+            { id: "cozy_29", text: "🎤 Караоке-баттл: Друзья устраивают караоке-дуэль. Победитель выбирает, куда все пойдут в следующий раз.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["friend"], tags: ["friendship"] },
+            { id: "cozy_30", text: "🏕️ Поход с палатками: Друзья уезжают на природу, ставят палатку, жарят маршмеллоу и рассказывают страшилки.", category: "cozy", subcategory: "cozy", intensity: 2, source: "default", targetType: "group", requires: ["friend"], tags: ["friendship"] },
+            { id: "cozy_31", text: "🎨 Серия картин: Сим решает написать мини-серию из 3 картин на одну тему и вешает их дома.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family"] },
+            { id: "cozy_32", text: "📝 Первая глава книги: Сим садится писать роман и пишет первую главу. Дальше — как пойдёт.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family"] },
+            { id: "cozy_33", text: "📸 Фотопроект «Мой район»: Сим делает по одному снимку в день в своём районе и собирает серию.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family"] },
+            { id: "cozy_34", text: "🎼 Учимся играть на новом инструменте: Сим берёт уроки на инструменте, который раньше не пробовал.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family"] },
+            { id: "cozy_35", text: "🏺 Мастерская керамики: Сим покупает гончарный круг и лепит первую кружку. Кривая, но своя.", category: "cozy", subcategory: "creative", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["family"] },
+            { id: "cozy_36", text: "🌹 Свидание по старой схеме: Пара решает повторить их самое первое свидание. Место, музыка, меню — всё как тогда.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "pair", requires: ["partner"], tags: ["love"] },
+            { id: "cozy_37", text: "💌 Переписка через письма: Неделю пара общается только записками, которые оставляет на видных местах.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "pair", requires: ["partner"], tags: ["love"] },
+            { id: "cozy_38", text: "🌌 Ночь под звёздами: Пара уезжает за город, расстилает плед и смотрит на звёзды до рассвета.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "pair", requires: ["partner"], tags: ["love"] },
+            { id: "cozy_39", text: "👨‍🍳 Готовим вместе: Пара решает приготовить сложное блюдо вдвоём. Кто-то режет, кто-то мешает, оба смеются.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "pair", requires: ["partner"], tags: ["love"] },
+            { id: "cozy_40", text: "👶 День с малышом без гаджетов: Родители весь день посвящают ребёнку: играют, гуляют, читают вслух. Никаких телефонов.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family", "child"], tags: ["family"] },
+            { id: "cozy_41", text: "👵 Визит к бабушке с дедушкой: Семья едет к пожилым родственникам, привозит гостинцы и слушает старые истории.", category: "cozy", subcategory: "cozy", intensity: 1, source: "default", targetType: "group", requires: ["family", "elder"], tags: ["family"] }
+        ];
+
+        const defaultChaos = [
+            { id: "chaos_1", text: "✉️ Анонимная записка: Кто-то находит загадочное послание с намёком на секрет одного из домочадцев. Весь день в доме висит напряжение и подозрения. Что в той записке?", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "pair", requires: ["family"], tags: ["drama", "conflict"] },
+            { id: "chaos_2", text: "🚪 Таинственный побег: Один из персонажей не справляется с давлением и ночью тихо ускользает из дома, отключив телефон и оставив пустую комнату.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "single", requires: ["family"], tags: ["drama"] },
+            { id: "chaos_3", text: "👤 Вспышка из прошлого: На пороге появляется бывший партнёр или соперник, вызывая приступ ревности и громкую личную сцену посреди гостиной.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["partner"], tags: ["drama", "love", "conflict"] },
+            { id: "chaos_4", text: "🍷 Слишком много правды: Обычный приём пищи выходит из-под контроля, когда кто-то случайно ляпает чужую тайну прямо на глазах у всех.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "conflict"] },
+            { id: "chaos_5", text: "⚡ Громкая ссора из-за мелочи: Бытовой пустяк перерастает в грандиозный скандал с битьём посуды и взаимными претензиями.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "pair", requires: ["family"], tags: ["conflict", "drama"] },
+            { id: "chaos_6", text: "🚪 Незваный визитёр: На пороге без предупреждения появляется назойливый знакомый или сосед, который отказывается уходить и путает все планы.", category: "chaos", subcategory: "soft-drama", intensity: 1, source: "default", targetType: "group", requires: [], tags: ["drama", "friendship"] },
+            { id: "chaos_7", text: "🗣️ Городские сплетни: Кто-то из персонажей возвращается домой сам не свой, услышав от соседей неприятный или шокирующий слух о своей семье.", category: "chaos", subcategory: "soft-drama", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["drama"] },
+            { id: "chaos_8", text: "💥 Сорванный план: Важная поездка, долгожданное свидание или встреча рушатся в самый ответственный момент.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "pair", requires: ["partner"], tags: ["drama", "love", "conflict"] },
+            { id: "chaos_9", text: "🐣 Предоставлен самому себе: В течение 3 дней младший сим в семье живёт в режиме полной свободы. Игроку запрещено напрямую управлять им — только побуждать.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "single", requires: ["child"], tags: ["family", "drama"], requiresChild: true },
+            { id: "chaos_10", text: "💳 Потерянная карта: Кто-то из домочадцев роняет телефон или кошелёк, и со счёта пропадают симолеоны. Кажется, кому-то стоит внимательнее следить за вещами.", category: "chaos", subcategory: "soft-drama", intensity: 1, source: "default", targetType: "single", requires: [], tags: ["drama"] },
+            { id: "chaos_11", text: "🔥 Ночь у костра и бессонница: Семья или друзья жарят еду на костре и травят байки. Но после страшной истории симы настолько напуганы, что не могут уснуть.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "group", requires: ["friend"], tags: ["friendship", "family"] },
+            { id: "chaos_12", text: "⚡ Холодная война: Персонажи объявляют друг другу бойкот. Никаких разговоров и взаимодействий до конца недели — попробуйте выжить под одной крышей!", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["family"], tags: ["conflict", "drama"] },
+            { id: "chaos_13", text: "💼 Токсичный карьерист: Сим получает долгожданное неожиданное повышение, но вместе с ним наживает крайне завистливого и опасного коллегу.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "single", requires: [], tags: ["drama"] },
+            { id: "chaos_14", text: "💫 Привет из прошлого: Случайная встреча на улице с бывшим партнёром полностью переворачивает все планы на вечер и бередит старые раны.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "single", requires: [], tags: ["drama", "love"] },
+            { id: "chaos_15", text: "💔 Предательство друга: Друг рассказывает общий секрет посторонним. Тот, кто доверился, узнаёт об этом случайно.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "pair", requires: ["friend"], tags: ["drama", "conflict"] },
+            { id: "chaos_16", text: "💰 Займ, который не вернули: Один друг занял у другого крупную сумму и не возвращает. Начинается неловкое напряжение.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "pair", requires: ["friend"], tags: ["drama", "conflict"] },
+            { id: "chaos_17", text: "🎉 Вечеринка, которая вышла из-под контроля: Друзья устраивают вечеринку, но кто-то приглашает чужих. Соседи жалуются, полиция приезжает.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "group", requires: ["friend"], tags: ["drama"] },
+            { id: "chaos_18", text: "📸 Компрометирующее фото: На вечеринке кто-то сфотографировал друга в неловкий момент и выложил в сеть.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "pair", requires: ["friend"], tags: ["drama", "conflict"] },
+            { id: "chaos_19", text: "🚗 Разбитая машина: Друг взял машину покататься и вернул её помятой. Признаваться не спешит.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "pair", requires: ["friend"], tags: ["drama", "conflict"] },
+            { id: "chaos_20", text: "🎭 Ревность к новому другу: Один из друзей завёл нового близкого друга, и старый чувствует себя брошенным.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "pair", requires: ["friend"], tags: ["drama"] },
+            { id: "chaos_21", text: "💌 Анонимное любовное письмо: Партнёру приходит письмо от тайного поклонника. Второй партнёр находит и требует объяснений.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["partner"], tags: ["drama", "love", "conflict"] },
+            { id: "chaos_22", text: "📱 Сообщение не тому адресату: Один партнёр случайно отправляет флирт-сообщение другому человеку. Второй видит экран.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["partner"], tags: ["drama", "love", "conflict"] },
+            { id: "chaos_23", text: "🍸 Бывшая/бывший на горизонте: На вечеринке появляется бывший партнёр. Начинается ревность, флирт или холодная вежливость — как решит игрок.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["partner"], tags: ["drama", "love"] },
+            { id: "chaos_24", text: "💍 Отменённая помолвка: Один из пары отменяет помолвку в последний момент. Второй узнаёт об этом от гостей.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["partner"], tags: ["drama", "love"] },
+            { id: "chaos_25", text: "🛏️ Разные спальни: Пара решает спать в разных комнатах «на время». Никто не знает, что это значит.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "pair", requires: ["partner"], tags: ["drama", "love"] },
+            { id: "chaos_26", text: "📞 Пропавший на три дня: Один из партнёров исчезает без объяснений на 3 дня. Возвращается без внятной причины.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["partner"], tags: ["drama", "love"] },
+            { id: "chaos_27", text: "💸 Семейный долг: Один родственник влез в долги и просит всех скинуться. Другие не в восторге.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_28", text: "🎓 Проваленный экзамен подростка: Подросток провалил экзамены и скрывает это от родителей. Правда всплывает.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "group", requires: ["family", "teen"], tags: ["drama", "family"] },
+            { id: "chaos_29", text: "🚪 Уход из дома: Подросток или взрослый ребёнок собирает вещи и уходит из дома после ссоры.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_30", text: "📜 Завещание бабушки: После тяжёлой болезни пожилого родственника семья читает завещание. Кто-то получает больше, чем ожидал.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["family", "elder"], tags: ["drama", "family"] },
+            { id: "chaos_31", text: "🎂 Сорванный юбилей: Организатор праздника в последний момент отменяет всё из-за конфликта с виновником торжества.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_32", text: "🍷 Пьяный родственник на празднике: Праздник превращается в скандал, потому что кто-то перебрал и начал выяснять отношения.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_33", text: "📺 Публичный позор: Один из родственников попал в неприятную историю, о которой узнал весь район. Семья вынуждена оправдываться.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_34", text: "🧳 Родственник, который не уезжает: Дальний родственник приехал «на пару дней» и живёт уже месяц. Никто не решается выгнать.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_35", text: "👶 Спор о воспитании: Родители расходятся во мнениях о том, как воспитывать ребёнка. Конфликт выходит наружу при ребёнке.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "group", requires: ["family", "child"], tags: ["drama", "family"] },
+            { id: "chaos_36", text: "📱 Ребёнок в интернете: Родители узнают, что ребёнок завёл тайный аккаунт и общается с незнакомцами.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "group", requires: ["family", "child"], tags: ["drama", "family"] },
+            { id: "chaos_37", text: "🚨 Подросток попал в неприятности: Подростка задержали за мелкое хулиганство. Родители должны его выручать.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["family", "teen"], tags: ["drama", "family"] },
+            { id: "chaos_38", text: "🏠 Брат против брата: Двое сиблингов не могут поделить комнату, наследство или внимание родителей. Ссора перерастает в холодную войну.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["family"], tags: ["drama", "family", "conflict"] },
+            { id: "chaos_39", text: "👵 Бабушка против матери: Пожилая родственница вмешивается в воспитание внуков, мать не выдерживает.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "group", requires: ["family", "elder"], tags: ["drama", "family", "conflict"] },
+            { id: "chaos_40", text: "💼 Конкурент на работе: Соперник получает должность, которую сим ждал годами. Сим ищет способ отомстить.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["rival"], tags: ["drama", "conflict"] },
+            { id: "chaos_41", text: "🎓 Соперничество в учёбе: Двое соперников постоянно соревнуются за первое место. Один из них решается на подлость.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "pair", requires: ["rival"], tags: ["drama", "conflict"] },
+            { id: "chaos_42", text: "💔 Любовный треугольник: Двое соперников влюблены в одного и того же сима. Противостояние доходит до открытой ссоры.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["rival"], tags: ["drama", "love", "conflict"] },
+            { id: "chaos_43", text: "🗞️ Сплетни от соперника: Соперник распускает слухи о персонаже. Слухи доходят до начальства.", category: "chaos", subcategory: "hard-drama", intensity: 2, source: "default", targetType: "pair", requires: ["rival"], tags: ["drama", "conflict"] },
+            { id: "chaos_44", text: "🥊 Публичная ссора: Соперники встречаются на вечеринке и выясняют отношения при всех. Кто-то уходит в слезах, кто-то в ярости.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "pair", requires: ["rival"], tags: ["drama", "conflict"] },
+            { id: "chaos_45", text: "💸 Крупный счёт за ремонт: Прорвало трубу или сломалась техника. Ремонт стоит как половина бюджета.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "single", requires: [], tags: ["drama", "family"] },
+            { id: "chaos_46", text: "🔥 Пожар на кухне: Что-то подгорело, начался пожар. Половина дома — в копоти.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_47", text: "💼 Увольнение: Сима увольняют с работы. Он скрывает это от близких пару дней.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "single", requires: [], tags: ["drama"] },
+            { id: "chaos_48", text: "📉 Инвестиции прогорели: Семья вложила деньги в «верное дело» и потеряла почти всё.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_49", text: "🏥 Травма в спортзале: Сим неудачно тренируется, ломает ногу и на месяц выпадает из активной жизни.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "single", requires: [], tags: ["drama"] },
+            { id: "chaos_50", text: "🌪️ Ураган повредил дом: Ночью разыгралась буря, ветром снесло крышу или затопило подвал.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_51", text: "🐛 Нашествие вредителей: В доме завелись тараканы или клопы. Все вынуждены временно переехать.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] },
+            { id: "chaos_52", text: "💊 Внезапная болезнь: Один из симов серьёзно заболевает. Остальные вынуждены распределить обязанности.", category: "chaos", subcategory: "hard-drama", intensity: 3, source: "default", targetType: "group", requires: ["family"], tags: ["drama", "family"] }
+        ];
+
+        const defaultSoftDrama = [
+            { id: "soft_1", text: "🧳 Незваный гость: На пороге вашего дома неожиданно появляется дальний родственник с чемоданом, заявляя, что погостит неопределённый срок.", category: "chaos", subcategory: "soft-drama", intensity: 1, source: "default", targetType: "group", requires: ["family"], tags: ["family", "drama"] },
+            { id: "soft_2", text: "📜 Семейная реликвия: Ребёнок случайно находит на чердаке или в старом комоде пожелтевшее письмо, раскрывающее давнюю семейную тайну.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "single", requires: ["family"], tags: ["family", "drama"] },
+            { id: "soft_3", text: "💸 Непредвиденные расходы: Неожиданный крупный счёт за коммуналку или крупный штраф заставляет всю семью экстренно пересмотреть бюджет и затянуть пояса.", category: "chaos", subcategory: "soft-drama", intensity: 2, source: "default", targetType: "group", requires: ["family"], tags: ["family", "drama"] }
+        ];
+
+        const normalizeCustom = (item, index) => {
+            if (typeof item === 'string') {
+                const cleanText = item.replace(/^⭐ Кастомное событие:\s*/, '');
+                return {
+                    id: 'custom_' + Date.now() + '_' + index,
+                    text: cleanText,
+                    category: 'custom',
+                    subcategory: 'custom',
+                    intensity: 1,
+                    source: 'custom',
+                    targetType: 'single',
+                    requires: [],
+                    tags: []
+                };
+            }
+            if (item && typeof item === 'object') {
+                return {
+                    id: item.id || ('custom_' + Date.now() + '_' + index),
+                    text: item.text || String(item),
+                    category: item.category || 'custom',
+                    subcategory: item.subcategory || 'custom',
+                    intensity: item.intensity || 1,
+                    source: 'custom',
+                    targetType: item.targetType || 'single',
+                    requires: item.requires || [],
+                    tags: item.tags || []
+                };
+            }
+            return null;
+        };
+
+        let rawCustomEvents = JSON.parse(localStorage.getItem('sims_custom_events')) || [];
+        let customEvents = rawCustomEvents.map(normalizeCustom).filter(Boolean);
+
+        let enableDefaultEvents = localStorage.getItem('sims_enable_default_events') !== 'false';
+        let enableCustomEvents = localStorage.getItem('sims_enable_custom_events') !== 'false';
+        let enableCozy = localStorage.getItem('sims_modeCozy') !== 'false';
+        let enableChaos = localStorage.getItem('sims_modeChaos') !== 'false';
+
+        $('enableDefaultEvents').checked = enableDefaultEvents;
+        $('enableCustomEvents').checked = enableCustomEvents;
+        $('modeCozy').checked = enableCozy;
+        $('modeChaos').checked = enableChaos;
+
+        let historyLog = JSON.parse(localStorage.getItem('sims_history_log')) || [];
+        let activeEvents = [];
+        let editingCustomIndex = null;
+        let editingSimId = null;
+
+        let isSpinning = false;
+        let spinTimer = null;
+        let lastSpinParticipants = null;
+        let lastResultWasTodayIdea = false;
+
+        let currentTheme = localStorage.getItem('sims_theme') || 'cozy';
+
+        let selectedNewSimAvatar = '';
+        let selectedEditSimAvatar = '';
+
+        function applyTheme(theme) {
+            document.body.classList.remove('theme-focus', 'theme-forest', 'theme-dark');
+            if (theme === 'focus') document.body.classList.add('theme-focus');
+            if (theme === 'forest') document.body.classList.add('theme-forest');
+            if (theme === 'dark') document.body.classList.add('theme-dark');
+            $('themeToggleBtn').textContent = THEME_ICONS[theme] || '☀️';
+        }
+        applyTheme(currentTheme);
+
+        let soundEnabled = localStorage.getItem('sims_sound_enabled') !== 'false';
+
+        function updateSoundIcon() {
+            const btn = $('soundToggleBtn');
+            btn.textContent = soundEnabled ? '🔊' : '🔇';
+            btn.setAttribute('aria-pressed', String(soundEnabled));
+            btn.title = soundEnabled ? 'Звук включен (нажмите выкл)' : 'Звук выключен (нажмите вкл)';
+        }
+        updateSoundIcon();
+
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+            }
+        }
+
+        function playTickSound() {
+            if (!soundEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.03);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.03);
+            } catch(e) {}
+        }
+
+        function playWinSound() {
+            if (!soundEnabled || !audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                [440, 554.37, 659.25, 880].forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + i * 0.06);
+                    gain.gain.setValueAtTime(0.12, now + i * 0.06);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.4);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(now + i * 0.06); osc.stop(now + i * 0.06 + 0.4);
+                });
+            } catch(e) {}
+        }
+
+        function getRelationBetween(idA, idB) {
+            const a = String(idA), b = String(idB);
+            return familyRelationships.find(r =>
+                (String(r.a) === a && String(r.b) === b) ||
+                (String(r.a) === b && String(r.b) === a)
+            ) || null;
+        }
+
+        function saveRelationships() {
+            localStorage.setItem('sims_family_relationships', JSON.stringify(familyRelationships));
+        }
+
+        function updateRelationDropdowns() {
+            const selA = $('relSimA');
+            const selB = $('relSimB');
+            const prevA = selA.value;
+            const prevB = selB.value;
+
+            selA.innerHTML = '<option value="" disabled selected>Первый сим...</option>';
+            selB.innerHTML = '<option value="" disabled selected>Второй сим...</option>';
+
+            familyMembers.forEach(sim => {
+                const optA = document.createElement('option');
+                optA.value = sim.id;
+                optA.textContent = `${sim.avatar} ${sim.name}`;
+                selA.appendChild(optA);
+
+                const optB = document.createElement('option');
+                optB.value = sim.id;
+                optB.textContent = `${sim.avatar} ${sim.name}`;
+                selB.appendChild(optB);
+            });
+
+            if (prevA) selA.value = prevA;
+            if (prevB) selB.value = prevB;
+        }
+
+        function renderRelationshipsList() {
+            const container = $('relationsManageList');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (familyRelationships.length === 0) {
+                container.innerHTML = `<div class="empty-hint">Нет заданных связей</div>`;
+                return;
+            }
+
+            familyRelationships.forEach(rel => {
+                const simA = familyMembers.find(s => String(s.id) === String(rel.a));
+                const simB = familyMembers.find(s => String(s.id) === String(rel.b));
+                if (!simA || !simB) return;
+
+                const label = RELATION_LABELS[rel.type] || rel.type;
+                const item = document.createElement('div');
+                item.className = 'relation-manage-item';
+                item.innerHTML = `
+                    <span class="relation-manage-text" title="${simA.name} — ${simB.name}: ${label}">
+                        ${simA.name} — ${simB.name}: ${label}
+                    </span>
+                    <div class="relation-actions">
+                        <button type="button" class="custom-event-btn-small"
+                                data-action="del-rel" data-id="${rel.id}"
+                                aria-label="Удалить связь" title="Удалить">✕</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function saveRelation() {
+            const a = $('relSimA').value;
+            const b = $('relSimB').value;
+            const type = $('relType').value;
+
+            if (!a || !b) { showNotification("Выберите обоих симов"); return; }
+            if (String(a) === String(b)) { showNotification("Нельзя связать сима с самим собой"); return; }
+
+            const existing = getRelationBetween(a, b);
+            if (existing) {
+                existing.type = type;
+                showNotification("Связь обновлена");
+            } else {
+                familyRelationships.push({
+                    id: 'rel_' + Date.now(),
+                    a: String(a),
+                    b: String(b),
+                    type
+                });
+                showNotification("Связь добавлена");
+            }
+
+            saveRelationships();
+            renderRelationshipsList();
+            $('relSimA').value = '';
+            $('relSimB').value = '';
+        }
+
+        function confirmDeleteRelation(id) {
+            openConfirmModal("Удалить эту связь?", () => {
+                const removed = familyRelationships.find(r => r.id === id);
+                const removedIndex = familyRelationships.findIndex(r => r.id === id);
+                if (!removed) return;
+                familyRelationships = familyRelationships.filter(r => r.id !== id);
+                saveRelationships();
+                renderRelationshipsList();
+                closeConfirmModal();
+                showNotification("Связь удалена", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        familyRelationships.splice(removedIndex, 0, removed);
+                        saveRelationships();
+                        renderRelationshipsList();
+                    }
+                });
+            });
+        }
+
+        function participantsSatisfy(participants, requiresList) {
+            if (!requiresList || requiresList.length === 0) return true;
+            const ids = participants.map(p => String(p.id));
+            const roles = participants.map(p => p.role || 'adult');
+
+            for (const req of requiresList) {
+                if (req === 'family') {
+                    if (participants.length < 2) continue;
+                    const allConnected = ids.every(id =>
+                        ids.some(otherId => {
+                            if (id === otherId) return false;
+                            const rel = getRelationBetween(id, otherId);
+                            return rel && (rel.type === 'parent-child'
+                                || rel.type === 'sibling'
+                                || rel.type === 'partner');
+                        })
+                    );
+                    if (!allConnected) return false;
+                } else if (req === 'partner') {
+                    if (participants.length !== 2) return false;
+                    const rel = getRelationBetween(ids[0], ids[1]);
+                    if (!rel || rel.type !== 'partner') return false;
+                } else if (req === 'child') {
+                    if (!roles.includes('child')) return false;
+                } else if (req === 'teen') {
+                    if (!roles.includes('teen')) return false;
+                } else if (req === 'elder') {
+                    if (!roles.includes('elder')) return false;
+                } else if (req === 'friend') {
+                    if (participants.length < 2) return false;
+                    const allConnected = ids.every(id =>
+                        ids.some(otherId => {
+                            if (id === otherId) return false;
+                            const rel = getRelationBetween(id, otherId);
+                            return rel && rel.type === 'friend';
+                        })
+                    );
+                    if (!allConnected) return false;
+                } else if (req === 'rival') {
+                    if (participants.length < 2) return false;
+                    const allConnected = ids.every(id =>
+                        ids.some(otherId => {
+                            if (id === otherId) return false;
+                            const rel = getRelationBetween(id, otherId);
+                            return rel && rel.type === 'rival';
+                        })
+                    );
+                    if (!allConnected) return false;
+                }
+            }
+            return true;
+        }
+
+        function matchTargetType(ev, count) {
+            const t = ev.targetType || "single";
+            if (t === "single") return count === 1;
+            if (t === "pair")   return count === 2;
+            if (t === "group")  return count >= 3;
+            return true;
+        }
+
+        function describeParticipantsRelation(participants) {
+            if (participants.length < 2) return '';
+            const ids = participants.map(p => String(p.id));
+            const labels = [];
+
+            for (let i = 0; i < ids.length; i++) {
+                for (let j = i + 1; j < ids.length; j++) {
+                    const rel = getRelationBetween(ids[i], ids[j]);
+                    if (rel) {
+                        const l = RELATION_LABELS[rel.type];
+                        if (l && !labels.includes(l)) labels.push(l);
+                    }
+                }
+            }
+            return labels.join(' · ');
+        }
+
+        function splitEventText(fullText) {
+            const match = fullText.match(/^([^:]{2,80}):\s*(.+)$/s);
+            if (match) {
+                return { title: match[1].trim(), description: match[2].trim() };
+            }
+            return { title: fullText, description: '' };
+        }
+
+        function getRelevantRelations(participants, eventObj) {
+            if (participants.length < 2) return [];
+            const requires = eventObj && eventObj.requires ? eventObj.requires : [];
+            if (requires.length === 0) return [];
+
+            const ids = participants.map(p => String(p.id));
+
+            const mapReqToType = {
+                partner: ['partner'],
+                family: ['partner', 'parent-child', 'sibling'],
+                friend: ['friend'],
+                rival: ['rival']
+            };
+
+            const allowedTypes = new Set();
+            requires.forEach(req => {
+                (mapReqToType[req] || []).forEach(t => allowedTypes.add(t));
+            });
+
+            if (allowedTypes.size === 0) return [];
+
+            const seen = new Set();
+            const result = [];
+
+            for (let i = 0; i < ids.length; i++) {
+                for (let j = i + 1; j < ids.length; j++) {
+                    const rel = getRelationBetween(ids[i], ids[j]);
+                    if (!rel) continue;
+                    if (!allowedTypes.has(rel.type)) continue;
+
+                    const key = rel.type + '_' + ids[i] + '_' + ids[j];
+                    if (seen.has(key)) continue;
+                    seen.add(key);
+
+                    result.push({
+                        type: rel.type,
+                        label: RELATION_LABELS[rel.type] || rel.type
+                    });
+                }
+            }
+            return result;
+        }
+
+        function renderParticipantChips(participants) {
+            const container = $('modalParticipants');
+            container.innerHTML = '';
+            participants.forEach(p => {
+                const chip = document.createElement('span');
+                chip.className = 'participant-chip';
+                chip.innerHTML = `<span class="chip-avatar">${p.avatar}</span>${p.name}`;
+                container.appendChild(chip);
+            });
+        }
+
+        function renderRelationChips(participants, eventObj) {
+            const titleEl = $('modalRelationsTitle');
+            const container = $('modalRelationChips');
+            container.innerHTML = '';
+
+            const relations = getRelevantRelations(participants, eventObj);
+            if (relations.length === 0) {
+                titleEl.style.display = 'none';
+                return;
+            }
+            titleEl.style.display = '';
+
+            relations.forEach(rel => {
+                const chip = document.createElement('span');
+                chip.className = 'relation-chip';
+                chip.textContent = rel.label;
+                container.appendChild(chip);
+            });
+        }
+
+        function setModalCategory(label, category) {
+            const el = $('modalCategory');
+            el.textContent = label;
+            el.classList.remove('is-cozy', 'is-chaos', 'is-custom');
+            if (category === 'cozy') el.classList.add('is-cozy');
+            else if (category === 'chaos') el.classList.add('is-chaos');
+            else el.classList.add('is-custom');
+        }
+
+        function updatePresetDropdown() {
+            const select = $('presetSelect');
+            const names = Object.keys(savedPresets);
+            select.innerHTML = '<option value="" disabled selected>Выберите сохранённую семью...</option>';
+            names.forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                select.appendChild(opt);
+            });
+
+            const hint = $('presetEmptyHint');
+            const deleteBtn = $('deletePresetBtn');
+            const hasPresets = names.length > 0;
+            select.style.display = hasPresets ? '' : 'none';
+            deleteBtn.style.display = hasPresets ? '' : 'none';
+            hint.style.display = hasPresets ? 'none' : '';
+        }
+        updatePresetDropdown();
+
+        function saveCurrentPreset() {
+            const nameInput = $('presetNameInput');
+            const name = nameInput.value.trim() || currentFamilyName;
+            if (familyMembers.length === 0) {
+                showNotification("Список пуст, нечего сохранять!");
+                return;
+            }
+            savedPresets[name] = {
+                name,
+                members: JSON.parse(JSON.stringify(familyMembers)),
+                relationships: JSON.parse(JSON.stringify(familyRelationships)),
+                customEvents: JSON.parse(JSON.stringify(customEvents))
+            };
+            localStorage.setItem('sims_saved_presets', JSON.stringify(savedPresets));
+            updatePresetDropdown();
+            $('presetSelect').value = name;
+            nameInput.value = '';
+            showNotification(`Семья "${name}" сохранена`);
+        }
+
+        function loadPreset(name) {
+            if (!savedPresets[name]) return;
+            const data = savedPresets[name];
+            const loadedMembers = data.members || data;
+            familyMembers = normalizeFamilyMembers(loadedMembers);
+            currentFamilyName = data.name || name;
+            localStorage.setItem('sims_current_family_name', currentFamilyName);
+
+            familyRelationships = Array.isArray(data.relationships) ? data.relationships : [];
+            saveRelationships();
+
+            if (data.customEvents) {
+                customEvents = data.customEvents.map(normalizeCustom).filter(Boolean);
+                localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+                renderCustomEventsManager();
+                updateEventsList();
+            }
+
+            saveAndRenderFamily();
+            updateRelationDropdowns();
+            renderRelationshipsList();
+            showNotification(`Семья "${currentFamilyName}" загружена`);
+        }
+
+        function confirmDeletePreset() {
+            const name = $('presetSelect').value;
+            if (!name) { showNotification("Выберите пресет для удаления"); return; }
+            openConfirmModal(`Удалить пресет «${name}»?`, () => {
+                const removed = savedPresets[name];
+                delete savedPresets[name];
+                localStorage.setItem('sims_saved_presets', JSON.stringify(savedPresets));
+                updatePresetDropdown();
+                closeConfirmModal();
+                showNotification("Пресет удален", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        savedPresets[name] = removed;
+                        localStorage.setItem('sims_saved_presets', JSON.stringify(savedPresets));
+                        updatePresetDropdown();
+                    }
+                });
+            });
+        }
+
+        function exportFamilyFile() {
+            const dataToExport = {
+                version: SCHEMA_VERSION,
+                familyName: currentFamilyName,
+                familyMembers,
+                familyRelationships,
+                customEvents
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataToExport, null, 2));
+            const a = document.createElement('a');
+            a.href = dataStr;
+            a.download = "sims_family_preset.json";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            showNotification("Файл семьи скачан");
+        }
+
+        function importFamilyFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.readAsText(file, "UTF-8");
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (!imported.familyMembers) {
+                        showNotification("Неверный формат файла");
+                        return;
+                    }
+                    familyMembers = normalizeFamilyMembers(imported.familyMembers);
+                    if (imported.familyName) {
+                        currentFamilyName = imported.familyName;
+                        localStorage.setItem('sims_current_family_name', currentFamilyName);
+                    }
+                    familyRelationships = Array.isArray(imported.familyRelationships)
+                        ? imported.familyRelationships
+                        : [];
+                    saveRelationships();
+
+                    if (imported.customEvents) {
+                        customEvents = imported.customEvents.map(normalizeCustom).filter(Boolean);
+                        localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+                        renderCustomEventsManager();
+                        updateEventsList();
+                    }
+                    saveAndRenderFamily();
+                    updateRelationDropdowns();
+                    renderRelationshipsList();
+                    showNotification("Семья успешно загружена");
+                } catch {
+                    showNotification("Ошибка чтения файла JSON");
+                }
+            };
+            event.target.value = '';
+        }
+
+        function updateEventsList() {
+            activeEvents = [];
+            if (enableDefaultEvents) {
+                if (enableCozy) activeEvents.push(...defaultCozy);
+                if (enableChaos) activeEvents.push(...defaultChaos, ...defaultSoftDrama);
+            }
+            if (enableCustomEvents) activeEvents.push(...customEvents);
+
+            if (activeEvents.length === 0) {
+                activeEvents.push({
+                    id: "empty_warning",
+                    text: "✨ Внимание: Все события отключены. Включите дефолтные события или добавьте свои кастомные в настройках!",
+                    category: "custom",
+                    subcategory: "custom",
+                    intensity: 1,
+                    source: "default",
+                    targetType: "single",
+                    requires: [],
+                    tags: []
+                });
+            }
+        }
+
+        function renderCustomEventsManager() {
+            const container = $('customEventsManageList');
+            container.innerHTML = '';
+            $('customEventsCount').textContent = customEvents.length;
+
+            if (customEvents.length === 0) {
+                container.innerHTML = `<div class="empty-hint">У вас пока нет своих событий. Добавьте первое выше ↑</div>`;
+                return;
+            }
+            customEvents.forEach((evObj, index) => {
+                const cleanText = evObj.text.replace(/^⭐ Кастомное событие:\s*/, '');
+                const item = document.createElement('div');
+                item.className = 'custom-event-manage-item';
+                item.innerHTML = `
+                    <span class="custom-event-manage-text" title="${cleanText}">${cleanText}</span>
+                    <div class="custom-event-actions">
+                        <button type="button" class="custom-event-btn-small" data-action="edit-ev" data-index="${index}" aria-label="Редактировать событие" title="Редактировать">✎</button>
+                        <button type="button" class="custom-event-btn-small" data-action="del-ev" data-index="${index}" aria-label="Удалить событие" title="Удалить">✕</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function startEditCustomEvent(index) {
+            editingCustomIndex = index;
+            const cleanText = customEvents[index].text.replace(/^⭐ Кастомное событие:\s*/, '');
+            $('customEventText').value = cleanText;
+            $('customEventActionBtn').textContent = "Сохранить изменения";
+            $('customEventForm').classList.add('open');
+            $('toggleCustomForm').textContent = '× Скрыть';
+        }
+
+        function confirmDeleteCustomEvent(index) {
+            openConfirmModal("Удалить это кастомное событие?", () => {
+                const removed = customEvents[index];
+                customEvents.splice(index, 1);
+                localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+                if (editingCustomIndex === index) cancelEditCustomEvent();
+                updateEventsList();
+                renderCustomEventsManager();
+                closeConfirmModal();
+                showNotification("Событие удалено", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        customEvents.splice(index, 0, removed);
+                        localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+                        updateEventsList();
+                        renderCustomEventsManager();
+                    }
+                });
+            });
+        }
+
+        function cancelEditCustomEvent() {
+            editingCustomIndex = null;
+            $('customEventText').value = '';
+            $('customEventActionBtn').textContent = "Добавить в колесо";
+        }
+
+        function addCustomEvent() {
+            const textInput = $('customEventText');
+            const val = textInput.value.trim();
+            if (!val) return;
+
+            if (editingCustomIndex !== null) {
+                const prevText = customEvents[editingCustomIndex].text;
+                customEvents[editingCustomIndex].text = val;
+                showNotification("Событие обновлено", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        customEvents[editingCustomIndex].text = prevText;
+                        localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+                        updateEventsList();
+                        renderCustomEventsManager();
+                    }
+                });
+                cancelEditCustomEvent();
+            } else {
+                const newEvent = {
+                    id: 'custom_' + Date.now(),
+                    text: val,
+                    category: 'custom',
+                    subcategory: 'custom',
+                    intensity: 1,
+                    source: 'custom',
+                    targetType: 'single',
+                    requires: [],
+                    tags: []
+                };
+                customEvents.push(newEvent);
+                showNotification("Событие добавлено", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        const idx = customEvents.findIndex(e => e.id === newEvent.id);
+                        if (idx !== -1) customEvents.splice(idx, 1);
+                        localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+                        updateEventsList();
+                        renderCustomEventsManager();
+                    }
+                });
+            }
+            localStorage.setItem('sims_custom_events', JSON.stringify(customEvents));
+            textInput.value = '';
+            updateEventsList();
+            renderCustomEventsManager();
+        }
+
+        function addCustomSim() {
+            const nameInput = $('newSimName');
+            const name = nameInput.value.trim();
+            const avatar = "👤";
+            const roleInput = $('newSimRole');
+            const role = roleInput.value || 'adult';
+
+            if (!name) { showNotification("Введите имя персонажа!"); return; }
+
+            const newId = familyMembers.length > 0 ? Math.max(...familyMembers.map(s => s.id)) + 1 : 1;
+            const newSim = { id: newId, name, avatar, active: true, role };
+            familyMembers.push(newSim);
+            saveAndRenderFamily();
+
+            nameInput.value = '';
+            roleInput.value = 'adult';
+            showNotification(`Сим ${name} добавлен`, {
+                undoLabel: 'Отменить',
+                onUndo: () => {
+                    familyMembers = familyMembers.filter(s => s.id !== newId);
+                    familyRelationships = familyRelationships.filter(r =>
+                        String(r.a) !== String(newId) && String(r.b) !== String(newId)
+                    );
+                    saveRelationships();
+                    saveAndRenderFamily();
+                    updateRelationDropdowns();
+                    renderRelationshipsList();
+                }
+            });
+        }
+
+        function deleteSim(id) {
+            const simIndex = familyMembers.findIndex(s => s.id === id);
+            if (simIndex === -1) return;
+            const sim = familyMembers[simIndex];
+            const removedSim = { ...sim };
+            const removedRels = familyRelationships.filter(r =>
+                String(r.a) === String(id) || String(r.b) === String(id)
+            );
+
+            openConfirmModal(`Удалить персонажа «${sim.name}» из семьи?`, () => {
+                familyMembers = familyMembers.filter(s => s.id !== id);
+                familyRelationships = familyRelationships.filter(r =>
+                    String(r.a) !== String(id) && String(r.b) !== String(id)
+                );
+                saveRelationships();
+                saveAndRenderFamily();
+                updateRelationDropdowns();
+                renderRelationshipsList();
+                closeConfirmModal();
+                showNotification("Персонаж удален", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        familyMembers.splice(simIndex, 0, removedSim);
+                        removedRels.forEach(r => {
+                            if (!familyRelationships.find(x => x.id === r.id)) {
+                                familyRelationships.push(r);
+                            }
+                        });
+                        saveRelationships();
+                        saveAndRenderFamily();
+                        updateRelationDropdowns();
+                        renderRelationshipsList();
+                    }
+                });
+            });
+        }
+
+        function clearAllSims() {
+            if (familyMembers.length === 0) {
+                showNotification("Список персонажей уже пуст");
+                return;
+            }
+            const snapshotMembers = JSON.parse(JSON.stringify(familyMembers));
+            const snapshotRels = JSON.parse(JSON.stringify(familyRelationships));
+            openConfirmModal(`Удалить всех персонажей (${familyMembers.length}) и все их связи?`, () => {
+                familyMembers = [];
+                familyRelationships = [];
+                saveRelationships();
+                saveAndRenderFamily();
+                updateRelationDropdowns();
+                renderRelationshipsList();
+                closeConfirmModal();
+                showNotification("Все персонажи удалены", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        familyMembers = snapshotMembers;
+                        familyRelationships = snapshotRels;
+                        saveRelationships();
+                        saveAndRenderFamily();
+                        updateRelationDropdowns();
+                        renderRelationshipsList();
+                    }
+                });
+            });
+        }
+
+        function openEditSimModal(id) {
+            const sim = familyMembers.find(s => s.id === id);
+            if (!sim) return;
+            editingSimId = id;
+            $('editSimNameInput').value = sim.name;
+            selectedEditSimAvatar = sim.avatar || '';
+            updateEmojiLabel($('editSimAvatarLabel'), selectedEditSimAvatar);
+            if (pickerState['edit']) pickerState['edit'].updateSelected(selectedEditSimAvatar);
+            $('editSimRoleInput').value = sim.role || 'adult';
+            openModalWithTrap('editSimModal');
+        }
+
+        function closeEditSimModal() {
+            closeModalWithTrap('editSimModal');
+            editingSimId = null;
+            selectedEditSimAvatar = '';
+            closeAllEmojiPickers();
+        }
+
+        function saveEditedSim() {
+            if (editingSimId === null) return;
+            const sim = familyMembers.find(s => s.id === editingSimId);
+            if (sim) {
+                const newName = $('editSimNameInput').value.trim();
+                const newAvatar = selectedEditSimAvatar || "👤";
+                const newRole = $('editSimRoleInput').value || 'adult';
+                if (newName) {
+                    const prev = { name: sim.name, avatar: sim.avatar, role: sim.role };
+                    sim.name = newName;
+                    sim.avatar = newAvatar;
+                    sim.role = newRole;
+                    saveAndRenderFamily();
+                    showNotification("Персонаж изменен", {
+                        undoLabel: 'Отменить',
+                        onUndo: () => {
+                            const s = familyMembers.find(x => x.id === editingSimId || x.id === sim.id);
+                            if (s) {
+                                s.name = prev.name;
+                                s.avatar = prev.avatar;
+                                s.role = prev.role;
+                                saveAndRenderFamily();
+                            }
+                        }
+                    });
+                }
+            }
+            closeEditSimModal();
+        }
+
+        function saveAndRenderFamily() {
+            localStorage.setItem('sims_family_members', JSON.stringify(familyMembers));
+            renderFamily();
+        }
+
+        function renderFamily() {
+            const grid = $('simsGrid');
+            $('familyTitleDisplay').textContent = currentFamilyName;
+            grid.innerHTML = '';
+            if (familyMembers.length === 0) {
+                // Пустое состояние без CTA-кнопки.
+                // Подсказка ведёт пользователя в настройки и напоминает про отношения.
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-emoji">👥</div>
+                        <div class="empty-title">Семья пока пуста</div>
+                        <div class="empty-sub">
+                            Нажмите ⚙️ (настройки), чтобы добавить персонажей.
+                            Задайте им связи, чтобы события отображались правильно.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            familyMembers.forEach(sim => {
+                const card = document.createElement('div');
+                card.className = `sim-card ${sim.active ? '' : 'disabled'}`;
+                const roleLabel = ROLE_LABELS[sim.role] || ROLE_LABELS.adult;
+                card.innerHTML = `
+                    <button type="button" class="sim-edit-btn" data-action="edit-sim" data-id="${sim.id}" aria-label="Редактировать ${sim.name}" title="Редактировать">✎</button>
+                    <button type="button" class="sim-delete-btn" data-action="del-sim" data-id="${sim.id}" aria-label="Удалить ${sim.name}" title="Удалить">✕</button>
+                    <div class="sim-avatar">${sim.avatar}</div>
+                    <div class="sim-name">${sim.name}</div>
+                    <div class="sim-role-badge" title="${roleLabel}">${roleLabel}</div>
+                    <button type="button" class="sim-action-btn" data-action="roll-sim" data-id="${sim.id}">🎲 Бросок</button>
+                `;
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('button')) return;
+                    sim.active = !sim.active;
+                    saveAndRenderFamily();
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        function openModal(id) { openModalWithTrap(id); }
+        function closeModal(id) { closeModalWithTrap(id); }
+
+        let confirmCallback = null;
+        function openConfirmModal(text, onYes) {
+            $('confirmModalText').textContent = text;
+            confirmCallback = onYes;
+            openModalWithTrap('confirmModal');
+        }
+        function closeConfirmModal() {
+            closeModalWithTrap('confirmModal');
+            confirmCallback = null;
+        }
+
+        function addToHistory(typeTag, simInfoStr, text, meta = {}) {
+            const now = new Date();
+            const dateStr = String(now.getDate()).padStart(2, '0') + '.' +
+                            String(now.getMonth() + 1).padStart(2, '0') + '.' +
+                            now.getFullYear();
+            const timeStr = String(now.getHours()).padStart(2, '0') + ':' +
+                            String(now.getMinutes()).padStart(2, '0');
+            historyLog.unshift({
+                id: 'id_' + Date.now() + Math.random().toString(36).slice(2, 7),
+                date: dateStr,
+                time: timeStr,
+                type: typeTag,
+                sim: simInfoStr,
+                text,
+                eventId: meta.eventId || null,
+                eventCategory: meta.eventCategory || null,
+                participantIds: meta.participantIds || []
+            });
+            if (historyLog.length > 100) historyLog.pop();
+            localStorage.setItem('sims_history_log', JSON.stringify(historyLog));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const listEl = $('historyList');
+            if (historyLog.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state" style="padding:14px 6px;">
+                        <div class="empty-emoji">📭</div>
+                        <div class="empty-title">История пуста</div>
+                        <div class="empty-sub">Крутите колесо, чтобы здесь появились выпавшие события.</div>
+                    </div>
+                `;
+                return;
+            }
+            listEl.innerHTML = '';
+            historyLog.slice(0, 5).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div class="history-meta">${item.date} ${item.time} · ${item.sim}</div>
+                    <div class="history-tag">${item.type}</div>
+                    <div>${item.text}</div>
+                `;
+                listEl.appendChild(div);
+            });
+        }
+
+        function renderFullHistory() {
+            const listEl = $('fullHistoryList');
+            listEl.innerHTML = '';
+            if (historyLog.length === 0) {
+                listEl.innerHTML = `<div style="font-size: 13px; color: var(--muted); text-align: center; padding: 20px;">История пуста</div>`;
+                return;
+            }
+            historyLog.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div class="history-meta">${item.date} ${item.time} · ${item.sim}</div>
+                    <div class="history-tag">${item.type}</div>
+                    <div>${item.text}</div>
+                `;
+                listEl.appendChild(div);
+            });
+        }
+
+        function getActiveSims() {
+            return familyMembers.filter(s => s.active);
+        }
+
+        function buildParticipantsForEvent(ev, opts = {}) {
+            const active = getActiveSims();
+            if (active.length === 0) return null;
+
+            const recentParticipantIds = new Set(
+                historyLog.slice(0, PARTICIPANT_COOLDOWN * 3)
+                    .flatMap(item => (item.participantIds || []))
+            );
+
+            const weights = active.map(sim => {
+                let w = 1;
+                const countInHistory = historyLog.slice(0, RECENT_BAN_WINDOW * 3)
+                    .filter(item => item.sim && item.sim.includes(sim.name)).length;
+                w = 1 / (1 + countInHistory * 0.4);
+                if (recentParticipantIds.has(String(sim.id))) w *= 0.4;
+                return { sim, weight: w };
+            });
+
+            const targetType = ev.targetType || "single";
+            const requires = ev.requires || [];
+
+            const candidateSets = generateCandidateSets(active, targetType, requires);
+            if (candidateSets.length === 0) return null;
+
+            const setWeights = candidateSets.map(set => {
+                const w = set.reduce((acc, sim) => {
+                    const rec = weights.find(x => x.sim.id === sim.id);
+                    return acc + (rec ? rec.weight : 1);
+                }, 0);
+                return w / set.length;
+            });
+
+            const total = setWeights.reduce((s, w) => s + w, 0);
+            if (total <= 0) {
+                return candidateSets[Math.floor(Math.random() * candidateSets.length)];
+            }
+
+            let roll = Math.random() * total;
+            for (let i = 0; i < candidateSets.length; i++) {
+                roll -= setWeights[i];
+                if (roll <= 0) return candidateSets[i];
+            }
+            return candidateSets[candidateSets.length - 1];
+        }
+
+        function generateCandidateSets(active, targetType, requires) {
+            const result = [];
+            const needsPartner = requires.includes('partner');
+            const needsFamily = requires.includes('family');
+            const needsFriend = requires.includes('friend');
+            const needsRival = requires.includes('rival');
+            const needsChild = requires.includes('child');
+            const needsTeen = requires.includes('teen');
+            const needsElder = requires.includes('elder');
+
+            function allHaveRelation(set, type) {
+                const ids = set.map(s => String(s.id));
+                return ids.every(id =>
+                    ids.some(other => {
+                        if (id === other) return false;
+                        const rel = getRelationBetween(id, other);
+                        return rel && rel.type === type;
+                    })
+                );
+            }
+
+            function allHaveFamilyRelation(set) {
+                const ids = set.map(s => String(s.id));
+                return ids.every(id =>
+                    ids.some(other => {
+                        if (id === other) return false;
+                        const rel = getRelationBetween(id, other);
+                        return rel && (rel.type === 'partner'
+                            || rel.type === 'parent-child'
+                            || rel.type === 'sibling');
+                    })
+                );
+            }
+
+            function setSatisfies(set) {
+                if (needsPartner) {
+                    if (set.length !== 2) return false;
+                    const rel = getRelationBetween(set[0].id, set[1].id);
+                    if (!rel || rel.type !== 'partner') return false;
+                }
+                if (needsFamily) {
+                    if (set.length < 2) return false;
+                    if (!allHaveFamilyRelation(set)) return false;
+                }
+                if (needsFriend) {
+                    if (set.length < 2) return false;
+                    if (!allHaveRelation(set, 'friend')) return false;
+                }
+                if (needsRival) {
+                    if (set.length < 2) return false;
+                    if (!allHaveRelation(set, 'rival')) return false;
+                }
+                if (needsChild && !set.some(s => (s.role || 'adult') === 'child')) return false;
+                if (needsTeen && !set.some(s => (s.role || 'adult') === 'teen')) return false;
+                if (needsElder && !set.some(s => (s.role || 'adult') === 'elder')) return false;
+                return true;
+            }
+
+            if (targetType === 'single') {
+                for (const sim of active) {
+                    if (setSatisfies([sim])) result.push([sim]);
+                }
+                if (result.length === 0 && (needsChild || needsTeen || needsElder)) {
+                    for (const sim of active) {
+                        const onlyRoleReqs = [...requires].filter(r => r !== 'child' && r !== 'teen' && r !== 'elder');
+                        if (participantsSatisfy([sim], onlyRoleReqs)) result.push([sim]);
+                    }
+                }
+                return result;
+            }
+
+            if (targetType === 'pair') {
+                for (let i = 0; i < active.length; i++) {
+                    for (let j = i + 1; j < active.length; j++) {
+                        const pair = [active[i], active[j]];
+                        if (setSatisfies(pair)) result.push(pair);
+                    }
+                }
+                return result;
+            }
+
+            if (targetType === 'group') {
+                if (active.length >= 3 && setSatisfies(active)) result.push([...active]);
+
+                if (active.length >= 3) {
+                    for (let i = 0; i < active.length; i++) {
+                        for (let j = i + 1; j < active.length; j++) {
+                            for (let k = j + 1; k < active.length; k++) {
+                                const trio = [active[i], active[j], active[k]];
+                                if (setSatisfies(trio)) result.push(trio);
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+
+            return result;
+        }
+
+        function pickEventAndParticipants(forcedSimId = null) {
+            const active = getActiveSims();
+            if (active.length === 0) return null;
+
+            if (forcedSimId !== null) {
+                const sim = active.find(s => s.id === forcedSimId);
+                if (!sim) return null;
+
+                const banned = getRecentEventIds();
+                const multipliers = getBalanceMultipliers();
+
+                const compatible = [];
+                activeEvents.forEach(ev => {
+                    const sets = generateCandidateSets(active, ev.targetType || 'single', ev.requires || []);
+                    const ok = sets.some(set => set.some(s => s.id === sim.id));
+                    if (ok) compatible.push(ev);
+                });
+
+                let pool = compatible.filter(ev => !banned.includes(ev.id));
+                if (pool.length < 3) pool = compatible;
+                if (pool.length === 0) pool = activeEvents.slice();
+
+                const weights = pool.map(ev => calcEventWeight(ev, multipliers));
+                const totalW = weights.reduce((s, w) => s + w, 0);
+                let chosen = pool[pool.length - 1];
+                if (totalW > 0) {
+                    let roll = Math.random() * totalW;
+                    for (let i = 0; i < pool.length; i++) {
+                        roll -= weights[i];
+                        if (roll <= 0) { chosen = pool[i]; break; }
+                    }
+                } else {
+                    chosen = pool[Math.floor(Math.random() * pool.length)];
+                }
+
+                let participants = buildParticipantsForEvent(chosen);
+                if (!participants) {
+                    participants = [sim];
+                } else if (!participants.some(p => p.id === sim.id)) {
+                    const alt = tryBuildWithForcedSim(chosen, sim);
+                    if (alt) participants = alt;
+                    else participants = [sim];
+                }
+                return { event: chosen, participants };
+            }
+
+            const multipliers = getBalanceMultipliers();
+            const banned = getRecentEventIds();
+
+            const candidateEvents = [];
+            for (const ev of activeEvents) {
+                const participants = buildParticipantsForEvent(ev);
+                if (participants && participants.length > 0) {
+                    candidateEvents.push({ ev, participants });
+                }
+            }
+
+            if (candidateEvents.length === 0) {
+                const ev = activeEvents[Math.floor(Math.random() * activeEvents.length)];
+                if (!ev) return null;
+                const sim = active[Math.floor(Math.random() * active.length)];
+                return { event: ev, participants: [sim] };
+            }
+
+            let pool = candidateEvents.filter(x => !banned.includes(x.ev.id));
+            if (pool.length < 3) pool = candidateEvents;
+
+            const weights = pool.map(x => calcEventWeight(x.ev, multipliers));
+            const totalW = weights.reduce((s, w) => s + w, 0);
+
+            let chosen = pool[pool.length - 1];
+            if (totalW > 0) {
+                let roll = Math.random() * totalW;
+                for (let i = 0; i < pool.length; i++) {
+                    roll -= weights[i];
+                    if (roll <= 0) { chosen = pool[i]; break; }
+                }
+            } else {
+                chosen = pool[Math.floor(Math.random() * pool.length)];
+            }
+
+            return { event: chosen.ev, participants: chosen.participants };
+        }
+
+        function tryBuildWithForcedSim(ev, sim) {
+            const active = getActiveSims();
+            const targetType = ev.targetType || 'single';
+            const requires = ev.requires || [];
+
+            if (targetType === 'single') {
+                return [sim];
+            }
+
+            const others = active.filter(s => s.id !== sim.id);
+            if (targetType === 'pair') {
+                for (const other of others) {
+                    const pair = [sim, other];
+                    if (participantsSatisfy(pair, requires)) return pair;
+                }
+                return null;
+            }
+            if (targetType === 'group') {
+                if (others.length >= 2) {
+                    for (let i = 0; i < others.length; i++) {
+                        for (let j = i + 1; j < others.length; j++) {
+                            const trio = [sim, others[i], others[j]];
+                            if (participantsSatisfy(trio, requires)) return trio;
+                        }
+                    }
+                }
+                if (participantsSatisfy(active, requires)) return [...active];
+                return null;
+            }
+            return null;
+        }
+
+        function getRecentCategoryRatio() {
+            const recent = historyLog.slice(0, RECENT_BALANCE_WINDOW);
+            let cozy = 0, chaos = 0;
+            recent.forEach(item => {
+                if (item.eventCategory === 'cozy') cozy++;
+                else if (item.eventCategory === 'chaos') chaos++;
+            });
+            const total = cozy + chaos;
+            if (total === 0) return null;
+            return cozy / total;
+        }
+
+        function getBalanceMultipliers() {
+            const ratio = getRecentCategoryRatio();
+            if (ratio === null) {
+                return { cozy: 1.2, chaos: 0.9, custom: 1 };
+            }
+            if (ratio > TARGET_COZY_RATIO + 0.15) {
+                return { cozy: 0.6, chaos: 1.8, custom: 1 };
+            }
+            if (ratio < TARGET_COZY_RATIO - 0.15) {
+                return { cozy: 1.8, chaos: 0.6, custom: 1 };
+            }
+            return { cozy: 1, chaos: 1, custom: 1 };
+        }
+
+        function getRecentEventIds() {
+            return historyLog.slice(0, RECENT_BAN_WINDOW)
+                .map(item => item.eventId)
+                .filter(Boolean);
+        }
+
+        function calcEventWeight(ev, multipliers) {
+            const base = INTENSITY_WEIGHTS[ev.intensity] || INTENSITY_WEIGHTS[1];
+            const catMul = multipliers[ev.category] || 1;
+            return base * catMul;
+        }
+
+        function getCounter() {
+            return parseInt($('daysCounter').textContent, 10) || 0;
+        }
+
+        function bumpCounter() {
+            const counter = getCounter() + 1;
+            $('daysCounter').textContent = counter;
+            localStorage.setItem('sims_counter', String(counter));
+            return counter;
+        }
+
+        function showEventResult(eventObj, participants, opts = {}) {
+            let categoryLabel = "✨ Событие";
+            if (eventObj.category === "cozy") categoryLabel = "🌱 Уютное событие";
+            else if (eventObj.category === "chaos") categoryLabel = "🔥 Драма / Форс-мажор";
+            else if (eventObj.category === "custom") categoryLabel = "✏️ Своё событие";
+
+            setModalCategory(categoryLabel, eventObj.category);
+
+            const { title, description } = splitEventText(eventObj.text);
+            $('modalEventTitle').textContent = title;
+            const descEl = $('modalEventDescription');
+            descEl.textContent = description;
+            descEl.style.display = description ? '' : 'none';
+
+            $('modalParticipantsTitle').style.display = '';
+            renderParticipantChips(participants);
+            renderRelationChips(participants, eventObj);
+
+            openModalWithTrap('resultModal');
+
+            if (!opts.silentHistory) {
+                const participantsStr = participants.map(p => `${p.avatar} ${p.name}`).join(' & ');
+                addToHistory(categoryLabel, participantsStr, eventObj.text, {
+                    eventId: eventObj.id,
+                    eventCategory: eventObj.category,
+                    participantIds: participants.map(p => String(p.id))
+                });
+            }
+        }
+
+        function rotateWheelToSector(sectorIndex) {
+            const wheelEl = $('wheel');
+            const degreesPerSector = 360 / SECTOR_COUNT;
+
+            const targetSector = (typeof sectorIndex === 'number' && sectorIndex >= 0 && sectorIndex < SECTOR_COUNT)
+                ? sectorIndex
+                : Math.floor(Math.random() * SECTOR_COUNT);
+
+            const sectorCenter = targetSector * degreesPerSector + degreesPerSector / 2;
+
+            const maxJitter = degreesPerSector * 0.35;
+            const jitter = (Math.random() - 0.5) * 2 * maxJitter;
+
+            let targetMod = (360 - sectorCenter + jitter) % 360;
+            if (targetMod < 0) targetMod += 360;
+
+            const currentMod = ((wheelRotation % 360) + 360) % 360;
+
+            let diff = targetMod - currentMod;
+            if (diff <= 0) diff += 360;
+
+            const fullSpins = MIN_FULL_SPINS + Math.floor(Math.random() * (MAX_FULL_SPINS - MIN_FULL_SPINS + 1));
+
+            wheelRotation += fullSpins * 360 + diff;
+
+            wheelEl.style.transform = `rotate(${wheelRotation}deg)`;
+        }
+
+        function triggerEvent(forcedSimId = null, opts = {}) {
+            if (isSpinning) return;
+
+            updateEventsList();
+
+            const picked = pickEventAndParticipants(forcedSimId);
+            if (!picked) {
+                showNotification("Нет активных персонажей! Включите хотя бы одного сима.");
+                return;
+            }
+
+            const { event: selectedEvent, participants } = picked;
+
+            lastSpinParticipants = participants;
+            lastResultWasTodayIdea = false;
+
+            isSpinning = true;
+            $('spinBtn').disabled = true;
+            $('rerollBtn').disabled = true;
+
+            const randomSector = Math.floor(Math.random() * SECTOR_COUNT);
+            rotateWheelToSector(randomSector);
+            playTickSound();
+
+            spinTimer = setTimeout(() => {
+                spinTimer = null;
+                playWinSound();
+
+                if (!opts.skipCounter) bumpCounter();
+                showEventResult(selectedEvent, participants);
+
+                isSpinning = false;
+                $('spinBtn').disabled = false;
+                $('rerollBtn').disabled = false;
+            }, SPIN_DURATION);
+        }
+
+        function rerollSameParticipants() {
+            if (isSpinning) return;
+
+            if (lastResultWasTodayIdea) {
+                triggerTodayIdea(false);
+                return;
+            }
+
+            updateEventsList();
+
+            const picked = pickEventAndParticipants();
+            if (!picked) {
+                showNotification("Нет активных персонажей, сделайте новую крутку");
+                closeResultModal();
+                return;
+            }
+            const { event: selectedEvent, participants } = picked;
+            lastSpinParticipants = participants;
+
+            isSpinning = true;
+            $('spinBtn').disabled = true;
+            $('rerollBtn').disabled = true;
+
+            const randomSector = Math.floor(Math.random() * SECTOR_COUNT);
+            rotateWheelToSector(randomSector);
+            playTickSound();
+
+            spinTimer = setTimeout(() => {
+                spinTimer = null;
+                playWinSound();
+                showEventResult(selectedEvent, participants);
+
+                isSpinning = false;
+                $('spinBtn').disabled = false;
+                $('rerollBtn').disabled = false;
+            }, SPIN_DURATION);
+        }
+
+        function closeResultModal() {
+            closeModalWithTrap('resultModal');
+            if (spinTimer) {
+                clearTimeout(spinTimer);
+                spinTimer = null;
+                isSpinning = false;
+                $('spinBtn').disabled = false;
+                $('rerollBtn').disabled = false;
+            }
+            lastSpinParticipants = null;
+            lastResultWasTodayIdea = false;
+        }
+
+        function triggerTodayIdea(isReroll = false) {
+            const idea = todayIdeasPool[Math.floor(Math.random() * todayIdeasPool.length)];
+            setModalCategory("⚡ Совет дня", "custom");
+
+            const { title, description } = splitEventText(idea.text);
+            $('modalEventTitle').textContent = title;
+            const descEl = $('modalEventDescription');
+            descEl.textContent = description;
+            descEl.style.display = description ? '' : 'none';
+
+            $('modalParticipants').innerHTML = '';
+            $('modalParticipantsTitle').style.display = 'none';
+            $('modalRelationChips').innerHTML = '';
+            $('modalRelationsTitle').style.display = 'none';
+
+            openModalWithTrap('resultModal');
+
+            addToHistory("⚡ Совет дня", "Вся семья", idea.text);
+
+            lastResultWasTodayIdea = true;
+            lastSpinParticipants = null;
+
+            playWinSound();
+        }
+
+        function initCounter() {
+            const saved = localStorage.getItem('sims_counter') || '0';
+            $('daysCounter').textContent = saved;
+        }
+
+        function resetCounter() {
+            $('daysCounter').textContent = "0";
+            localStorage.setItem('sims_counter', "0");
+            showNotification("Счетчик сброшен");
+        }
+
+        function closeAllEmojiPickers() {
+            document.querySelectorAll('.emoji-picker.open').forEach(p => p.classList.remove('open'));
+            document.querySelectorAll('.emoji-input-btn.open').forEach(b => b.classList.remove('open'));
+        }
+
+        function setupEmojiPicker(btnId, pickerId, labelId, stateKey, onPick) {
+            const btn = $(btnId);
+            const picker = $(pickerId);
+
+            buildEmojiPicker(picker, stateKey, (emoji) => {
+                onPick(emoji);
+                updateEmojiLabel($(labelId), emoji);
+                if (pickerState[stateKey]) pickerState[stateKey].updateSelected(emoji);
+                closeAllEmojiPickers();
+            });
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = picker.classList.contains('open');
+                closeAllEmojiPickers();
+                if (!isOpen) {
+                    picker.classList.add('open');
+                    btn.classList.add('open');
+                }
+            });
+
+            picker.addEventListener('click', (e) => e.stopPropagation());
+        }
+
+        setupEmojiPicker('editSimAvatarBtn', 'editSimAvatarPicker', 'editSimAvatarLabel', 'edit', (emoji) => {
+            selectedEditSimAvatar = emoji;
+        });
+
+        document.addEventListener('click', () => {
+            closeAllEmojiPickers();
+        });
+
+        function maybeShowOnboarding() {
+            if (localStorage.getItem('sims_onboarding_seen') === 'true') return;
+            openModalWithTrap('onboardingModal');
+        }
+
+        function closeOnboarding() {
+            localStorage.setItem('sims_onboarding_seen', 'true');
+            closeModalWithTrap('onboardingModal');
+        }
+
+        function openDebugPanel() {
+            const active = getActiveSims();
+            const stats = {
+                total: activeEvents.length,
+                cozy: activeEvents.filter(e => e.category === 'cozy').length,
+                chaos: activeEvents.filter(e => e.category === 'chaos').length,
+                custom: activeEvents.filter(e => e.category === 'custom').length,
+                defaultOn: enableDefaultEvents,
+                customOn: enableCustomEvents,
+                cozyOn: enableCozy,
+                chaosOn: enableChaos,
+                activeSims: active.length,
+                totalSims: familyMembers.length,
+                relationships: familyRelationships.length
+            };
+
+            $('debugStats').innerHTML = `
+                <div class="debug-stat"><div class="ds-num">${stats.total}</div><div class="ds-label">Всего событий</div></div>
+                <div class="debug-stat"><div class="ds-num">${stats.cozy}</div><div class="ds-label">Уютных</div></div>
+                <div class="debug-stat"><div class="ds-num">${stats.chaos}</div><div class="ds-label">Драм</div></div>
+                <div class="debug-stat"><div class="ds-num">${stats.custom}</div><div class="ds-label">Своих</div></div>
+                <div class="debug-stat"><div class="ds-num">${stats.activeSims}</div><div class="ds-label">Активных симов</div></div>
+                <div class="debug-stat"><div class="ds-num">${stats.relationships}</div><div class="ds-label">Связей</div></div>
+            `;
+
+            const multipliers = getBalanceMultipliers();
+            const ratio = getRecentCategoryRatio();
+            const banned = getRecentEventIds();
+            const accessibleSets = activeEvents.map(ev => ({
+                ev,
+                participants: buildParticipantsForEvent(ev)
+            }));
+            const accessible = accessibleSets.filter(x => x.participants && x.participants.length > 0).length;
+            const inaccessible = activeEvents.length - accessible;
+
+            const rows = [
+                ['Стандартные события', stats.defaultOn ? 'вкл' : 'выкл'],
+                ['Свои события', stats.customOn ? 'вкл' : 'выкл'],
+                ['Уютные', stats.cozyOn ? 'вкл' : 'выкл'],
+                ['Драмы', stats.chaosOn ? 'вкл' : 'выкл'],
+                ['Всего симов', stats.totalSims],
+                ['Активных симов', stats.activeSims],
+                ['Последнее соотношение cozy/chaos', ratio === null ? '—' : ratio.toFixed(2)],
+                ['Множитель cozy', multipliers.cozy.toFixed(2)],
+                ['Множитель chaos', multipliers.chaos.toFixed(2)],
+                ['Забанено ID (последние)', banned.length ? banned.join(', ') : '—'],
+                ['Событий с участниками', accessible],
+                ['Событий БЕЗ участников', inaccessible]
+            ];
+
+            $('debugList').innerHTML = rows.map(([k, v]) => `
+                <div class="debug-row">
+                    <span class="debug-key">${k}</span>
+                    <span class="debug-val">${v}</span>
+                </div>
+            `).join('');
+
+            openModalWithTrap('debugModal');
+        }
+
+        let logoTapCount = 0;
+        let logoTapTimer = null;
+        document.getElementById('siteLogo').addEventListener('click', () => {
+            logoTapCount++;
+            if (logoTapTimer) clearTimeout(logoTapTimer);
+            logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 900);
+            if (logoTapCount >= 3) {
+                logoTapCount = 0;
+                openDebugPanel();
+            }
+        });
+
+        function init() {
+            initCounter();
+            renderFamily();
+            updateEventsList();
+            renderCustomEventsManager();
+            renderHistory();
+            updatePresetDropdown();
+            updateRelationDropdowns();
+            renderRelationshipsList();
+
+            updateEmojiLabel($('editSimAvatarLabel'), '');
+
+            if (familyMembers.length === 0) {
+                setTimeout(maybeShowOnboarding, 400);
+            } else {
+                localStorage.setItem('sims_onboarding_seen', 'true');
+            }
+        }
+
+        $('settingsBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const menu = $('settingsMenu');
+            const isOpen = menu.classList.toggle('active');
+            $('settingsBtn').setAttribute('aria-expanded', String(isOpen));
+        });
+        $('settingsMenu').addEventListener('click', (e) => e.stopPropagation());
+
+        document.addEventListener('click', (e) => {
+            const menu = $('settingsMenu');
+            const btn = $('settingsBtn');
+            if (!menu.classList.contains('active')) return;
+            if (menu.contains(e.target) || btn.contains(e.target)) return;
+            menu.classList.remove('active');
+            $('settingsBtn').setAttribute('aria-expanded', 'false');
+        });
+
+        $('themeToggleBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
+            currentTheme = THEMES[idx];
+            localStorage.setItem('sims_theme', currentTheme);
+            applyTheme(currentTheme);
+        });
+
+        $('soundToggleBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            initAudio();
+            soundEnabled = !soundEnabled;
+            localStorage.setItem('sims_sound_enabled', String(soundEnabled));
+            updateSoundIcon();
+        });
+
+        $('savePresetBtn').addEventListener('click', saveCurrentPreset);
+        $('deletePresetBtn').addEventListener('click', confirmDeletePreset);
+        $('presetSelect').addEventListener('change', (e) => {
+            if (e.target.value) loadPreset(e.target.value);
+        });
+        $('exportFileBtn').addEventListener('click', exportFamilyFile);
+        $('importFileBtn').addEventListener('click', () => $('importFile').click());
+        $('importFile').addEventListener('change', importFamilyFile);
+
+        $('enableDefaultEvents').addEventListener('change', (e) => {
+            enableDefaultEvents = e.target.checked;
+            localStorage.setItem('sims_enable_default_events', String(enableDefaultEvents));
+            updateEventsList();
+        });
+        $('enableCustomEvents').addEventListener('change', (e) => {
+            enableCustomEvents = e.target.checked;
+            localStorage.setItem('sims_enable_custom_events', String(enableCustomEvents));
+            updateEventsList();
+        });
+        $('modeCozy').addEventListener('change', (e) => {
+            enableCozy = e.target.checked;
+            localStorage.setItem('sims_modeCozy', String(enableCozy));
+            updateEventsList();
+        });
+        $('modeChaos').addEventListener('change', (e) => {
+            enableChaos = e.target.checked;
+            localStorage.setItem('sims_modeChaos', String(enableChaos));
+            updateEventsList();
+        });
+
+        $('toggleCustomForm').addEventListener('click', () => {
+            const form = $('customEventForm');
+            const btn = $('toggleCustomForm');
+            const isOpen = form.classList.toggle('open');
+            btn.textContent = isOpen ? '× Скрыть' : '+ Добавить своё событие';
+        });
+
+        $('addSimBtn').addEventListener('click', addCustomSim);
+        $('randomSimBtn').addEventListener('click', () => {
+            const activeSims = familyMembers.filter(s => s.active);
+            if (activeSims.length === 0) {
+                showNotification("Нет активных симов");
+                return;
+            }
+            const randomSim = activeSims[Math.floor(Math.random() * activeSims.length)];
+            triggerEvent(randomSim.id);
+        });
+        $('clearAllSimsBtn').addEventListener('click', clearAllSims);
+        $('simsGrid').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            const id = parseInt(btn.dataset.id, 10);
+            if (btn.dataset.action === 'edit-sim') openEditSimModal(id);
+            else if (btn.dataset.action === 'del-sim') deleteSim(id);
+            else if (btn.dataset.action === 'roll-sim') {
+                e.stopPropagation();
+                triggerEvent(id);
+            }
+        });
+
+        $('customEventActionBtn').addEventListener('click', addCustomEvent);
+        $('customEventsManageList').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            const index = parseInt(btn.dataset.index, 10);
+            if (btn.dataset.action === 'edit-ev') startEditCustomEvent(index);
+            else if (btn.dataset.action === 'del-ev') confirmDeleteCustomEvent(index);
+        });
+
+        $('saveRelationBtn').addEventListener('click', saveRelation);
+        $('relationsManageList').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            if (btn.dataset.action === 'del-rel') confirmDeleteRelation(btn.dataset.id);
+        });
+
+        $('spinBtn').addEventListener('click', () => {
+            initAudio();
+            triggerEvent();
+        });
+        $('todayIdeaBtn').addEventListener('click', () => {
+            initAudio();
+            triggerTodayIdea();
+        });
+        $('rerollBtn').addEventListener('click', () => {
+            initAudio();
+            rerollSameParticipants();
+        });
+        $('closeResultBtn').addEventListener('click', closeResultModal);
+        $('closeResultX').addEventListener('click', closeResultModal);
+
+        $('resetCounterBtn').addEventListener('click', resetCounter);
+
+        $('openFullHistoryBtn').addEventListener('click', () => {
+            renderFullHistory();
+            openModalWithTrap('fullHistoryModal');
+        });
+        $('closeFullHistoryBtn').addEventListener('click', () => closeModalWithTrap('fullHistoryModal'));
+        $('clearHistoryBtn').addEventListener('click', () => {
+            const snapshot = JSON.parse(JSON.stringify(historyLog));
+            openConfirmModal("Очистить всю историю событий?", () => {
+                historyLog = [];
+                localStorage.removeItem('sims_history_log');
+                renderHistory();
+                closeConfirmModal();
+                showNotification("История очищена", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        historyLog = snapshot;
+                        localStorage.setItem('sims_history_log', JSON.stringify(historyLog));
+                        renderHistory();
+                    }
+                });
+            });
+        });
+
+        $('confirmYesBtn').addEventListener('click', () => {
+            if (typeof confirmCallback === 'function') confirmCallback();
+        });
+        $('confirmCancelBtn').addEventListener('click', closeConfirmModal);
+
+        $('saveEditSimBtn').addEventListener('click', saveEditedSim);
+        $('cancelEditSimBtn').addEventListener('click', closeEditSimModal);
+
+        $('onboardingSkipBtn').addEventListener('click', closeOnboarding);
+        $('onboardingGoBtn').addEventListener('click', () => {
+            closeOnboarding();
+            const menu = $('settingsMenu');
+            menu.classList.add('active');
+            $('settingsBtn').setAttribute('aria-expanded', 'true');
+            const details = menu.querySelectorAll('details');
+            if (details[2]) details[2].open = true;
+            setTimeout(() => $('newSimName').focus(), 60);
+        });
+
+        $('closeDebugBtn').addEventListener('click', () => closeModalWithTrap('debugModal'));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            document.querySelectorAll('.modal.active').forEach(m => {
+                if (m.id === 'resultModal') closeResultModal();
+                else closeModalWithTrap(m.id);
+            });
+            $('settingsMenu').classList.remove('active');
+            $('settingsBtn').setAttribute('aria-expanded', 'false');
+            closeAllEmojiPickers();
+        });
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target !== modal) return;
+                if (modal.id === 'resultModal') closeResultModal();
+                else if (modal.id === 'onboardingModal') closeOnboarding();
+                else closeModalWithTrap(modal.id);
+            });
+        });
+
+        init();
+    </script>
+</body>
+</ht
