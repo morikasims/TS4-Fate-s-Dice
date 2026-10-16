@@ -160,7 +160,8 @@
     body.custom-cursor-on .author-block,
     body.custom-cursor-on .brand-logo-mark,
     body.custom-cursor-on .wheel-hub,
-    body.custom-cursor-on .wheel-container {
+    body.custom-cursor-on .wheel-container,
+    body.custom-cursor-on .pack-card {
         cursor: var(--cursor-url) var(--cursor-hotspot), pointer;
     }
     body.custom-cursor-on input,
@@ -471,6 +472,7 @@
     .history-item .hi-cat.cat-chaos  { background: var(--chaos); }
     .history-item .hi-cat.cat-custom { background: var(--custom); }
     .history-item .hi-cat.cat-idea   { background: var(--gold); color: #4A3A0A; }
+    .history-item .hi-cat.cat-pack   { background: var(--gold); color: #4A3A0A; }
     .history-item .hi-body { min-width: 0; }
     .history-item .hi-meta {
         font-size: 10.5px; color: var(--ink-soft); font-weight: 800;
@@ -569,9 +571,11 @@
     .modal-category.is-chaos  { background: rgba(199,97,88,0.16); color: #A94A3F; }
     .modal-category.is-custom { background: rgba(143,123,179,0.18); color: #6E52A8; }
     .modal-category.is-idea   { background: rgba(217,169,63,0.20); color: #8A6E10; }
+    .modal-category.is-pack   { background: rgba(217,169,63,0.20); color: #8A6E10; }
     body.theme-dark .modal-category.is-chaos  { color: #F3A198; }
     body.theme-dark .modal-category.is-custom { color: #C7B2EE; }
     body.theme-dark .modal-category.is-idea   { color: #EBCB6E; }
+    body.theme-dark .modal-category.is-pack   { color: #EBCB6E; }
     .close-x {
         background: none; border: none; color: var(--ink-soft); cursor: pointer;
         padding: 6px; border-radius: var(--radius-xs); display: grid;
@@ -647,6 +651,7 @@
         font-size: 12.5px; font-weight: 800; color: var(--ink-muted);
         cursor: pointer; display: inline-flex; align-items: center;
         justify-content: center; gap: 6px; transition: var(--transition);
+        position: relative;
     }
     .tab .icon { width: 15px; height: 15px; }
     .tab:hover { color: var(--ink); }
@@ -654,6 +659,22 @@
         background: var(--surface-1); color: var(--accent-deep);
         box-shadow: var(--shadow-sm);
     }
+    .tab .tab-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 999px;
+        background: var(--accent-deep);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+        line-height: 1;
+        margin-left: 2px;
+    }
+    .tab .tab-badge.hidden { display: none; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
@@ -826,6 +847,42 @@
         flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
 
+    /* ===== PACKS ===== */
+    .pack-list { display: flex; flex-direction: column; gap: 10px; }
+    .pack-card {
+        background: var(--surface-1); border: 1px solid var(--line);
+        border-radius: var(--radius-md); padding: 12px 14px;
+        display: grid; grid-template-columns: auto 1fr auto; gap: 12px;
+        align-items: center; transition: var(--transition);
+    }
+    .pack-card:hover { border-color: var(--accent); }
+    .pack-card.disabled { opacity: 0.5; }
+    .pack-card.disabled .pack-name { text-decoration: line-through; text-decoration-thickness: 1px; }
+    .pack-icon {
+        width: 48px; height: 48px; border-radius: 12px;
+        background: var(--accent-soft); color: var(--accent-deep);
+        display: grid; place-items: center; flex-shrink: 0;
+        font-size: 24px; line-height: 1;
+    }
+    .pack-body { min-width: 0; text-align: left; }
+    .pack-name {
+        font-size: 14px; font-weight: 800; color: var(--ink);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .pack-meta {
+        font-size: 11px; color: var(--ink-muted); font-weight: 700;
+        display: flex; flex-wrap: wrap; gap: 6px; margin-top: 3px;
+    }
+    .pack-meta span { display: inline-flex; align-items: center; gap: 3px; }
+    .pack-meta .sep { opacity: 0.4; }
+    .pack-desc {
+        font-size: 12px; color: var(--ink-soft); margin-top: 4px;
+        line-height: 1.4; font-weight: 600;
+        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .pack-actions { display: flex; gap: 4px; flex-shrink: 0; align-items: center; }
+
     .toast-container {
         position: fixed; bottom: 24px; right: 24px;
         display: flex; flex-direction: column; gap: 8px;
@@ -850,6 +907,8 @@
         cursor: pointer; margin-left: 4px;
     }
     .toast .toast-undo-btn:hover { background: var(--accent-deep); color: #fff; }
+    .toast.toast-error { border-color: var(--chaos); }
+    .toast.toast-error .toast-icon { color: var(--chaos); }
 
     .onboarding-steps {
         text-align: left; margin: 10px 0 18px;
@@ -952,6 +1011,7 @@
         .icon-btn { width: 36px; height: 36px; }
         .author-info { display: none; }
         .wheel-hub { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
+        .pack-icon { width: 40px; height: 40px; font-size: 20px; }
     }
     @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
@@ -1079,6 +1139,10 @@
         <symbol id="icon-save" viewBox="0 0 24 24">
             <path d="M4 4h13l3 3v13H4V4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
             <path d="M8 4v6h7V4M8 20v-7h8v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-package" viewBox="0 0 24 24">
+            <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M2 7l10 5 10-5M12 12v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
         </symbol>
     </defs>
 </svg>
@@ -1218,6 +1282,11 @@
                     <svg class="icon" aria-hidden="true"><use href="#icon-save"></use></svg>
                     Пресеты
                 </button>
+                <button type="button" class="tab" data-tab="packs" role="tab">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-package"></use></svg>
+                    Паки
+                    <span class="tab-badge hidden" id="packsTabBadge">0</span>
+                </button>
             </div>
 
             <div class="tab-panel active" data-panel="characters">
@@ -1326,6 +1395,39 @@
                         Загрузить
                     </button>
                     <input type="file" id="importFile" class="visually-hidden" accept=".json">
+                </div>
+            </div>
+
+            <div class="tab-panel" data-panel="packs">
+                <div class="field-label" style="margin-top:0;">Установленные паки</div>
+                <div style="font-size:11px;color:var(--ink-soft);margin-bottom:12px;">
+                    Паки — это наборы готовых событий: сезонные, тематические, оккультные. Покупные и авторские паки загружаются отдельным файлом и не смешиваются с твоими событиями из настроек.
+                </div>
+
+                <div class="pack-list" id="packsList">
+                    <div class="empty-hint">Пока нет установленных паков</div>
+                </div>
+
+                <button type="button" class="add-toggle" id="toggleImportPackForm">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                    Загрузить пак из файла
+                </button>
+                <div class="form-collapse" id="importPackForm">
+                    <div style="display:flex;gap:8px;margin-top:8px;">
+                        <button type="button" class="btn btn-primary" id="importPackBtn" style="flex:1;">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-upload"></use></svg>
+                            Выбрать файл пака
+                        </button>
+                    </div>
+                    <input type="file" id="importPackInput" class="visually-hidden" accept=".json,.pack">
+                    <div style="font-size:11px;color:var(--ink-soft);margin-top:8px;line-height:1.5;">
+                        Поддерживается формат JSON. 
+                    </div>
+                </div>
+
+                <div class="add-toggle" id="exportPackBtn" style="margin-top:8px;">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+                    Скачать установленные паки как один файл
                 </div>
             </div>
         </div>
@@ -1523,15 +1625,15 @@
 'use strict';
 
 /* ============================================================
- * CONFIG — константы, метки, иконки
+ * CONFIG
  * ============================================================ */
 const Config = (() => {
-    const CAT_ICON = { cozy: 'icon-leaf', chaos: 'icon-flame', custom: 'icon-pencil', idea: 'icon-sparkle' };
-    const CAT_LABEL = { cozy: 'Уютное событие', chaos: 'Драма / Форс-мажор', custom: 'Своё событие', idea: 'Совет дня' };
+    const CAT_ICON = { cozy: 'icon-leaf', chaos: 'icon-flame', custom: 'icon-pencil', idea: 'icon-sparkle', pack: 'icon-package' };
+    const CAT_LABEL = { cozy: 'Уютное событие', chaos: 'Драма / Форс-мажор', custom: 'Своё событие', idea: 'Совет дня', pack: 'Пак событий' };
     const ROLE_LABEL = { adult: 'Взрослый', teen: 'Подросток', child: 'Ребёнок', elder: 'Пожилой' };
     const REL_LABEL = { partner: 'Партнёры', 'parent-child': 'Родитель — ребёнок', sibling: 'Братья/сёстры', friend: 'Друзья', rival: 'Соперники' };
     const AVATAR_COLORS = ['#5CA227','#D9A93F','#C76158','#8F7BB3','#6BB5C4','#D68A5A','#C97F9E','#8A9E5A'];
-    const SCHEMA_VERSION = 6;
+    const SCHEMA_VERSION = 7;
     const SPIN_DURATION = 4000;
     const THEMES = ['light', 'dark'];
     const INTENSITY_WEIGHTS = { 1: 10, 2: 5, 3: 2 };
@@ -1542,6 +1644,18 @@ const Config = (() => {
     const SECTOR_COUNT = 8;
     const MIN_FULL_SPINS = 6;
     const MAX_FULL_SPINS = 9;
+    const PACK_FORMAT_VERSION = 1;
+    const THEME_ICONS = {
+        autumn: '🍂',
+        winter: '❄️',
+        spring: '🌸',
+        summer: '☀️',
+        occult: '🔮',
+        pets: '🐾',
+        seasons: '🌦️',
+        holiday: '🎉',
+        custom: '✨'
+    };
     const LS_KEYS = {
         schema: 'sims_schema_version',
         members: 'sims_family_members',
@@ -1549,6 +1663,7 @@ const Config = (() => {
         familyName: 'sims_current_family_name',
         presets: 'sims_saved_presets',
         customEvents: 'sims_custom_events',
+        installedPacks: 'sims_installed_packs',
         history: 'sims_history_log',
         counter: 'sims_counter',
         theme: 'sims_theme',
@@ -1565,12 +1680,13 @@ const Config = (() => {
         SCHEMA_VERSION, SPIN_DURATION, THEMES, INTENSITY_WEIGHTS,
         TARGET_COZY_RATIO, RECENT_BALANCE_WINDOW, RECENT_BAN_WINDOW,
         PARTICIPANT_COOLDOWN, SECTOR_COUNT, MIN_FULL_SPINS, MAX_FULL_SPINS,
+        PACK_FORMAT_VERSION, THEME_ICONS,
         LS_KEYS
     };
 })();
 
 /* ============================================================
- * UTILS — утилиты
+ * UTILS
  * ============================================================ */
 const Utils = (() => {
     const $ = (id) => document.getElementById(id);
@@ -1600,8 +1716,8 @@ const Utils = (() => {
     function showNotification(message, opts = {}) {
         const container = $('toastContainer');
         const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `${svgUse('icon-check','toast-icon')}<span>${escapeHtml(message)}</span>`;
+        toast.className = 'toast' + (opts.error ? ' toast-error' : '');
+        toast.innerHTML = `${svgUse(opts.error ? 'icon-close' : 'icon-check','toast-icon')}<span>${escapeHtml(message)}</span>`;
         if (opts.undoLabel && typeof opts.onUndo === 'function') {
             const btn = document.createElement('button');
             btn.type = 'button';
@@ -1623,7 +1739,6 @@ const Utils = (() => {
         }, ttl);
     }
 
-    // Audio
     let audioCtx = null;
     function initAudio() {
         if (!audioCtx) {
@@ -1670,18 +1785,26 @@ const Utils = (() => {
         return { title: fullText, description: '' };
     }
 
-    return { $, avatarColor, initials, svgUse, escapeHtml, showNotification, initAudio, playTickSound, playWinSound, splitEventText };
+    function formatDate(ts) {
+        const d = new Date(ts);
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}.${mm}.${yyyy}`;
+    }
+
+    return { $, avatarColor, initials, svgUse, escapeHtml, showNotification, initAudio, playTickSound, playWinSound, splitEventText, formatDate };
 })();
 
 const $ = Utils.$;
-const { avatarColor, initials, svgUse, escapeHtml, showNotification, splitEventText } = Utils;
+const { avatarColor, initials, svgUse, escapeHtml, showNotification, splitEventText, formatDate } = Utils;
 
 /* ============================================================
- * EVENTS_DATA — пулы событий
+ * EVENTS_DATA
  * ============================================================ */
 const EventsData = (() => {
     const todayIdeasPool = [
-        { text: "Приготовь вкусный ужин для всей семьи и устрой совместный уютный вечер за столом без телефонов." },
+        { text: "Приготовь вкусный ужин для всей семьи и устрой совместный уютный вечер за столом." },
         { text: "Выбери одного сима и удели весь день прокачке его текущего навыка до нового уровня." },
         { text: "Отправь сима в локацию или парк, в котором он давно не бывал, чтобы пофотографировать окрестности." },
         { text: "Позвони старому другу или родственнику и пригласи его в гости на настольные игры или чашечку кофе." },
@@ -1804,7 +1927,7 @@ const EventsData = (() => {
 })();
 
 /* ============================================================
- * STORAGE — работа с localStorage
+ * STORAGE
  * ============================================================ */
 const Storage = (() => {
     const K = Config.LS_KEYS;
@@ -1831,6 +1954,9 @@ const Storage = (() => {
 
     function loadCustomEvents() { return safeParse(getRaw(K.customEvents), []) || []; }
     function saveCustomEvents(e) { setRaw(K.customEvents, JSON.stringify(e)); }
+
+    function loadPacks() { return safeParse(getRaw(K.installedPacks), []) || []; }
+    function savePacks(p) { setRaw(K.installedPacks, JSON.stringify(p)); }
 
     function loadHistory() { return safeParse(getRaw(K.history), []) || []; }
     function saveHistory(h) { setRaw(K.history, JSON.stringify(h)); }
@@ -1861,6 +1987,7 @@ const Storage = (() => {
         loadFamilyName, saveFamilyName,
         loadPresets, savePresets,
         loadCustomEvents, saveCustomEvents,
+        loadPacks, savePacks,
         loadHistory, saveHistory, clearHistory,
         loadCounter, saveCounter,
         loadTheme, saveTheme,
@@ -1872,7 +1999,7 @@ const Storage = (() => {
 })();
 
 /* ============================================================
- * STATE — текущее состояние и миграции
+ * STATE
  * ============================================================ */
 const State = (() => {
     const K = Config.LS_KEYS;
@@ -1971,6 +2098,12 @@ const State = (() => {
                 Storage.setRaw(K.presets, JSON.stringify(rawP));
             } catch (e) {}
         }
+        if (savedVersion < 7) {
+            // Добавляем пустой массив паков, если ещё нет
+            if (Storage.getRaw(K.installedPacks) === null) {
+                Storage.setRaw(K.installedPacks, '[]');
+            }
+        }
         Storage.setRaw(K.schema, String(Config.SCHEMA_VERSION));
     }
 
@@ -1990,6 +2123,9 @@ const State = (() => {
         const rawCustomEvents = Storage.loadCustomEvents();
         let customEvents = rawCustomEvents.map(normalizeCustom).filter(Boolean);
 
+        let installedPacks = Storage.loadPacks();
+        if (!Array.isArray(installedPacks)) installedPacks = [];
+
         let enableDefaultEvents = Storage.loadFlag(K.enableDefault, true);
         let enableCustomEvents = Storage.loadFlag(K.enableCustom, true);
         let enableCozy = Storage.loadFlag(K.modeCozy, true);
@@ -2007,6 +2143,7 @@ const State = (() => {
             currentFamilyName,
             savedPresets,
             customEvents,
+            installedPacks,
             enableDefaultEvents,
             enableCustomEvents,
             enableCozy,
@@ -2036,7 +2173,179 @@ const State = (() => {
 })();
 
 /* ============================================================
- * LOGIC — бизнес-логика (выбор событий, участников, баланс)
+ * PACKS — управление паками
+ * ============================================================ */
+const Packs = (() => {
+    const REQUIRED_FIELDS = ['packId', 'packName', 'packVersion', 'events'];
+
+    function validatePack(data) {
+        if (!data || typeof data !== 'object') {
+            return { ok: false, error: 'Файл не является объектом JSON' };
+        }
+        for (const field of REQUIRED_FIELDS) {
+            if (!data[field]) {
+                return { ok: false, error: `Отсутствует поле «${field}»` };
+            }
+        }
+        if (typeof data.packId !== 'string' && typeof data.packId !== 'number') {
+            return { ok: false, error: 'Поле packId должно быть строкой или числом' };
+        }
+        if (data.packFormatVersion && data.packFormatVersion > Config.PACK_FORMAT_VERSION) {
+            return { ok: false, error: 'Этот пак требует более новой версии колеса' };
+        }
+        if (!Array.isArray(data.events) || data.events.length === 0) {
+            return { ok: false, error: 'В паке нет событий' };
+        }
+        const validCategories = ['cozy', 'chaos', 'custom'];
+        const validTargets = ['single', 'pair', 'group'];
+        for (let i = 0; i < data.events.length; i++) {
+            const ev = data.events[i];
+            if (!ev || typeof ev !== 'object') {
+                return { ok: false, error: `Событие #${i + 1}: не является объектом` };
+            }
+            if (!ev.id || !ev.text) {
+                return { ok: false, error: `Событие #${i + 1}: нет id или текста` };
+            }
+            if (!validCategories.includes(ev.category)) {
+                return { ok: false, error: `Событие #${i + 1}: неверная категория «${ev.category}»` };
+            }
+            if (ev.targetType && !validTargets.includes(ev.targetType)) {
+                return { ok: false, error: `Событие #${i + 1}: неверный targetType` };
+            }
+        }
+        return { ok: true, pack: normalizePack(data) };
+    }
+
+    function normalizePack(data) {
+        return {
+            packId: String(data.packId),
+            packName: String(data.packName),
+            packAuthor: data.packAuthor ? String(data.packAuthor) : 'Неизвестный автор',
+            packVersion: String(data.packVersion),
+            packDescription: data.packDescription ? String(data.packDescription) : '',
+            theme: data.theme ? String(data.theme) : 'custom',
+            icon: data.icon ? String(data.icon) : null,
+            installedAt: Date.now(),
+            enabled: true,
+            events: data.events.map((ev, i) => ({
+                id: String(ev.id || `pack_${data.packId}_${i}`),
+                text: String(ev.text),
+                category: ev.category || 'custom',
+                subcategory: ev.subcategory || 'pack',
+                intensity: ev.intensity || 1,
+                source: 'pack',
+                packId: String(data.packId),
+                targetType: ev.targetType || 'single',
+                requires: Array.isArray(ev.requires) ? ev.requires : [],
+                tags: Array.isArray(ev.tags) ? ev.tags : [],
+                enabled: true
+            }))
+        };
+    }
+
+    function installPack(data) {
+        const validation = validatePack(data);
+        if (!validation.ok) return validation;
+        const pack = validation.pack;
+        const state = App.state;
+        const existing = state.installedPacks.find(p => p.packId === pack.packId);
+        let replaced = false;
+        if (existing) {
+            existing.packName = pack.packName;
+            existing.packAuthor = pack.packAuthor;
+            existing.packVersion = pack.packVersion;
+            existing.packDescription = pack.packDescription;
+            existing.theme = pack.theme;
+            existing.icon = pack.icon;
+            existing.installedAt = pack.installedAt;
+            existing.events = pack.events;
+            existing.enabled = true;
+            replaced = true;
+        } else {
+            state.installedPacks.push(pack);
+        }
+        Storage.savePacks(state.installedPacks);
+        View.updateEventsList();
+        View.renderPacksManager();
+        return { ok: true, pack, replaced };
+    }
+
+    function uninstallPack(packId) {
+        const state = App.state;
+        const idx = state.installedPacks.findIndex(p => p.packId === packId);
+        if (idx === -1) return null;
+        const removed = state.installedPacks.splice(idx, 1)[0];
+        Storage.savePacks(state.installedPacks);
+        View.updateEventsList();
+        View.renderPacksManager();
+        return removed;
+    }
+
+    function togglePack(packId) {
+        const state = App.state;
+        const pack = state.installedPacks.find(p => p.packId === packId);
+        if (!pack) return;
+        pack.enabled = pack.enabled === false ? true : false;
+        Storage.savePacks(state.installedPacks);
+        View.updateEventsList();
+        View.renderPacksManager();
+    }
+
+    function getEnabledPackEvents() {
+        const state = App.state;
+        const result = [];
+        state.installedPacks.forEach(pack => {
+            if (pack.enabled === false) return;
+            pack.events.forEach(ev => {
+                if (ev.enabled !== false) result.push(ev);
+            });
+        });
+        return result;
+    }
+
+    function exportAllPacks() {
+        const state = App.state;
+        if (state.installedPacks.length === 0) {
+            return { ok: false, error: 'Нет установленных паков' };
+        }
+        const data = {
+            packFormatVersion: Config.PACK_FORMAT_VERSION,
+            packsBundle: true,
+            exportedAt: Date.now(),
+            packs: state.installedPacks
+        };
+        return { ok: true, data };
+    }
+
+    function importFromBundle(data) {
+        // Поддержка двух форматов: одиночный пак и bundle из нескольких
+        if (data && Array.isArray(data.packs)) {
+            const results = [];
+            let okCount = 0;
+            data.packs.forEach(p => {
+                const r = installPack(p);
+                results.push(r);
+                if (r.ok) okCount++;
+            });
+            return { ok: okCount > 0, results, count: okCount };
+        }
+        return installPack(data);
+    }
+
+    function getThemeIcon(theme, customIcon) {
+        if (customIcon) return customIcon;
+        return Config.THEME_ICONS[theme] || Config.THEME_ICONS.custom;
+    }
+
+    return {
+        validatePack, installPack, uninstallPack, togglePack,
+        getEnabledPackEvents, exportAllPacks, importFromBundle,
+        getThemeIcon
+    };
+})();
+
+/* ============================================================
+ * LOGIC
  * ============================================================ */
 const Logic = (() => {
     function getRelationBetween(idA, idB) {
@@ -2345,23 +2654,15 @@ const Logic = (() => {
     }
 
     return {
-        getRelationBetween,
-        getActiveSims,
-        participantsSatisfy,
-        getRelevantRelations,
-        buildParticipantsForEvent,
-        generateCandidateSets,
-        tryBuildWithForcedSim,
-        getRecentCategoryRatio,
-        getBalanceMultipliers,
-        getRecentEventIds,
-        calcEventWeight,
-        pickEventAndParticipants
+        getRelationBetween, getActiveSims, participantsSatisfy,
+        getRelevantRelations, buildParticipantsForEvent, generateCandidateSets,
+        tryBuildWithForcedSim, getRecentCategoryRatio, getBalanceMultipliers,
+        getRecentEventIds, calcEventWeight, pickEventAndParticipants
     };
 })();
 
 /* ============================================================
- * MODALS — управление модалками + focus trap
+ * MODALS
  * ============================================================ */
 const Modals = (() => {
     const FOCUSABLE_SELECTOR = [
@@ -2432,14 +2733,14 @@ const Modals = (() => {
 })();
 
 /* ============================================================
- * VIEW — рендер интерфейса
+ * VIEW
  * ============================================================ */
 const View = (() => {
     function setModalCategory(category) {
         const wrap = $('resultModalContent');
         wrap.classList.remove('cat-cozy','cat-chaos','cat-custom','cat-idea');
         const catEl = $('modalCategory');
-        catEl.classList.remove('is-cozy','is-chaos','is-custom','is-idea');
+        catEl.classList.remove('is-cozy','is-chaos','is-custom','is-idea','is-pack');
         const use = $('modalCategoryIcon');
         const label = $('modalCategoryLabel');
         const iconId = Config.CAT_ICON[category] || 'icon-sparkle';
@@ -2448,6 +2749,7 @@ const View = (() => {
         if (category === 'cozy')  { catEl.classList.add('is-cozy');   wrap.classList.add('cat-cozy'); }
         else if (category === 'chaos') { catEl.classList.add('is-chaos');  wrap.classList.add('cat-chaos'); }
         else if (category === 'custom'){ catEl.classList.add('is-custom'); wrap.classList.add('cat-custom'); }
+        else if (category === 'pack')  { catEl.classList.add('is-pack');   wrap.classList.add('cat-idea'); }
         else { catEl.classList.add('is-idea'); wrap.classList.add('cat-idea'); }
     }
 
@@ -2615,10 +2917,71 @@ const View = (() => {
         });
     }
 
+    function renderPacksManager() {
+        const state = App.state;
+        const container = $('packsList');
+        const badge = $('packsTabBadge');
+        if (!container) return;
+
+        const activeCount = state.installedPacks.filter(p => p.enabled !== false).length;
+        if (badge) {
+            if (activeCount > 0) {
+                badge.textContent = String(activeCount);
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        container.innerHTML = '';
+        if (state.installedPacks.length === 0) {
+            container.innerHTML = `<div class="empty-hint">Пока нет установленных паков</div>`;
+            return;
+        }
+
+        state.installedPacks.forEach(pack => {
+            const isEnabled = pack.enabled !== false;
+            const icon = Packs.getThemeIcon(pack.theme, pack.icon);
+            const eventsCount = pack.events ? pack.events.length : 0;
+            const installedDate = pack.installedAt ? formatDate(pack.installedAt) : '—';
+
+            const card = document.createElement('div');
+            card.className = 'pack-card' + (isEnabled ? '' : ' disabled');
+            card.innerHTML = `
+                <div class="pack-icon" aria-hidden="true">${escapeHtml(icon)}</div>
+                <div class="pack-body">
+                    <div class="pack-name">${escapeHtml(pack.packName)}</div>
+                    <div class="pack-meta">
+                        <span>${svgUse('icon-pencil','icon-14')} ${escapeHtml(pack.packAuthor || 'Неизвестный автор')}</span>
+                        <span class="sep">·</span>
+                        <span>v${escapeHtml(pack.packVersion)}</span>
+                        <span class="sep">·</span>
+                        <span>${eventsCount} ${eventsCount === 1 ? 'событие' : (eventsCount < 5 ? 'события' : 'событий')}</span>
+                        <span class="sep">·</span>
+                        <span>${escapeHtml(installedDate)}</span>
+                    </div>
+                    ${pack.packDescription ? `<div class="pack-desc">${escapeHtml(pack.packDescription)}</div>` : ''}
+                </div>
+                <div class="pack-actions">
+                    <button type="button" class="custom-event-toggle ${isEnabled ? 'on' : ''}" data-action="toggle-pack" data-id="${escapeHtml(pack.packId)}" aria-label="${isEnabled ? 'Выключить пак' : 'Включить пак'}" title="${isEnabled ? 'Выключить пак' : 'Включить пак'}">
+                        ${svgUse(isEnabled ? 'icon-eye' : 'icon-eye-off')}
+                    </button>
+                    <button type="button" class="icon-btn-sm" data-action="export-pack" data-id="${escapeHtml(pack.packId)}" aria-label="Скачать пак" title="Скачать пак в файл">
+                        ${svgUse('icon-download')}
+                    </button>
+                    <button type="button" class="icon-btn-sm danger" data-action="del-pack" data-id="${escapeHtml(pack.packId)}" aria-label="Удалить пак" title="Удалить пак">
+                        ${svgUse('icon-trash')}
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
     function historyItemHTML(item) {
         const catKey = item.eventCategory || item.categoryKey || (item.type && item.type.includes('Совет') ? 'idea' : 'custom');
         const iconId = Config.CAT_ICON[catKey] || 'icon-sparkle';
-        const cls = 'cat-' + (catKey === 'idea' ? 'idea' : (catKey === 'chaos' ? 'chaos' : (catKey === 'cozy' ? 'cozy' : 'custom')));
+        const cls = 'cat-' + (catKey === 'idea' ? 'idea' : (catKey === 'chaos' ? 'chaos' : (catKey === 'cozy' ? 'cozy' : (catKey === 'pack' ? 'pack' : 'custom'))));
         return `
             <div class="history-item">
                 <div class="hi-cat ${cls}">${svgUse(iconId)}</div>
@@ -2755,6 +3118,9 @@ const View = (() => {
         if (state.enableCustomEvents) {
             state.customEvents.forEach(ev => { if (ev.enabled !== false) state.activeEvents.push(ev); });
         }
+        // События из паков
+        Packs.getEnabledPackEvents().forEach(ev => state.activeEvents.push(ev));
+
         if (state.activeEvents.length === 0) {
             state.activeEvents.push({
                 id: "empty_warning",
@@ -2792,18 +3158,20 @@ const View = (() => {
             cozy: state.activeEvents.filter(e => e.category === 'cozy').length,
             chaos: state.activeEvents.filter(e => e.category === 'chaos').length,
             custom: state.activeEvents.filter(e => e.category === 'custom').length,
+            pack: state.activeEvents.filter(e => e.category === 'pack' || e.source === 'pack').length,
             defaultOn: state.enableDefaultEvents, customOn: state.enableCustomEvents,
             cozyOn: state.enableCozy, chaosOn: state.enableChaos,
             activeSims: active.length, totalSims: state.familyMembers.length,
-            relationships: state.familyRelationships.length
+            relationships: state.familyRelationships.length,
+            packsInstalled: state.installedPacks.length
         };
         $('debugStats').innerHTML = `
             <div class="debug-stat"><div class="ds-num">${stats.total}</div><div class="ds-label">Всего</div></div>
             <div class="debug-stat"><div class="ds-num">${stats.cozy}</div><div class="ds-label">Уютных</div></div>
             <div class="debug-stat"><div class="ds-num">${stats.chaos}</div><div class="ds-label">Драм</div></div>
             <div class="debug-stat"><div class="ds-num">${stats.custom}</div><div class="ds-label">Своих</div></div>
-            <div class="debug-stat"><div class="ds-num">${stats.activeSims}</div><div class="ds-label">Активных</div></div>
-            <div class="debug-stat"><div class="ds-num">${stats.relationships}</div><div class="ds-label">Связей</div></div>
+            <div class="debug-stat"><div class="ds-num">${stats.pack}</div><div class="ds-label">Из паков</div></div>
+            <div class="debug-stat"><div class="ds-num">${stats.packsInstalled}</div><div class="ds-label">Паков</div></div>
         `;
         const multipliers = Logic.getBalanceMultipliers();
         const ratio = Logic.getRecentCategoryRatio();
@@ -2842,17 +3210,19 @@ const View = (() => {
 
     return {
         setModalCategory,
-        renderFamily, renderRelationTargetGrid, updateRelSelectedCount, renderRelationshipsList, updateRelationForm,
-        renderCustomEventsManager, renderHistory, renderFullHistory,
+        renderFamily, renderRelationTargetGrid, updateRelSelectedCount,
+        renderRelationshipsList, updateRelationForm,
+        renderCustomEventsManager, renderPacksManager,
+        renderHistory, renderFullHistory,
         renderParticipantTags, renderRelationChips, showEventResult,
-        updatePresetDropdown, applyTheme, updateSoundIcon, applyCustomCursor, updateEventsList,
-        switchFamilyTab, openFamilyScreen, closeFamilyScreen,
+        updatePresetDropdown, applyTheme, updateSoundIcon, applyCustomCursor,
+        updateEventsList, switchFamilyTab, openFamilyScreen, closeFamilyScreen,
         openDebugPanel, maybeShowOnboarding, closeOnboarding
     };
 })();
 
 /* ============================================================
- * ACTIONS — действия пользователя
+ * ACTIONS
  * ============================================================ */
 const Actions = (() => {
     function saveAndRenderFamily() {
@@ -3230,7 +3600,7 @@ const Actions = (() => {
         reader.onload = (e) => {
             try {
                 const imported = JSON.parse(e.target.result);
-                if (!imported.familyMembers) { showNotification("Неверный формат файла"); return; }
+                if (!imported.familyMembers) { showNotification("Неверный формат файла", { error: true }); return; }
                 state.familyMembers = State.normalizeMembers(imported.familyMembers);
                 if (imported.familyName) {
                     state.currentFamilyName = imported.familyName;
@@ -3248,10 +3618,123 @@ const Actions = (() => {
                 View.updateRelationForm();
                 View.renderRelationshipsList();
                 showNotification("Семья успешно загружена");
-            } catch { showNotification("Ошибка чтения файла JSON"); }
+            } catch { showNotification("Ошибка чтения файла JSON", { error: true }); }
         };
         event.target.value = '';
     }
+
+    // ===== PACKS ACTIONS =====
+
+    function importPackFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = (e) => {
+            try {
+                const imported = JSON.parse(e.target.result);
+                // Поддержка одиночного пака и бандла паков
+                const result = Packs.importFromBundle(imported);
+                if (!result.ok) {
+                    const err = result.error || (result.results && result.results.find(r => !r.ok)?.error) || "Не удалось загрузить пак";
+                    showNotification(err, { error: true });
+                    return;
+                }
+                if (result.count !== undefined) {
+                    showNotification(`Загружено паков: ${result.count}`);
+                } else if (result.replaced) {
+                    showNotification(`Пак «${result.pack.packName}» обновлён`);
+                } else {
+                    showNotification(`Пак «${result.pack.packName}» установлен`);
+                }
+            } catch {
+                showNotification("Ошибка чтения файла пака", { error: true });
+            }
+        };
+        event.target.value = '';
+    }
+
+    function togglePackAction(packId) {
+        Packs.togglePack(packId);
+        const pack = App.state.installedPacks.find(p => p.packId === packId);
+        if (pack) {
+            showNotification(pack.enabled === false
+                ? `Пак «${pack.packName}» выключен`
+                : `Пак «${pack.packName}» включён`);
+        }
+    }
+
+    function exportSinglePack(packId) {
+        const state = App.state;
+        const pack = state.installedPacks.find(p => p.packId === packId);
+        if (!pack) return;
+        // Экспортируем как одиночный пак (без installedAt и enabled)
+        const packData = {
+            packFormatVersion: Config.PACK_FORMAT_VERSION,
+            packId: pack.packId,
+            packName: pack.packName,
+            packAuthor: pack.packAuthor,
+            packVersion: pack.packVersion,
+            packDescription: pack.packDescription,
+            theme: pack.theme,
+            icon: pack.icon,
+            events: pack.events.map(ev => ({
+                id: ev.id,
+                text: ev.text,
+                category: ev.category,
+                subcategory: ev.subcategory,
+                intensity: ev.intensity,
+                targetType: ev.targetType,
+                requires: ev.requires,
+                tags: ev.tags
+            }))
+        };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(packData, null, 2));
+        const a = document.createElement('a');
+        a.href = dataStr;
+        a.download = `pack_${pack.packId}.json`;
+        document.body.appendChild(a); a.click(); a.remove();
+        showNotification(`Пак «${pack.packName}» скачан`);
+    }
+
+    function exportAllPacksAction() {
+        const result = Packs.exportAllPacks();
+        if (!result.ok) {
+            showNotification(result.error, { error: true });
+            return;
+        }
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result.data, null, 2));
+        const a = document.createElement('a');
+        a.href = dataStr;
+        a.download = `fatesdice_packs_bundle_${Date.now()}.json`;
+        document.body.appendChild(a); a.click(); a.remove();
+        showNotification("Все паки скачаны одним файлом");
+    }
+
+    function confirmDeletePack(packId) {
+        const state = App.state;
+        const pack = state.installedPacks.find(p => p.packId === packId);
+        if (!pack) return;
+        Modals.openConfirm(
+            `Удалить пак «${pack.packName}»?\n\nСобытия из пака исчезнут из колеса. Записи в истории останутся.`,
+            () => {
+                const removed = Packs.uninstallPack(packId);
+                Modals.closeConfirm();
+                if (!removed) return;
+                showNotification("Пак удалён", {
+                    undoLabel: 'Отменить',
+                    onUndo: () => {
+                        state.installedPacks.push(removed);
+                        Storage.savePacks(state.installedPacks);
+                        View.updateEventsList();
+                        View.renderPacksManager();
+                    }
+                });
+            }
+        );
+    }
+
+    // ===== SPIN / ROLL =====
 
     function rotateWheelToSector(sectorIndex) {
         const state = App.state;
@@ -3420,13 +3903,15 @@ const Actions = (() => {
         openEditSimModal, closeEditSimModal, saveEditedSim,
         saveCurrentPreset, loadPreset, confirmDeletePreset,
         exportFamilyFile, importFamilyFile,
+        importPackFile, togglePackAction, exportSinglePack,
+        exportAllPacksAction, confirmDeletePack,
         rotateWheelToSector, triggerEvent, rerollSameParticipants,
         closeResultModal, triggerTodayIdea, bumpCounter, clearHistory
     };
 })();
 
 /* ============================================================
- * APP — инициализация, state и обработчики событий
+ * APP
  * ============================================================ */
 const App = (() => {
     const state = State.buildInitialState();
@@ -3435,6 +3920,7 @@ const App = (() => {
         View.renderFamily();
         View.updateEventsList();
         View.renderCustomEventsManager();
+        View.renderPacksManager();
         View.renderHistory();
         View.updatePresetDropdown();
         View.updateRelationForm();
@@ -3541,6 +4027,23 @@ const App = (() => {
             else if (btn.dataset.action === 'del-ev') Actions.confirmDeleteCustomEvent(index);
         });
 
+        // ===== PACKS =====
+        $('toggleImportPackForm').addEventListener('click', () => {
+            $('importPackForm').classList.toggle('open');
+        });
+        $('importPackBtn').addEventListener('click', () => $('importPackInput').click());
+        $('importPackInput').addEventListener('change', Actions.importPackFile);
+        $('exportPackBtn').addEventListener('click', Actions.exportAllPacksAction);
+
+        $('packsList').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            const packId = btn.dataset.id;
+            if (btn.dataset.action === 'toggle-pack') Actions.togglePackAction(packId);
+            else if (btn.dataset.action === 'del-pack') Actions.confirmDeletePack(packId);
+            else if (btn.dataset.action === 'export-pack') Actions.exportSinglePack(packId);
+        });
+
         $('enableCustomCursor').addEventListener('change', (e) => {
             state.enableCustomCursor = e.target.checked;
             Storage.saveCursor(state.enableCustomCursor);
@@ -3638,7 +4141,6 @@ const App = (() => {
     return { state, init };
 })();
 
-// Запуск
 App.init();
 </script>
 
