@@ -1,0 +1,3646 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fate's Dice — Симы</title>
+<link rel="icon" type="image/png" href="cologo.png">
+<link rel="apple-touch-icon" href="cologo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --surface-0: #F0EDE5;
+        --surface-1: #FFFFFF;
+        --surface-2: #FAF8F3;
+        --surface-3: #EFEBE2;
+        --line:      rgba(46,36,31,0.10);
+        --line-2:    rgba(46,36,31,0.05);
+        --ink:       #2E241F;
+        --ink-muted: #6E6560;
+        --ink-soft:  #A39B92;
+
+        --accent:      #5CA227;
+        --accent-deep: #4A851F;
+        --accent-soft: rgba(92,162,39,0.14);
+
+        --cozy:   #5CA227;
+        --chaos:  #C76158;
+        --custom: #8F7BB3;
+        --gold:   #D9A93F;
+
+        --radius-xs: 8px;
+        --radius-sm: 10px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+        --radius-xl: 28px;
+
+        --shadow-sm: 0 1px 2px rgba(46,36,31,0.06);
+        --shadow-md: 0 4px 14px rgba(46,36,31,0.08), 0 1px 2px rgba(46,36,31,0.05);
+        --shadow-lg: 0 20px 50px -12px rgba(46,36,31,0.22), 0 6px 18px -6px rgba(46,36,31,0.10);
+
+        --transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+        --scrollbar-size: 8px;
+
+        --cursor-url: url('cursor.png');
+        --cursor-hotspot: 8 8;
+    }
+
+    body.theme-dark {
+        --surface-0: #1A1A1A;
+        --surface-1: #232323;
+        --surface-2: #2A2A2A;
+        --surface-3: #333333;
+        --line:      rgba(255,255,255,0.10);
+        --line-2:    rgba(255,255,255,0.06);
+        --ink:       #EDEAE6;
+        --ink-muted: #A8A29C;
+        --ink-soft:  #787472;
+
+        --accent:      #6FBD33;
+        --accent-deep: #5CA227;
+        --accent-soft: rgba(111,189,51,0.16);
+
+        --cozy:   #6FBD33;
+        --chaos:  #E08076;
+        --custom: #AB97CC;
+        --gold:   #E8B94E;
+
+        --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+        --shadow-md: 0 6px 18px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.3);
+        --shadow-lg: 0 24px 60px -16px rgba(0,0,0,0.65), 0 8px 20px -8px rgba(0,0,0,0.4);
+
+        --cursor-url: url('cursor-white.png');
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+        font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        background-color: var(--surface-0);
+        color: var(--ink);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px 60px;
+        transition: var(--transition);
+        background-image: none;
+    }
+
+    .icon {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+        vertical-align: -0.125em;
+    }
+    .icon-14 { width: 14px; height: 14px; }
+    .icon-16 { width: 16px; height: 16px; }
+    .icon-18 { width: 18px; height: 18px; }
+    .icon-20 { width: 20px; height: 20px; }
+    .icon-24 { width: 24px; height: 24px; }
+    .icon-32 { width: 32px; height: 32px; }
+    .icon-48 { width: 48px; height: 48px; }
+
+    :focus { outline: none; }
+    :focus-visible {
+        outline: 2px solid var(--accent-deep);
+        outline-offset: 3px;
+        border-radius: var(--radius-xs);
+    }
+
+    button { font-family: inherit; color: inherit; }
+
+    .visually-hidden {
+        position: absolute !important;
+        width: 1px; height: 1px;
+        padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0,0,0,0);
+        white-space: nowrap; border: 0;
+    }
+
+    .unified-scroll { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+    .unified-scroll::-webkit-scrollbar { width: var(--scrollbar-size); height: var(--scrollbar-size); }
+    .unified-scroll::-webkit-scrollbar-track { background: transparent; }
+    .unified-scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+    .unified-scroll::-webkit-scrollbar-thumb:hover { background: var(--ink-soft); }
+
+    body.custom-cursor-on,
+    body.custom-cursor-on * {
+        cursor: var(--cursor-url) var(--cursor-hotspot), auto;
+    }
+    body.custom-cursor-on a,
+    body.custom-cursor-on button:not(:disabled),
+    body.custom-cursor-on .btn:not(:disabled),
+    body.custom-cursor-on .family-strip,
+    body.custom-cursor-on .icon-btn,
+    body.custom-cursor-on .icon-btn-sm,
+    body.custom-cursor-on .sim-row,
+    body.custom-cursor-on .rel-chip,
+    body.custom-cursor-on .tab,
+    body.custom-cursor-on .link-btn,
+    body.custom-cursor-on .close-x,
+    body.custom-cursor-on .add-toggle,
+    body.custom-cursor-on .toggle-row,
+    body.custom-cursor-on .custom-event-toggle,
+    body.custom-cursor-on .back-btn,
+    body.custom-cursor-on .author-block,
+    body.custom-cursor-on .brand-logo-mark,
+    body.custom-cursor-on .wheel-hub,
+    body.custom-cursor-on .wheel-container {
+        cursor: var(--cursor-url) var(--cursor-hotspot), pointer;
+    }
+    body.custom-cursor-on input,
+    body.custom-cursor-on textarea,
+    body.custom-cursor-on .input,
+    body.custom-cursor-on .select {
+        cursor: var(--cursor-url) var(--cursor-hotspot), text;
+    }
+    body.custom-cursor-on button:disabled,
+    body.custom-cursor-on .btn:disabled {
+        cursor: var(--cursor-url) var(--cursor-hotspot), not-allowed;
+    }
+    @media (hover: none) {
+        body.custom-cursor-on, body.custom-cursor-on * { cursor: auto !important; }
+    }
+
+    .top-bar {
+        width: 100%;
+        background: var(--surface-0);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px 0;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+    .top-bar-inner {
+        width: 100%;
+        max-width: 1160px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .brand { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+    .brand-logo-mark {
+        width: 74px; height: 74px; flex-shrink: 0; cursor: pointer; user-select: none;
+        position: relative; display: grid; place-items: center;
+    }
+    .brand-logo-mark .logo-dice {
+        width: 100%; height: 100%; object-fit: contain; display: block;
+        animation: floatLogo 4.5s ease-in-out infinite;
+        filter: drop-shadow(0 4px 10px rgba(46,36,31,0.18));
+        pointer-events: none; user-select: none;
+    }
+    @keyframes floatLogo {
+        0%   { transform: translateY(0)    rotate(-3deg); }
+        25%  { transform: translateY(-5px) rotate(0deg);  }
+        50%  { transform: translateY(0)    rotate(3deg);  }
+        75%  { transform: translateY(5px)  rotate(0deg);  }
+        100% { transform: translateY(0)    rotate(-3deg); }
+    }
+    .brand-text { display: flex; flex-direction: column; min-width: 0; gap: 2px; }
+    .brand-font-logo {
+        height: 55px; width: auto; max-width: 50%; object-fit: contain;
+        display: block; user-select: none; pointer-events: none;
+    }
+    .brand-sub {
+        font-size: 12px; color: var(--ink-muted); font-weight: 600;
+        letter-spacing: 0.01em; margin-top: 2px; line-height: 1.2;
+    }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .icon-btn {
+        width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line);
+        background: var(--surface-1); color: var(--ink); display: grid; place-items: center;
+        cursor: pointer; box-shadow: var(--shadow-sm);
+        transition: var(--transition), transform .12s ease;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent-deep); }
+    .icon-btn:active { transform: scale(0.94); }
+    .icon-btn .icon { width: 20px; height: 20px; }
+    .author-block {
+        display: flex; align-items: center; gap: 10px; padding-left: 16px; margin-left: 6px;
+        border-left: 1px solid var(--line); position: relative; text-decoration: none;
+    }
+    .author-block::after {
+        content: "♡"; position: absolute; top: -14px; right: -4px;
+        color: var(--accent); font-size: 16px; opacity: 0.7; pointer-events: none;
+    }
+    .author-avatar {
+        width: 38px; height: 38px; border-radius: 50%; background: var(--accent-deep);
+        display: grid; place-items: center; color: #fff; flex-shrink: 0;
+        transition: transform .2s ease;
+    }
+    .author-avatar .icon { width: 18px; height: 18px; }
+    .author-info { display: flex; flex-direction: column; line-height: 1.15; }
+    .author-block:hover { transform: translateX(2px); }
+    .author-block:hover .author-avatar { transform: scale(1.08) rotate(-5deg); }
+    .author-block:active .author-avatar { animation: authorTap .35s ease; }
+    @keyframes authorTap {
+        0%   { transform: scale(1); }
+        40%  { transform: scale(0.9) rotate(-2deg); }
+        70%  { transform: scale(1.06) rotate(1.5deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+    .author-label {
+        font-size: 10.5px; color: var(--ink-soft); font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .author-name { font-size: 14px; color: var(--ink); font-weight: 800; }
+
+    .app {
+        width: 100%; max-width: 720px; display: flex; flex-direction: column;
+        gap: 20px; margin-top: 28px;
+    }
+    .family-strip {
+        background: var(--surface-1); border: 1px solid var(--line);
+        border-radius: var(--radius-md); padding: 12px 18px;
+        display: flex; align-items: center; gap: 14px;
+        box-shadow: var(--shadow-sm); cursor: pointer; text-align: left;
+        width: 100%; transition: var(--transition);
+    }
+    .family-strip:hover { border-color: var(--accent); }
+    .family-strip .fs-icon {
+        width: 38px; height: 38px; border-radius: 12px; background: var(--accent-soft);
+        color: var(--accent-deep); display: grid; place-items: center; flex-shrink: 0;
+    }
+    .family-strip .fs-icon .icon { width: 20px; height: 20px; }
+    .family-strip .fs-body { flex: 1; min-width: 0; }
+    .family-strip .fs-label {
+        font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: 0.1em; color: var(--ink-soft);
+    }
+    .family-strip .fs-name {
+        font-size: 15px; font-weight: 800; color: var(--ink);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .family-strip .fs-count { font-size: 13px; color: var(--ink-muted); font-weight: 700; }
+    .family-strip .fs-arrow { color: var(--ink-soft); flex-shrink: 0; }
+    .family-strip .fs-arrow .icon { width: 20px; height: 20px; }
+
+    .hero {
+        background: var(--surface-1); border: 1px solid var(--line);
+        border-radius: var(--radius-xl); padding: 44px 32px 32px;
+        box-shadow: var(--shadow-md); position: relative; overflow: hidden;
+        display: flex; flex-direction: column; align-items: center;
+    }
+    .hero::before, .hero::after {
+        content: "✦"; position: absolute; color: var(--accent);
+        opacity: 0.55; font-size: 18px; pointer-events: none;
+    }
+    .hero::before { top: 40px; left: 80px; }
+    .hero::after  { top: 60px; right: 90px; font-size: 14px; }
+
+    .wheel-stage {
+        display: flex; flex-direction: column; align-items: center;
+        gap: 24px; width: 100%; position: relative;
+    }
+    .wheel-stage::before, .wheel-stage::after {
+        content: "✦"; position: absolute; color: var(--accent);
+        opacity: 0.5; pointer-events: none;
+    }
+    .wheel-stage::before { top: 20px; left: 30px; font-size: 14px; }
+    .wheel-stage::after  { bottom: 100px; right: 20px; font-size: 16px; }
+
+    .wheel-container {
+        position: relative; width: min(340px, 78vw); height: min(340px, 78vw);
+        --slice-radius: calc(min(340px, 78vw) * 0.30);
+    }
+    .pointer {
+        position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(45deg);
+        width: 20px; height: 20px; background: var(--accent-deep);
+        border: 3px solid var(--surface-1); border-radius: 5px; z-index: 20;
+        box-shadow: 0 4px 10px rgba(74,133,31,0.4);
+    }
+    .wheel {
+        width: 100%; height: 100%; border-radius: 50%; position: relative; overflow: hidden;
+        transition: transform 4s cubic-bezier(0.16, 0.9, 0.16, 1);
+        box-shadow:
+            inset 0 0 0 6px var(--surface-1),
+            inset 0 0 0 8px rgba(92,162,39,0.25),
+            0 16px 40px -12px rgba(46,36,31,0.22);
+        background: conic-gradient(
+            #6FBD33 0deg 45deg, #D9A93F 45deg 90deg,
+            #C76158 90deg 135deg, #8F7BB3 135deg 180deg,
+            #6BB5C4 180deg 225deg, #D68A5A 225deg 270deg,
+            #C97F9E 270deg 315deg, #8A9E5A 315deg 360deg
+        );
+        -webkit-backface-visibility: hidden; backface-visibility: hidden; transform: translateZ(0);
+    }
+    .wheel::after {
+        content: ""; position: absolute; inset: 0; border-radius: 50%;
+        background: radial-gradient(circle at 50% 45%, rgba(255,255,255,0.14), transparent 55%);
+        pointer-events: none;
+    }
+    .wheel-slice-text { position: absolute; inset: 0; pointer-events: none; }
+    .slice-label {
+        position: absolute; top: 50%; left: 50%; width: 44px; height: 44px;
+        margin-top: -22px; margin-left: -22px;
+        display: flex; align-items: center; justify-content: center;
+        color: #FFFFFF; transform-origin: center center;
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
+    }
+    .slice-label .icon { width: 22px; height: 22px; stroke-width: 2; }
+    .slice-label:nth-child(1) { transform: rotate(22.5deg)  translate(0, calc(var(--slice-radius) * -1)) rotate(-22.5deg); }
+    .slice-label:nth-child(2) { transform: rotate(67.5deg)  translate(0, calc(var(--slice-radius) * -1)) rotate(-67.5deg); }
+    .slice-label:nth-child(3) { transform: rotate(112.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-112.5deg); }
+    .slice-label:nth-child(4) { transform: rotate(157.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-157.5deg); }
+    .slice-label:nth-child(5) { transform: rotate(202.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-202.5deg); }
+    .slice-label:nth-child(6) { transform: rotate(247.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-247.5deg); }
+    .slice-label:nth-child(7) { transform: rotate(292.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-292.5deg); }
+    .slice-label:nth-child(8) { transform: rotate(337.5deg) translate(0, calc(var(--slice-radius) * -1)) rotate(-337.5deg); }
+
+    .wheel-hub {
+        position: absolute; top: 50%; left: 50%; width: 68px; height: 68px;
+        margin: -34px 0 0 -34px; border-radius: 50%;
+        background: var(--surface-1); border: 3px solid var(--accent-deep);
+        display: grid; place-items: center; z-index: 15;
+        box-shadow: 0 6px 18px rgba(46,36,31,0.18); overflow: hidden;
+    }
+    .wheel-hub .hub-logo {
+        width: 80%; height: 80%; object-fit: contain;
+        display: block; pointer-events: none; user-select: none;
+    }
+
+    .spin-row { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+    .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+        border: none; border-radius: 999px; padding: 14px 24px;
+        font-size: 15px; font-weight: 800; letter-spacing: -0.01em;
+        cursor: pointer; transition: var(--transition), transform .12s ease;
+        white-space: nowrap; position: relative;
+    }
+    .btn:active:not(:disabled) { transform: translateY(1px); }
+    .btn .icon { width: 20px; height: 20px; }
+    .btn-primary {
+        background: var(--accent-deep); color: #FFFFFF;
+        box-shadow: 0 10px 24px -8px rgba(74,133,31,0.55);
+    }
+    .btn-primary:hover:not(:disabled) { background: #3F7119; }
+    .btn-primary:disabled {
+        background: var(--surface-3); color: var(--ink-soft);
+        box-shadow: none; cursor: not-allowed;
+    }
+    .btn-ghost {
+        background: var(--surface-1); color: var(--ink); border: 1px solid var(--line);
+    }
+    .btn-ghost:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-deep); }
+    .btn-spin {
+        width: 100%; max-width: 560px; font-size: 17px;
+        padding: 18px 28px; border-radius: 999px;
+    }
+    .btn-spin .icon { width: 22px; height: 22px; }
+    .btn-idea {
+        width: 100%; max-width: 560px; font-size: 14px;
+        padding: 14px 24px; border-radius: 999px;
+    }
+    .btn-idea::after {
+        content: attr(data-tooltip); position: absolute; bottom: calc(100% + 10px);
+        left: 50%; transform: translateX(-50%) translateY(4px);
+        background: var(--ink); color: var(--surface-1); padding: 10px 14px;
+        border-radius: var(--radius-sm); font-size: 12px; font-weight: 600;
+        line-height: 1.4; white-space: normal; width: max-content;
+        max-width: 280px; text-align: left; opacity: 0; pointer-events: none;
+        transition: opacity .18s ease, transform .18s ease;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.18); z-index: 40;
+    }
+    .btn-idea::before {
+        content: ""; position: absolute; bottom: calc(100% + 4px); left: 50%;
+        transform: translateX(-50%) translateY(4px); border: 6px solid transparent;
+        border-top-color: var(--ink); opacity: 0; pointer-events: none;
+        transition: opacity .18s ease, transform .18s ease; z-index: 40;
+    }
+    .btn-idea:hover::after, .btn-idea:focus-visible::after,
+    .btn-idea:hover::before, .btn-idea:focus-visible::before {
+        opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+
+    .history-section {
+        background: var(--surface-1); border: 1px solid var(--line);
+        border-radius: var(--radius-lg); padding: 18px 22px; box-shadow: var(--shadow-sm);
+    }
+    .section-head {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 8px; margin-bottom: 14px;
+    }
+    .section-title {
+        font-size: 12px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: 0.12em; color: var(--ink-muted);
+        display: flex; align-items: center; gap: 8px;
+    }
+    .section-title .icon { width: 16px; height: 16px; }
+    .link-btn {
+        background: none; border: none; color: var(--ink-muted);
+        font: inherit; font-size: 12px; font-weight: 700;
+        cursor: pointer; padding: 4px 8px; border-radius: var(--radius-xs);
+        transition: var(--transition);
+    }
+    .link-btn:hover { color: var(--accent-deep); background: var(--accent-soft); }
+
+    .history-list {
+        display: flex; flex-direction: column; gap: 10px;
+        max-height: 280px; overflow-y: auto; padding-right: 4px;
+    }
+    .history-item {
+        background: var(--surface-1); border: 1px solid var(--line-2);
+        border-radius: var(--radius-md); padding: 12px 14px;
+        display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start;
+    }
+    .history-item .hi-cat {
+        width: 32px; height: 32px; border-radius: 10px;
+        display: grid; place-items: center; flex-shrink: 0; color: #fff;
+    }
+    .history-item .hi-cat .icon { width: 16px; height: 16px; }
+    .history-item .hi-cat.cat-cozy   { background: var(--cozy); }
+    .history-item .hi-cat.cat-chaos  { background: var(--chaos); }
+    .history-item .hi-cat.cat-custom { background: var(--custom); }
+    .history-item .hi-cat.cat-idea   { background: var(--gold); color: #4A3A0A; }
+    .history-item .hi-body { min-width: 0; }
+    .history-item .hi-meta {
+        font-size: 10.5px; color: var(--ink-soft); font-weight: 800;
+        letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 3px;
+    }
+    .history-item .hi-text {
+        font-size: 13px; line-height: 1.45; color: var(--ink);
+        font-weight: 600; word-wrap: break-word;
+    }
+
+    .empty-state {
+        padding: 22px 12px; text-align: center; color: var(--ink-muted);
+    }
+    .empty-state .empty-icon {
+        width: 40px; height: 40px; margin: 0 auto 8px;
+        color: var(--ink-soft); opacity: 0.7;
+    }
+    .empty-state .empty-title {
+        font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+    }
+    .empty-state .empty-sub {
+        font-size: 11.5px; line-height: 1.5; opacity: 0.9;
+        max-width: 340px; margin: 0 auto;
+    }
+
+    .screen {
+        position: fixed; inset: 0; background: var(--surface-0); z-index: 90;
+        display: flex; flex-direction: column; align-items: center;
+        opacity: 0; pointer-events: none; transition: opacity .22s ease;
+        overflow-y: auto;
+    }
+    .screen.active { opacity: 1; pointer-events: auto; }
+    .screen-shell {
+        width: 100%; max-width: 720px; padding: 20px 20px 40px;
+        display: flex; flex-direction: column; gap: 14px; margin: 0 auto;
+    }
+    .screen-topbar { display: flex; align-items: center; gap: 12px; padding: 2px 4px; }
+    .back-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: var(--surface-1); border: 1px solid var(--line);
+        border-radius: 999px; padding: 9px 16px; font-size: 13px;
+        font-weight: 800; color: var(--ink); cursor: pointer;
+        transition: var(--transition); box-shadow: var(--shadow-sm); flex-shrink: 0;
+    }
+    .back-btn:hover { border-color: var(--accent); color: var(--accent-deep); }
+    .back-btn .icon { width: 15px; height: 15px; }
+    .screen-title {
+        flex: 1; font-size: 15px; font-weight: 800; color: var(--ink);
+        letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis;
+        white-space: nowrap; text-align: right;
+    }
+    .screen-panel {
+        background: var(--surface-1); border: 1px solid var(--line);
+        border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-sm);
+    }
+
+    .modal {
+        position: fixed; inset: 0; background: rgba(20, 20, 20, 0.55);
+        backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none; transition: opacity .25s ease;
+        z-index: 100; padding: 16px;
+    }
+    .modal.active { opacity: 1; pointer-events: auto; }
+    #confirmModal { z-index: 300; }
+    .modal-content {
+        background: var(--surface-1); border: 1px solid var(--line);
+        padding: 24px; border-radius: var(--radius-lg); max-width: 440px;
+        width: 100%; text-align: center; box-shadow: var(--shadow-lg);
+        max-height: calc(100dvh - 32px); display: flex; flex-direction: column;
+        transform: translateY(8px); transition: transform .25s ease;
+    }
+    .modal.active .modal-content { transform: translateY(0); }
+    .modal-content.wide { max-width: 560px; }
+    .modal-content.result-layout {
+        padding: 0; text-align: left; overflow: hidden; position: relative;
+    }
+    .modal-content.result-layout::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0;
+        height: 4px; background: var(--cozy); transition: background .2s ease;
+    }
+    .modal-content.result-layout.cat-chaos::before  { background: var(--chaos); }
+    .modal-content.result-layout.cat-custom::before { background: var(--custom); }
+    .modal-content.result-layout.cat-idea::before   { background: var(--gold); }
+    .modal-header {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 10px; padding: 18px 20px 12px;
+    }
+    .modal-category {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 5px 10px; border-radius: 999px; font-size: 10.5px;
+        font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+        background: var(--accent-soft); color: var(--accent-deep);
+    }
+    .modal-category .icon { width: 12px; height: 12px; }
+    .modal-category.is-chaos  { background: rgba(199,97,88,0.16); color: #A94A3F; }
+    .modal-category.is-custom { background: rgba(143,123,179,0.18); color: #6E52A8; }
+    .modal-category.is-idea   { background: rgba(217,169,63,0.20); color: #8A6E10; }
+    body.theme-dark .modal-category.is-chaos  { color: #F3A198; }
+    body.theme-dark .modal-category.is-custom { color: #C7B2EE; }
+    body.theme-dark .modal-category.is-idea   { color: #EBCB6E; }
+    .close-x {
+        background: none; border: none; color: var(--ink-soft); cursor: pointer;
+        padding: 6px; border-radius: var(--radius-xs); display: grid;
+        place-items: center; transition: var(--transition);
+    }
+    .close-x:hover { color: var(--ink); background: var(--surface-3); }
+    .close-x .icon { width: 18px; height: 18px; }
+    .modal-body { padding: 4px 22px 18px; }
+    .modal-event-title {
+        font-size: 20px; font-weight: 800; line-height: 1.25;
+        letter-spacing: -0.015em; color: var(--ink); margin-bottom: 10px;
+    }
+    .modal-event-description {
+        font-size: 14px; line-height: 1.55; color: var(--ink-muted);
+        margin-bottom: 20px; font-weight: 600;
+    }
+    .modal-block-title {
+        font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+        text-transform: uppercase; color: var(--ink-soft); margin-bottom: 10px;
+    }
+    .participants-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .participant-tag {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 5px 12px 5px 5px; border-radius: 999px;
+        background: var(--surface-2); border: 1px solid var(--line);
+        font-size: 12.5px; font-weight: 700; color: var(--ink);
+    }
+    .avatar-circle {
+        width: 26px; height: 26px; border-radius: 50%;
+        display: grid; place-items: center; color: #fff; font-size: 11px;
+        font-weight: 800; letter-spacing: 0.02em;
+        background: var(--accent-deep); flex-shrink: 0;
+    }
+    .relation-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .relation-chip {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 10px; border-radius: 999px;
+        background: var(--surface-2); color: var(--ink);
+        border: 1px solid var(--line); font-size: 11px; font-weight: 700;
+    }
+    .relation-chip .icon { width: 12px; height: 12px; color: var(--accent-deep); }
+    .modal-footer {
+        display: flex; gap: 8px; padding: 14px 18px 18px;
+        border-top: 1px solid var(--line-2); background: var(--surface-2);
+    }
+    .modal-footer .btn { flex: 1; border-radius: var(--radius-md); }
+    .modal-title {
+        font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+        color: var(--ink-soft); margin-bottom: 14px; font-weight: 800;
+    }
+    .modal-text {
+        font-size: 14.5px; font-weight: 600; margin-bottom: 22px;
+        line-height: 1.5; text-align: left; color: var(--ink);
+    }
+    .modal-actions {
+        display: flex; gap: 10px; justify-content: stretch; flex-wrap: wrap;
+    }
+    .modal-actions .btn { flex: 1; min-width: 120px; border-radius: var(--radius-md); }
+    .full-history-list {
+        display: flex; flex-direction: column; gap: 8px;
+        overflow-y: auto; max-height: 56vh; margin-bottom: 16px;
+        padding-right: 4px; text-align: left;
+    }
+
+    .tabs {
+        display: flex; gap: 4px; padding: 4px; background: var(--surface-2);
+        border: 1px solid var(--line); border-radius: var(--radius-md);
+        margin-bottom: 16px;
+    }
+    .tab {
+        flex: 1; background: transparent; border: none;
+        border-radius: var(--radius-sm); padding: 9px 10px;
+        font-size: 12.5px; font-weight: 800; color: var(--ink-muted);
+        cursor: pointer; display: inline-flex; align-items: center;
+        justify-content: center; gap: 6px; transition: var(--transition);
+    }
+    .tab .icon { width: 15px; height: 15px; }
+    .tab:hover { color: var(--ink); }
+    .tab.active {
+        background: var(--surface-1); color: var(--accent-deep);
+        box-shadow: var(--shadow-sm);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .field-label {
+        display: block; font-size: 11px; font-weight: 800;
+        color: var(--ink-soft); text-transform: uppercase;
+        letter-spacing: 0.08em; margin: 14px 0 6px;
+    }
+    .field-label:first-child { margin-top: 0; }
+
+    .input, .select, textarea.input {
+        width: 100%; padding: 11px 16px; border-radius: var(--radius-md);
+        border: 1px solid var(--line); background: var(--surface-1);
+        color: var(--ink); font-size: 13.5px; font-family: inherit;
+        font-weight: 600; transition: var(--transition);
+        appearance: none; -webkit-appearance: none;
+    }
+    .input::placeholder { color: var(--ink-soft); }
+    .input:hover, .select:hover { border-color: var(--accent); }
+    .input:focus, .select:focus {
+        border-color: var(--accent-deep); box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .select {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236E6560' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 14px center;
+        padding-right: 38px; cursor: pointer;
+    }
+    body.theme-dark .select {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A8A29C' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    }
+    textarea.input { resize: vertical; min-height: 76px; line-height: 1.5; }
+
+    .toggle-row {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; padding: 11px 16px; background: var(--surface-1);
+        border: 1px solid var(--line); border-radius: var(--radius-md);
+        margin-bottom: 8px; cursor: pointer; user-select: none;
+        transition: var(--transition);
+    }
+    .toggle-row:hover { border-color: var(--accent); }
+    .toggle-row.sub { margin-left: 20px; padding: 9px 14px; background: var(--surface-2); }
+    .toggle-text {
+        font-size: 13px; font-weight: 700; color: var(--ink);
+        display: flex; align-items: center; gap: 8px;
+    }
+    .toggle-text .icon { width: 16px; height: 16px; color: var(--ink-muted); }
+    .toggle-row input[type="checkbox"] {
+        appearance: none; -webkit-appearance: none;
+        width: 38px; height: 22px; border-radius: 999px;
+        background: var(--surface-3); border: 1px solid var(--line);
+        position: relative; cursor: pointer; transition: var(--transition);
+        flex-shrink: 0;
+    }
+    .toggle-row input[type="checkbox"]::after {
+        content: ""; position: absolute; top: 2px; left: 2px;
+        width: 16px; height: 16px; border-radius: 50%;
+        background: var(--surface-1); box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+        transition: transform .2s ease;
+    }
+    .toggle-row input[type="checkbox"]:checked {
+        background: var(--accent-deep); border-color: var(--accent-deep);
+    }
+    .toggle-row input[type="checkbox"]:checked::after { transform: translateX(16px); }
+
+    .sim-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .sim-row {
+        display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+        background: var(--surface-1); border: 1px solid var(--line);
+        border-radius: var(--radius-md); transition: var(--transition); cursor: pointer;
+    }
+    .sim-row:hover { border-color: var(--accent); }
+    .sim-row.disabled { opacity: 0.45; }
+    .sim-row.disabled .sim-row-name {
+        text-decoration: line-through; text-decoration-thickness: 1px;
+    }
+    .sim-row-avatar {
+        width: 40px; height: 40px; border-radius: 12px;
+        display: grid; place-items: center; color: #fff;
+        font-weight: 800; font-size: 15px; flex-shrink: 0;
+    }
+    .sim-row-body { flex: 1; min-width: 0; text-align: left; }
+    .sim-row-name {
+        font-size: 14px; font-weight: 800; color: var(--ink);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sim-row-role {
+        font-size: 11.5px; color: var(--ink-muted); font-weight: 700;
+        display: flex; align-items: center; gap: 4px; margin-top: 2px;
+    }
+    .sim-row-role .icon { width: 11px; height: 11px; }
+    .sim-row-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .icon-btn-sm {
+        width: 30px; height: 30px; border-radius: var(--radius-xs);
+        background: transparent; border: 1px solid transparent;
+        color: var(--ink-soft); display: grid; place-items: center;
+        cursor: pointer; transition: var(--transition);
+    }
+    .icon-btn-sm:hover { color: var(--accent-deep); border-color: var(--line); background: var(--surface-2); }
+    .icon-btn-sm.danger:hover { color: var(--chaos); }
+    .icon-btn-sm .icon { width: 15px; height: 15px; }
+
+    .manage-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .manage-item {
+        display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+        background: var(--surface-1); border: 1px solid var(--line);
+        border-radius: var(--radius-md); font-size: 12.5px; text-align: left;
+    }
+    .manage-item .mi-text {
+        flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+        white-space: nowrap; color: var(--ink); font-weight: 600;
+    }
+    .manage-item .mi-text b { color: var(--accent-deep); font-weight: 800; }
+    .manage-item .mi-icon {
+        width: 30px; height: 30px; border-radius: 8px;
+        display: grid; place-items: center; background: var(--accent-soft);
+        color: var(--accent-deep); flex-shrink: 0;
+    }
+    .manage-item .mi-icon .icon { width: 15px; height: 15px; }
+
+    .add-toggle {
+        width: 100%; background: transparent; border: 1px dashed var(--line);
+        color: var(--ink-muted); border-radius: var(--radius-md);
+        padding: 12px 16px; font-size: 13px; font-weight: 800;
+        cursor: pointer; margin-top: 8px; display: inline-flex;
+        align-items: center; justify-content: center; gap: 6px;
+        transition: var(--transition);
+    }
+    .add-toggle:hover { color: var(--accent-deep); border-color: var(--accent); background: var(--accent-soft); }
+    .add-toggle .icon { width: 14px; height: 14px; }
+    .form-collapse { display: none; margin-top: 10px; }
+    .form-collapse.open { display: block; }
+    .empty-hint {
+        font-size: 12px; color: var(--ink-soft); text-align: center;
+        padding: 12px; font-weight: 600;
+    }
+
+    .rel-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 8px; margin-top: 6px;
+    }
+    .rel-chip {
+        display: flex; align-items: center; gap: 8px;
+        padding: 8px 10px 8px 8px; background: var(--surface-1);
+        border: 1px solid var(--line); border-radius: var(--radius-md);
+        cursor: pointer; user-select: none; transition: var(--transition);
+        font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: left;
+    }
+    .rel-chip:hover { border-color: var(--accent); }
+    .rel-chip.selected {
+        border-color: var(--accent-deep); background: var(--accent-soft);
+        color: var(--accent-deep);
+    }
+    .rel-chip .rel-check {
+        width: 20px; height: 20px; border-radius: 50%;
+        border: 2px solid var(--line); display: grid; place-items: center;
+        flex-shrink: 0; background: var(--surface-1); color: #fff;
+        transition: var(--transition);
+    }
+    .rel-chip.selected .rel-check {
+        background: var(--accent-deep); border-color: var(--accent-deep);
+    }
+    .rel-chip .rel-check .icon { width: 12px; height: 12px; stroke-width: 3; opacity: 0; }
+    .rel-chip.selected .rel-check .icon { opacity: 1; }
+    .rel-chip .rel-avatar {
+        width: 26px; height: 26px; border-radius: 50%;
+        display: grid; place-items: center; color: #fff;
+        font-size: 10px; font-weight: 800; flex-shrink: 0;
+    }
+    .rel-chip .rel-name {
+        flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    .toast-container {
+        position: fixed; bottom: 24px; right: 24px;
+        display: flex; flex-direction: column; gap: 8px;
+        z-index: 400; pointer-events: none; align-items: flex-end;
+    }
+    .toast {
+        background: var(--surface-1); color: var(--ink);
+        border: 1px solid var(--line); padding: 12px 18px;
+        border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+        font-size: 13px; font-weight: 700; opacity: 0;
+        transform: translateX(20px); transition: opacity .3s ease, transform .3s ease;
+        pointer-events: auto; display: flex; align-items: center; gap: 10px;
+        max-width: min(360px, 90vw);
+    }
+    .toast.show { opacity: 1; transform: translateX(0); }
+    .toast .toast-icon { color: var(--accent-deep); flex-shrink: 0; }
+    .toast .toast-icon .icon { width: 16px; height: 16px; }
+    .toast .toast-undo-btn {
+        background: transparent; color: var(--accent-deep);
+        border: 1px solid var(--accent-deep); border-radius: var(--radius-xs);
+        padding: 3px 10px; font-size: 11.5px; font-weight: 800;
+        cursor: pointer; margin-left: 4px;
+    }
+    .toast .toast-undo-btn:hover { background: var(--accent-deep); color: #fff; }
+
+    .onboarding-steps {
+        text-align: left; margin: 10px 0 18px;
+        display: flex; flex-direction: column; gap: 8px;
+    }
+    .onboarding-step {
+        display: flex; gap: 12px; align-items: flex-start;
+        background: var(--surface-2); border: 1px solid var(--line-2);
+        border-radius: var(--radius-md); padding: 12px;
+    }
+    .onboarding-step .ob-icon {
+        width: 34px; height: 34px; border-radius: var(--radius-xs);
+        background: var(--accent-soft); color: var(--accent-deep);
+        display: grid; place-items: center; flex-shrink: 0;
+    }
+    .onboarding-step .ob-icon .icon { width: 18px; height: 18px; }
+    .onboarding-step .ob-text {
+        font-size: 13px; line-height: 1.45; color: var(--ink); font-weight: 600;
+    }
+    .onboarding-step .ob-text b { color: var(--accent-deep); font-weight: 800; }
+
+    .debug-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+    .debug-stat {
+        background: var(--surface-2); border: 1px solid var(--line-2);
+        border-radius: var(--radius-md); padding: 10px; text-align: center;
+    }
+    .debug-stat .ds-num {
+        font-size: 20px; font-weight: 800; color: var(--accent-deep); line-height: 1.1;
+    }
+    .debug-stat .ds-label {
+        font-size: 9.5px; color: var(--ink-soft); text-transform: uppercase;
+        letter-spacing: 0.06em; margin-top: 4px; font-weight: 800;
+    }
+    .debug-list {
+        display: flex; flex-direction: column; gap: 6px; max-height: 50vh;
+        overflow-y: auto; text-align: left; padding-right: 4px; margin-bottom: 16px;
+    }
+    .debug-row {
+        display: flex; justify-content: space-between; gap: 8px; font-size: 12px;
+        background: var(--surface-2); border: 1px solid var(--line-2);
+        border-radius: var(--radius-xs); padding: 7px 10px;
+    }
+    .debug-row .debug-key { color: var(--ink-muted); font-weight: 700; }
+    .debug-row .debug-val {
+        color: var(--ink); font-weight: 800; text-align: right; word-break: break-word;
+    }
+
+    .custom-event-toggle {
+        width: 26px; height: 26px; border-radius: var(--radius-xs);
+        background: transparent; border: 1px solid var(--line);
+        color: var(--ink-soft); display: grid; place-items: center;
+        cursor: pointer; transition: var(--transition); flex-shrink: 0;
+    }
+    .custom-event-toggle:hover { border-color: var(--accent); color: var(--accent-deep); }
+    .custom-event-toggle.on {
+        background: var(--accent-soft); border-color: var(--accent); color: var(--accent-deep);
+    }
+    .custom-event-toggle .icon { width: 14px; height: 14px; }
+    .manage-item.disabled .mi-text { opacity: 0.4; text-decoration: line-through; }
+    .manage-item.disabled .mi-icon { opacity: 0.4; }
+
+    @media (max-width: 720px) {
+        .top-bar-inner { padding: 0 14px; gap: 12px; }
+        .brand-logo-mark { width: 58px; height: 58px; }
+        .brand-font-logo { height: 34px; }
+        .brand-sub { font-size: 11px; }
+        .icon-btn { width: 40px; height: 40px; }
+        .icon-btn .icon { width: 18px; height: 18px; }
+        .author-label { display: none; }
+        .author-name { font-size: 12.5px; }
+        .author-avatar { width: 32px; height: 32px; }
+        .author-block::after { display: none; }
+    }
+    @media (max-width: 480px) {
+        body { padding: 0 12px 40px; }
+        .top-bar { padding: 12px 0; }
+        .brand { gap: 10px; }
+        .brand-logo-mark { width: 46px; height: 46px; }
+        .brand-font-logo { height: 26px; }
+        .brand-sub { display: none; }
+        .app { margin-top: 20px; }
+        .hero { padding: 32px 18px 24px; border-radius: var(--radius-lg); }
+        .hero::before { top: 24px; left: 20px; }
+        .hero::after  { top: 40px; right: 24px; }
+        .btn-spin { font-size: 15px; padding: 16px 22px; }
+        .modal-content { padding: 20px; }
+        .modal-content.result-layout { padding: 0; }
+        .modal-body { padding: 4px 18px 16px; }
+        .modal-header { padding: 16px 16px 12px; }
+        .toast-container { right: 12px; left: 12px; bottom: 12px; align-items: stretch; }
+        .toast { max-width: 100%; }
+        .debug-stats { grid-template-columns: repeat(2, 1fr); }
+        .sim-row-actions .icon-btn-sm { width: 28px; height: 28px; }
+        .btn-idea::after { max-width: 220px; }
+        .rel-grid { grid-template-columns: 1fr 1fr; }
+        .screen-shell { padding: 14px 12px 30px; }
+        .screen-panel { padding: 12px; }
+        .author-block { border-left: none; padding-left: 0; margin-left: 0; }
+        .header-actions { gap: 6px; }
+        .icon-btn { width: 36px; height: 36px; }
+        .author-info { display: none; }
+        .wheel-hub { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.001ms !important;
+            transition-duration: 0.001ms !important;
+        }
+        .brand-logo-mark .logo-dice { animation: none; }
+    }
+</style>
+</head>
+<body class="custom-cursor-on">
+
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+        <symbol id="icon-plumbob" viewBox="0 0 24 24">
+            <path d="M12 2 L20 12 L12 22 L4 12 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M12 6 L16.5 12 L12 18 L7.5 12 Z" fill="currentColor" opacity="0.25"></path>
+        </symbol>
+        <symbol id="icon-dice" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+            <circle cx="8" cy="8" r="1.3" fill="currentColor"></circle>
+            <circle cx="16" cy="8" r="1.3" fill="currentColor"></circle>
+            <circle cx="12" cy="12" r="1.3" fill="currentColor"></circle>
+            <circle cx="8" cy="16" r="1.3" fill="currentColor"></circle>
+            <circle cx="16" cy="16" r="1.3" fill="currentColor"></circle>
+        </symbol>
+        <symbol id="icon-refresh" viewBox="0 0 24 24">
+            <path d="M21 12a9 9 0 1 1-3-6.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            <path d="M21 4v5h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24">
+            <circle cx="9" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+            <path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            <circle cx="17.5" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+            <path d="M16 20c0-2.8 1.5-5 4-5s2.5 2 2.5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="icon-heart" viewBox="0 0 24 24">
+            <path d="M12 20.5S4 15 4 9.5C4 6.5 6.5 4 9.5 4c1.5 0 2.5.8 2.5.8S13 4 14.5 4C17.5 4 20 6.5 20 9.5c0 5.5-8 11-8 11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-settings" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+            <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="icon-moon" viewBox="0 0 24 24">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-volume-on" viewBox="0 0 24 24">
+            <path d="M4 9v6h4l5 4V5L8 9H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="icon-volume-off" viewBox="0 0 24 24">
+            <path d="M4 9v6h4l5 4V5L8 9H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M17 9l5 5M22 9l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="icon-pencil" viewBox="0 0 24 24">
+            <path d="M17 3l4 4-13 13H4v-4L17 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-trash" viewBox="0 0 24 24">
+            <path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+            <path d="M5 12h14M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+            <path d="M19 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24">
+            <path d="M5 12l5 5L20 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-sparkle" viewBox="0 0 24 24">
+            <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-flame" viewBox="0 0 24 24">
+            <path d="M12 3c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5-1-7 0 0 1 0 1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-leaf" viewBox="0 0 24 24">
+            <path d="M20 4C10 4 4 10 4 18c8 0 14-6 16-14z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M4 18l8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="icon-book" viewBox="0 0 24 24">
+            <path d="M4 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4V4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M20 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8V4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-history" viewBox="0 0 24 24">
+            <path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24">
+            <path d="M12 3v12M6 11l6 6 6-6M4 21h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-upload" viewBox="0 0 24 24">
+            <path d="M12 21V9M6 13l6-6 6 6M4 3h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-crown" viewBox="0 0 24 24">
+            <path d="M3 8l4 3 5-7 5 7 4-3-2 11H5L3 8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-ghost" viewBox="0 0 24 24">
+            <path d="M5 20V11a7 7 0 0 1 14 0v9l-2.3-2-2.3 2-2.4-2-2.3 2L5 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <circle cx="9.5" cy="11" r="1" fill="currentColor"></circle>
+            <circle cx="14.5" cy="11" r="1" fill="currentColor"></circle>
+        </symbol>
+        <symbol id="icon-note" viewBox="0 0 24 24">
+            <path d="M9 18V5l10-2v13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+            <circle cx="16" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+        </symbol>
+        <symbol id="icon-eye" viewBox="0 0 24 24">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+        </symbol>
+        <symbol id="icon-eye-off" viewBox="0 0 24 24">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.8"></path>
+        </symbol>
+        <symbol id="icon-save" viewBox="0 0 24 24">
+            <path d="M4 4h13l3 3v13H4V4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M8 4v6h7V4M8 20v-7h8v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+    </defs>
+</svg>
+
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<div class="top-bar">
+    <div class="top-bar-inner">
+        <div class="brand">
+            <div class="brand-logo-mark" id="siteLogo" title="Тройной клик — debug-панель" role="button" tabindex="0" aria-label="Fate's Dice — логотип">
+                <img src="dsf.png" alt="" class="logo-dice">
+            </div>
+            <div class="brand-text">
+                <img src="logo_font.png" alt="Fate's Dice" class="brand-font-logo">
+                <div class="brand-sub">Разбавляй симсовскую рутину с помощью колеса рандомных событий</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button type="button" class="icon-btn" id="soundToggleBtn" aria-label="Переключить звук" aria-pressed="true" title="Звук включен">
+                <svg class="icon" aria-hidden="true"><use href="#icon-volume-on" id="soundIconUse"></use></svg>
+            </button>
+            <button type="button" class="icon-btn" id="themeToggleBtn" aria-label="Переключить тему" title="Тема">
+                <svg class="icon" aria-hidden="true"><use href="#icon-sun" id="themeIconUse"></use></svg>
+            </button>
+            <button type="button" class="icon-btn" id="settingsBtn" aria-label="Открыть настройки" title="Настройки">
+                <svg class="icon" aria-hidden="true"><use href="#icon-settings"></use></svg>
+            </button>
+            <a class="author-block" href="https://t.me/morikasims" target="_blank" rel="noopener noreferrer" id="authorLink" title="Автор: morikasims">
+                <span class="author-avatar">
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 2L11 13"></path>
+                        <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                    </svg>
+                </span>
+                <span class="author-info">
+                    <span class="author-label">Автор:</span>
+                    <span class="author-name">morikasims</span>
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="app">
+
+    <button type="button" class="family-strip" id="familyStripBtn">
+        <div class="fs-icon">
+            <svg class="icon" aria-hidden="true"><use href="#icon-users"></use></svg>
+        </div>
+        <div class="fs-body">
+            <div class="fs-label">Активная семья</div>
+            <div class="fs-name" id="familyTitleDisplay">Список персонажей</div>
+        </div>
+        <div class="fs-count" id="familyCount">0</div>
+        <div class="fs-arrow">
+            <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+        </div>
+    </button>
+
+    <section class="hero">
+        <div class="wheel-stage">
+            <div class="wheel-container">
+                <div class="pointer" aria-hidden="true"></div>
+                <div class="wheel" id="wheel" role="img" aria-label="Колесо событий">
+                    <div class="wheel-slice-text" aria-hidden="true">
+                        <div class="slice-label"><svg class="icon" aria-hidden="true"><use href="#icon-leaf"></use></svg></div>
+                        <div class="slice-label"><svg class="icon" aria-hidden="true"><use href="#icon-heart"></use></svg></div>
+                        <div class="slice-label"><svg class="icon" aria-hidden="true"><use href="#icon-flame"></use></svg></div>
+                        <div class="slice-label"><svg class="icon" aria-hidden="true"><use href="#icon-crown"></use></svg></div>
+                        <div class="slice-label"><svg class="icon" aria-hidden="true"><use href="#icon-note"></use></svg></div>
+                        <div class="slice-label"><svg class="icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg></div>
+                        <div class="slice-label"><svg class="icon" aria-hidden="true"><use href="#icon-ghost"></use></svg></div>
+                        <div class="slice-label"><svg class="icon" aria-hidden="true"><use href="#icon-book"></use></svg></div>
+                    </div>
+                </div>
+                <div class="wheel-hub" aria-hidden="true">
+                    <img src="cologo.png" alt="" class="hub-logo">
+                </div>
+            </div>
+
+            <div class="spin-row">
+                <button type="button" class="btn btn-primary btn-spin" id="spinBtn">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-dice"></use></svg>
+                    Крутить судьбу
+                </button>
+                <button type="button" class="btn btn-ghost btn-idea" id="todayIdeaBtn" data-tooltip="Короткая идея для геймплея без случайного события: что логично сделать в игре прямо сейчас. «Крутить судьбу» бросает событие с участниками, а эта кнопка просто подсказывает занятие.">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg>
+                    Что сделать сегодня?
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="history-section">
+        <div class="section-head">
+            <div class="section-title">
+                <svg class="icon" aria-hidden="true"><use href="#icon-history"></use></svg>
+                История
+            </div>
+            <div style="display:flex;gap:4px;">
+                <button type="button" class="link-btn" id="openFullHistoryBtn">Вся</button>
+                <button type="button" class="link-btn" id="clearHistoryBtn">Очистить</button>
+            </div>
+        </div>
+        <div class="history-list unified-scroll" id="historyList">
+            <div class="empty-state" style="padding:14px 6px;">
+                <div class="empty-icon"><svg class="icon icon-32" aria-hidden="true"><use href="#icon-history"></use></svg></div>
+                <div class="empty-title">История пуста</div>
+                <div class="empty-sub">Крутите колесо, чтобы здесь появились события.</div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<section class="screen" id="familyScreen" aria-hidden="true">
+    <div class="screen-shell">
+        <div class="screen-topbar">
+            <button type="button" class="back-btn" id="familyBackBtn">
+                <svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
+                Назад к колесу
+            </button>
+            <div class="screen-title" id="familyScreenTitle">Список персонажей</div>
+        </div>
+
+        <div class="screen-panel">
+            <div class="tabs" role="tablist">
+                <button type="button" class="tab active" data-tab="characters" role="tab">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-users"></use></svg>
+                    Персонажи
+                </button>
+                <button type="button" class="tab" data-tab="relations" role="tab">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-heart"></use></svg>
+                    Связи
+                </button>
+                <button type="button" class="tab" data-tab="presets" role="tab">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-save"></use></svg>
+                    Пресеты
+                </button>
+            </div>
+
+            <div class="tab-panel active" data-panel="characters">
+                <div class="sim-list" id="simsList">
+                    <div class="empty-state" style="padding:14px 6px;">
+                        <div class="empty-icon"><svg class="icon icon-32" aria-hidden="true"><use href="#icon-users"></use></svg></div>
+                        <div class="empty-title">Семья пока пуста</div>
+                        <div class="empty-sub">Добавьте первого персонажа, чтобы начать.</div>
+                    </div>
+                </div>
+                <button type="button" class="add-toggle" id="toggleAddSimForm">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                    Добавить персонажа
+                </button>
+                <div class="form-collapse" id="addSimForm">
+                    <label class="field-label" for="newSimName">Имя</label>
+                    <input type="text" class="input" id="newSimName" placeholder="Например, Белла Гот">
+
+                    <label class="field-label" for="newSimRole">Роль</label>
+                    <select class="select" id="newSimRole">
+                        <option value="adult">Взрослый</option>
+                        <option value="teen">Подросток</option>
+                        <option value="child">Ребёнок</option>
+                        <option value="elder">Пожилой</option>
+                    </select>
+
+                    <div style="display:flex;gap:8px;margin-top:12px;">
+                        <button type="button" class="btn btn-primary" id="addSimBtn" style="flex:1;">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                            Добавить
+                        </button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-ghost" id="clearAllSimsBtn" style="width:100%;margin-top:12px;font-size:12.5px;color:var(--chaos);border-radius:var(--radius-md);">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
+                    Удалить всех
+                </button>
+            </div>
+
+            <div class="tab-panel" data-panel="relations">
+                <div id="relationsEmptyHint" class="empty-hint" style="display:none;">
+                    Пока нет связей. Добавьте персонажей и задайте им отношения.
+                </div>
+
+                <div class="manage-list" id="relationsManageList">
+                    <div class="empty-hint">Нет заданных связей</div>
+                </div>
+
+                <button type="button" class="add-toggle" id="toggleAddRelationForm">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                    Добавить связь
+                </button>
+                <div class="form-collapse" id="addRelationForm">
+                    <label class="field-label" for="relMainSim">Главный персонаж</label>
+                    <select class="select" id="relMainSim"><option value="" disabled selected>Выберите персонажа…</option></select>
+
+                    <label class="field-label" style="display:flex;align-items:center;justify-content:space-between;">
+                        <span>С кем связать</span>
+                        <span id="relSelectedCount" style="font-size:10px;font-weight:700;color:var(--accent-deep);letter-spacing:0;text-transform:none;"></span>
+                    </label>
+                    <div class="rel-grid" id="relTargetGrid"><div class="empty-hint" style="grid-column:1/-1;">Сначала выберите главного персонажа</div></div>
+
+                    <label class="field-label" for="relType">Тип связи</label>
+                    <select class="select" id="relType">
+                        <option value="partner">Партнёры</option>
+                        <option value="parent-child">Родитель — ребёнок</option>
+                        <option value="sibling">Братья/сёстры</option>
+                        <option value="friend">Друзья</option>
+                        <option value="rival">Соперники</option>
+                    </select>
+
+                    <div style="display:flex;gap:8px;margin-top:12px;">
+                        <button type="button" class="btn btn-primary" id="saveRelationBtn" style="flex:1;">
+                            <svg class="icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                            Добавить связи
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-panel" data-panel="presets">
+                <label class="field-label">Загрузить сохранённую</label>
+                <div id="presetEmptyHint" class="empty-hint">Пока нет сохранённых семей</div>
+                <select class="select" id="presetSelect" style="display: none;"><option value="" disabled selected>Выберите семью…</option></select>
+
+                <label class="field-label">Сохранить текущую</label>
+                <input type="text" class="input" id="presetNameInput" placeholder="Название семьи">
+                <button type="button" class="btn btn-primary" id="savePresetBtn" style="width:100%;margin-top:10px;">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-save"></use></svg>
+                    Сохранить семью
+                </button>
+                <button type="button" class="btn btn-ghost" id="deletePresetBtn" style="width: 100%; margin-top: 8px; display: none;">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-trash"></use></svg>
+                    Удалить выбранный пресет
+                </button>
+
+                <label class="field-label">Файл</label>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button type="button" class="btn btn-ghost" id="exportFileBtn">
+                        <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+                        Скачать
+                    </button>
+                    <button type="button" class="btn btn-ghost" id="importFileBtn">
+                        <svg class="icon" aria-hidden="true"><use href="#icon-upload"></use></svg>
+                        Загрузить
+                    </button>
+                    <input type="file" id="importFile" class="visually-hidden" accept=".json">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="modalEventTitle">
+    <div class="modal-content result-layout" id="resultModalContent">
+        <div class="modal-header">
+            <span class="modal-category" id="modalCategory">
+                <svg class="icon" aria-hidden="true"><use href="#icon-leaf" id="modalCategoryIcon"></use></svg>
+                <span id="modalCategoryLabel">Уютное событие</span>
+            </span>
+            <button type="button" class="close-x" id="closeResultX" aria-label="Закрыть">
+                <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-event-title" id="modalEventTitle">Название события</div>
+            <div class="modal-event-description" id="modalEventDescription">Описание события</div>
+            <div class="modal-block-title" id="modalParticipantsTitle">Участники</div>
+            <div class="participants-row" id="modalParticipants"></div>
+            <div id="modalRelationsBlock" style="display:none;">
+                <div class="modal-block-title">Связи</div>
+                <div class="relation-chips" id="modalRelationChips"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="rerollBtn">
+                <svg class="icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+                Ещё раз
+            </button>
+            <button type="button" class="btn btn-primary" id="closeResultBtn">
+                <svg class="icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                Готово
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="fullHistoryModal" role="dialog" aria-modal="true" aria-labelledby="fullHistoryTitle">
+    <div class="modal-content wide">
+        <div class="modal-title" id="fullHistoryTitle">Вся история событий</div>
+        <div class="full-history-list unified-scroll" id="fullHistoryList"></div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="closeFullHistoryBtn">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-content">
+        <div class="modal-title" id="confirmTitle">Подтверждение</div>
+        <div class="modal-text" id="confirmModalText">Вы уверены?</div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="confirmCancelBtn">Отмена</button>
+            <button type="button" class="btn btn-primary" id="confirmYesBtn">Удалить</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-content wide">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;">
+            <div class="modal-title" id="settingsModalTitle" style="margin:0;">Настройки событий</div>
+            <button type="button" class="close-x" id="closeSettingsModalX" aria-label="Закрыть">
+                <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+            </button>
+        </div>
+
+        <div class="full-history-list unified-scroll" style="max-height:60vh;">
+            <div class="field-label" style="margin-top:0;">Оформление</div>
+            <label class="toggle-row">
+                <span class="toggle-text">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-sparkle"></use></svg>
+                    Кастомный курсор
+                </span>
+                <input type="checkbox" id="enableCustomCursor" checked>
+            </label>
+            <div style="font-size:11px;color:var(--ink-soft);margin:-4px 0 12px 2px;">
+                Включить или выключить курсор-сердечко вместо системного.
+            </div>
+
+            <div class="field-label">Источники событий</div>
+            <label class="toggle-row">
+                <span class="toggle-text">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-book"></use></svg>
+                    Стандартные события
+                </span>
+                <input type="checkbox" id="enableDefaultEvents" checked>
+            </label>
+            <label class="toggle-row sub">
+                <span class="toggle-text">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-leaf"></use></svg>
+                    Уютные и творческие
+                </span>
+                <input type="checkbox" id="modeCozy" checked>
+            </label>
+            <label class="toggle-row sub">
+                <span class="toggle-text">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-flame"></use></svg>
+                    Драма и форс-мажоры
+                </span>
+                <input type="checkbox" id="modeChaos" checked>
+            </label>
+            <label class="toggle-row">
+                <span class="toggle-text">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
+                    Мои события (вкл/выкл все)
+                </span>
+                <input type="checkbox" id="enableCustomEvents" checked>
+            </label>
+
+            <div class="field-label">Мои события (<span id="customEventsCount">0</span>)</div>
+            <div style="font-size:11px;color:var(--ink-soft);margin-bottom:8px;">
+                Нажмите на иконку глаза у события, чтобы включить/выключить его в колесе.
+            </div>
+            <button type="button" class="add-toggle" id="toggleCustomForm">
+                <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                Добавить событие
+            </button>
+            <div class="form-collapse" id="customEventForm">
+                <textarea class="input" id="customEventText" placeholder="Введите текст события..."></textarea>
+                <button type="button" class="btn btn-primary" id="customEventActionBtn" style="width:100%;margin-top:8px;">
+                    <svg class="icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                    Добавить в колесо
+                </button>
+            </div>
+            <div class="manage-list" id="customEventsManageList"><div class="empty-hint">У вас пока нет своих событий</div></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="editSimModal" role="dialog" aria-modal="true" aria-labelledby="editSimTitle">
+    <div class="modal-content">
+        <div class="modal-title" id="editSimTitle">Редактирование персонажа</div>
+        <div style="text-align:left;">
+            <label class="field-label" for="editSimNameInput">Имя</label>
+            <input type="text" class="input" id="editSimNameInput">
+
+            <label class="field-label" for="editSimRoleInput">Роль</label>
+            <select class="select" id="editSimRoleInput">
+                <option value="adult">Взрослый</option>
+                <option value="teen">Подросток</option>
+                <option value="child">Ребёнок</option>
+                <option value="elder">Пожилой</option>
+            </select>
+        </div>
+        <div class="modal-actions" style="margin-top:16px;">
+            <button type="button" class="btn btn-ghost" id="cancelEditSimBtn">Отмена</button>
+            <button type="button" class="btn btn-primary" id="saveEditSimBtn">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="onboardingModal" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+    <div class="modal-content">
+        <div class="modal-title" id="onboardingTitle">Добро пожаловать</div>
+        <div class="modal-text" style="text-align:left;margin-bottom:6px;">
+            Три шага, чтобы начать:
+        </div>
+        <div class="onboarding-steps">
+            <div class="onboarding-step">
+                <div class="ob-icon"><svg class="icon" aria-hidden="true"><use href="#icon-users"></use></svg></div>
+                <div class="ob-text">Откройте <b>Семью</b> и добавьте персонажей с ролями.</div>
+            </div>
+            <div class="onboarding-step">
+                <div class="ob-icon"><svg class="icon" aria-hidden="true"><use href="#icon-heart"></use></svg></div>
+                <div class="ob-text">Свяжите их во вкладке <b>Связи</b> — можно выбрать сразу нескольких.</div>
+            </div>
+            <div class="onboarding-step">
+                <div class="ob-icon"><svg class="icon" aria-hidden="true"><use href="#icon-dice"></use></svg></div>
+                <div class="ob-text">Нажмите <b>Крутить судьбу</b>. В модалке — <b>Ещё раз</b> для повтора.</div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="onboardingSkipBtn">Пропустить</button>
+            <button type="button" class="btn btn-primary" id="onboardingGoBtn">Добавить сима</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="debugModal" role="dialog" aria-modal="true" aria-labelledby="debugTitle">
+    <div class="modal-content wide">
+        <div class="modal-title" id="debugTitle">Debug — статистика пула</div>
+        <div class="debug-stats" id="debugStats"></div>
+        <div class="debug-list unified-scroll" id="debugList"></div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="closeDebugBtn">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+ * CONFIG — константы, метки, иконки
+ * ============================================================ */
+const Config = (() => {
+    const CAT_ICON = { cozy: 'icon-leaf', chaos: 'icon-flame', custom: 'icon-pencil', idea: 'icon-sparkle' };
+    const CAT_LABEL = { cozy: 'Уютное событие', chaos: 'Драма / Форс-мажор', custom: 'Своё событие', idea: 'Совет дня' };
+    const ROLE_LABEL = { adult: 'Взрослый', teen: 'Подросток', child: 'Ребёнок', elder: 'Пожилой' };
+    const REL_LABEL = { partner: 'Партнёры', 'parent-child': 'Родитель — ребёнок', sibling: 'Братья/сёстры', friend: 'Друзья', rival: 'Соперники' };
+    const AVATAR_COLORS = ['#5CA227','#D9A93F','#C76158','#8F7BB3','#6BB5C4','#D68A5A','#C97F9E','#8A9E5A'];
+    const SCHEMA_VERSION = 6;
+    const SPIN_DURATION = 4000;
+    const THEMES = ['light', 'dark'];
+    const INTENSITY_WEIGHTS = { 1: 10, 2: 5, 3: 2 };
+    const TARGET_COZY_RATIO = 0.6;
+    const RECENT_BALANCE_WINDOW = 6;
+    const RECENT_BAN_WINDOW = 5;
+    const PARTICIPANT_COOLDOWN = 2;
+    const SECTOR_COUNT = 8;
+    const MIN_FULL_SPINS = 6;
+    const MAX_FULL_SPINS = 9;
+    const LS_KEYS = {
+        schema: 'sims_schema_version',
+        members: 'sims_family_members',
+        relationships: 'sims_family_relationships',
+        familyName: 'sims_current_family_name',
+        presets: 'sims_saved_presets',
+        customEvents: 'sims_custom_events',
+        history: 'sims_history_log',
+        counter: 'sims_counter',
+        theme: 'sims_theme',
+        sound: 'sims_sound_enabled',
+        cursor: 'sims_custom_cursor',
+        onboarding: 'sims_onboarding_seen',
+        enableDefault: 'sims_enable_default_events',
+        enableCustom: 'sims_enable_custom_events',
+        modeCozy: 'sims_modeCozy',
+        modeChaos: 'sims_modeChaos'
+    };
+    return {
+        CAT_ICON, CAT_LABEL, ROLE_LABEL, REL_LABEL, AVATAR_COLORS,
+        SCHEMA_VERSION, SPIN_DURATION, THEMES, INTENSITY_WEIGHTS,
+        TARGET_COZY_RATIO, RECENT_BALANCE_WINDOW, RECENT_BAN_WINDOW,
+        PARTICIPANT_COOLDOWN, SECTOR_COUNT, MIN_FULL_SPINS, MAX_FULL_SPINS,
+        LS_KEYS
+    };
+})();
+
+/* ============================================================
+ * UTILS — утилиты
+ * ============================================================ */
+const Utils = (() => {
+    const $ = (id) => document.getElementById(id);
+
+    function avatarColor(id) {
+        const s = String(id);
+        let h = 0;
+        for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+        return Config.AVATAR_COLORS[h % Config.AVATAR_COLORS.length];
+    }
+
+    function initials(name) {
+        const parts = String(name || '?').trim().split(/\s+/);
+        const a = (parts[0] || '?')[0] || '?';
+        const b = (parts[1] || '')[0] || '';
+        return (a + b).toUpperCase();
+    }
+
+    function svgUse(id, cls) {
+        return `<svg class="icon ${cls || ''}" aria-hidden="true"><use href="#${id}"></use></svg>`;
+    }
+
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function showNotification(message, opts = {}) {
+        const container = $('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `${svgUse('icon-check','toast-icon')}<span>${escapeHtml(message)}</span>`;
+        if (opts.undoLabel && typeof opts.onUndo === 'function') {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'toast-undo-btn';
+            btn.textContent = opts.undoLabel;
+            btn.addEventListener('click', () => {
+                try { opts.onUndo(); } catch (e) {}
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            });
+            toast.appendChild(btn);
+        }
+        container.appendChild(toast);
+        requestAnimationFrame(() => toast.classList.add('show'));
+        const ttl = opts.undoLabel ? 6000 : 3500;
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, ttl);
+    }
+
+    // Audio
+    let audioCtx = null;
+    function initAudio() {
+        if (!audioCtx) {
+            try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+        }
+    }
+    function playTickSound() {
+        if (!App.state.soundEnabled || !audioCtx) return;
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.03);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.03);
+        } catch(e) {}
+    }
+    function playWinSound() {
+        if (!App.state.soundEnabled || !audioCtx) return;
+        try {
+            const now = audioCtx.currentTime;
+            [440, 554.37, 659.25, 880].forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + i * 0.06);
+                gain.gain.setValueAtTime(0.12, now + i * 0.06);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.4);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now + i * 0.06); osc.stop(now + i * 0.06 + 0.4);
+            });
+        } catch(e) {}
+    }
+
+    function splitEventText(fullText) {
+        const match = fullText.match(/^([^:]{2,80}):\s*(.+)$/s);
+        if (match) return { title: match[1].trim(), description: match[2].trim() };
+        return { title: fullText, description: '' };
+    }
+
+    return { $, avatarColor, initials, svgUse, escapeHtml, showNotification, initAudio, playTickSound, playWinSound, splitEventText };
+})();
+
+const $ = Utils.$;
+const { avatarColor, initials, svgUse, escapeHtml, showNotification, splitEventText } = Utils;
+
+/* ============================================================
+ * EVENTS_DATA — пулы событий
+ * ============================================================ */
+const EventsData = (() => {
+    const todayIdeasPool = [
+        { text: "Приготовь вкусный ужин для всей семьи и устрой совместный уютный вечер за столом без телефонов." },
+        { text: "Выбери одного сима и удели весь день прокачке его текущего навыка до нового уровня." },
+        { text: "Отправь сима в локацию или парк, в котором он давно не бывал, чтобы пофотографировать окрестности." },
+        { text: "Позвони старому другу или родственнику и пригласи его в гости на настольные игры или чашечку кофе." },
+        { text: "Устрой день генеральной уборки: пусть симы сами помоют окна, сантехнику и наведут порядок во всех комнатах." },
+        { text: "Устрой спонтанное свидание для пары: сходите в ресторан или устройте ужин при свечах дома." },
+        { text: "Купи мольберт, пианино или инструмент для творчества и подари его симу, который давно хотел попробовать себя в искусстве." },
+        { text: "Собери всю семью и отправься на пикник в городской парк или лес." },
+        { text: "Отправляйтесь в торговый центр или на рынок: обновите гардероб хотя бы одному члену семьи." },
+        { text: "Устрой кулинарный марафон: пусть симы испекут три разных десерта и угостят ими соседей." },
+        { text: "Объяви официальный «день лени»: никому нельзя выходить из дома и заниматься работой — только спать, смотреть фильмы и отдыхать." },
+        { text: "Сделай красивые семейные фотографии и повесь их на самое видное место в гостиной." }
+    ];
+
+    const defaultCozy = [
+        { id:"cozy_1", text:"Творческий порыв: Один из персонажей полностью уходит в искусство на весь день.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"single", requires:["family"], tags:["friendship","family"] },
+        { id:"cozy_2", text:"Аромат выпечки: Дом наполняется запахом корицы. Все собираются на кухню, чтобы вместе приготовить сложный десерт.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_3", text:"Прогулка: Время сменить обстановку и отправиться всей семьей в парк на пикник и семейную фотосессию.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family","friendship"] },
+        { id:"cozy_4", text:"Уютная перестановка: Обновляем эстетику гнёздышка! Переделайте одну комнату, добавив гирлянды и уютные мелочи.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"group", requires:[], tags:["family"] },
+        { id:"cozy_5", text:"Киномарафон: Весь вечер семья проводит в обнимку на диване за просмотром любимых фильмов с попкорном.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family","friendship","love"] },
+        { id:"cozy_6", text:"Вечер без электричества: В доме выключают свет. Свечи, чай и сокровенные воспоминания.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family","friendship"] },
+        { id:"cozy_7", text:"Домашний оранжерейный день: Семья ухаживает за растениями и вместе занимается садом.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_8", text:"Письмо в будущее: Домочадцы записывают мечты и прячут «капсулу времени», которую откроют через сезон.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"pair", requires:["family"], tags:["family","love"] },
+        { id:"cozy_9", text:"Ленивое утро: Никто никуда не спешит. Поздний завтрак в пижамах и неторопливый день.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_10", text:"Спа-день: День заботы о себе. Возьмите отгул! Свечи, маски, любимый парфюм.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"single", requires:[], tags:["friendship","love"] },
+        { id:"cozy_11", text:"Побег в Гранит Фоллз: Четырёхдневный отпуск среди дикой природы.", category:"cozy", subcategory:"cozy", intensity:2, source:"default", targetType:"group", requires:["family"], tags:["love","family","friendship"] },
+        { id:"cozy_12", text:"Кемпинг с близкими: Палатки, еда, гитара и вечер у костра.", category:"cozy", subcategory:"cozy", intensity:2, source:"default", targetType:"group", requires:["friend"], tags:["friendship","family"] },
+        { id:"cozy_13", text:"Личный дневник: Сим заводит дневник и всю неделю записывает туда мысли и события дня.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"single", requires:[], tags:["family","friendship"] },
+        { id:"cozy_14", text:"Новое хобби: Сим выбирает занятие, которым никогда не увлекался, и пробует освоить новый навык.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"single", requires:[], tags:["friendship","family"] },
+        { id:"cozy_15", text:"Семейный ужин по новому рецепту: Все вместе готовят блюдо, которое никогда не пробовали.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_16", text:"Украшаем дом к сезону: Гирлянды, венки, свечи — всё идёт в ход.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_17", text:"Вечер спа для двоих: Ванна, массаж, любимая музыка. Никаких телефонов.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"pair", requires:["partner"], tags:["love"] },
+        { id:"cozy_18", text:"Огород на подоконнике: Сим покупает семена и заводит мини-огород.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"single", requires:[], tags:["family"] },
+        { id:"cozy_19", text:"Семейный фотоальбом: Все ищут старые снимки и собирают настоящий альбом с подписями.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_20", text:"Уборка на чердаке: Сим разбирает старые вещи и находит что-то ценное.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"single", requires:[], tags:["family"] },
+        { id:"cozy_21", text:"Утро с открытыми окнами: Свежий воздух, чай и книга у окна.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"single", requires:[], tags:["family"] },
+        { id:"cozy_22", text:"Печенье для соседей: Семья печёт печенье и разносит соседям.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_23", text:"Настольная ночь: Все садятся играть в настолки. Проигравший моет посуду.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_24", text:"Семейное чтение вслух: Один сим читает, остальные слушают затаив дыхание.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family"] },
+        { id:"cozy_25", text:"Джем-сейшн: Друзья играют на гитаре, поют, кто-то на пианино. Вечер, который запомнится.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"group", requires:["friend"], tags:["friendship"] },
+        { id:"cozy_26", text:"Спонтанный выезд на пляж: Друзья бросают всё и едут на пляж.", category:"cozy", subcategory:"cozy", intensity:2, source:"default", targetType:"group", requires:["friend"], tags:["friendship"] },
+        { id:"cozy_27", text:"Ночь плохих фильмов: Друзья смотрят нелепые фильмы и ржут до утра.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["friend"], tags:["friendship"] },
+        { id:"cozy_28", text:"Пицца-вечер у друга: Заказывают пиццу, делятся историями и играют в видеоигры.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["friend"], tags:["friendship"] },
+        { id:"cozy_29", text:"Караоке-баттл: Друзья устраивают караоке-дуэль.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["friend"], tags:["friendship"] },
+        { id:"cozy_30", text:"Поход с палатками: Друзья уезжают на природу, жарят маршмеллоу и рассказывают страшилки.", category:"cozy", subcategory:"cozy", intensity:2, source:"default", targetType:"group", requires:["friend"], tags:["friendship"] },
+        { id:"cozy_31", text:"Серия картин: Сим решает написать мини-серию из 3 картин на одну тему.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"single", requires:[], tags:["family"] },
+        { id:"cozy_32", text:"Первая глава книги: Сим садится писать роман.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"single", requires:[], tags:["family"] },
+        { id:"cozy_33", text:"Фотопроект «Мой район»: Сим делает по одному снимку в день и собирает серию.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"single", requires:[], tags:["family"] },
+        { id:"cozy_34", text:"Учимся играть на новом инструменте: Сим берёт уроки на инструменте, который раньше не пробовал.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"single", requires:[], tags:["family"] },
+        { id:"cozy_35", text:"Мастерская керамики: Сим покупает гончарный круг и лепит первую кружку.", category:"cozy", subcategory:"creative", intensity:1, source:"default", targetType:"single", requires:[], tags:["family"] },
+        { id:"cozy_36", text:"Свидание по старой схеме: Пара повторяет их самое первое свидание.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"pair", requires:["partner"], tags:["love"] },
+        { id:"cozy_37", text:"Переписка через письма: Неделю пара общается только записками.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"pair", requires:["partner"], tags:["love"] },
+        { id:"cozy_38", text:"Ночь под звёздами: Пара уезжает за город, расстилает плед и смотрит на звёзды.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"pair", requires:["partner"], tags:["love"] },
+        { id:"cozy_39", text:"Готовим вместе: Пара решает приготовить сложное блюдо вдвоём.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"pair", requires:["partner"], tags:["love"] },
+        { id:"cozy_40", text:"День с малышом без гаджетов: Родители весь день посвящают ребёнку: играют, гуляют, читают вслух.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family","child"], tags:["family"] },
+        { id:"cozy_41", text:"Визит к бабушке с дедушкой: Семья едет к пожилым родственникам, привозит гостинцы и слушает старые истории.", category:"cozy", subcategory:"cozy", intensity:1, source:"default", targetType:"group", requires:["family","elder"], tags:["family"] }
+    ];
+
+    const defaultChaos = [
+        { id:"chaos_1", text:"Анонимная записка: Кто-то находит загадочное послание с намёком на секрет одного из домочадцев.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"pair", requires:["family"], tags:["drama","conflict"] },
+        { id:"chaos_2", text:"Таинственный побег: Один из персонажей ночью тихо ускользает из дома, отключив телефон.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"single", requires:["family"], tags:["drama"] },
+        { id:"chaos_3", text:"Вспышка из прошлого: На пороге появляется бывший партнёр или соперник, вызывая громкую сцену.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["partner"], tags:["drama","love","conflict"] },
+        { id:"chaos_4", text:"Слишком много правды: Обычный приём пищи выходит из-под контроля, когда кто-то ляпает чужую тайну при всех.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"group", requires:["family"], tags:["drama","conflict"] },
+        { id:"chaos_5", text:"Громкая ссора из-за мелочи: Бытовой пустяк перерастает в грандиозный скандал.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"pair", requires:["family"], tags:["conflict","drama"] },
+        { id:"chaos_6", text:"Незваный визитёр: На пороге появляется назойливый знакомый, который отказывается уходить.", category:"chaos", subcategory:"soft-drama", intensity:1, source:"default", targetType:"group", requires:[], tags:["drama","friendship"] },
+        { id:"chaos_7", text:"Городские сплетни: Кто-то возвращается домой сам не свой, услышав неприятный слух о своей семье.", category:"chaos", subcategory:"soft-drama", intensity:1, source:"default", targetType:"single", requires:[], tags:["drama"] },
+        { id:"chaos_8", text:"Сорванный план: Важная поездка или свидание рушатся в самый ответственный момент.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"pair", requires:["partner"], tags:["drama","love","conflict"] },
+        { id:"chaos_9", text:"Предоставлен самому себе: В течение 3 дней младший сим живёт в режиме полной свободы.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"single", requires:["child"], tags:["family","drama"] },
+        { id:"chaos_10", text:"Потерянная карта: Кто-то роняет телефон или кошелёк, и со счёта пропадают симолеоны.", category:"chaos", subcategory:"soft-drama", intensity:1, source:"default", targetType:"single", requires:[], tags:["drama"] },
+        { id:"chaos_11", text:"Ночь у костра и бессонница: После страшной истории симы не могут уснуть.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"group", requires:["friend"], tags:["friendship","family"] },
+        { id:"chaos_12", text:"Холодная война: Персонажи объявляют друг другу бойкот до конца недели.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["family"], tags:["conflict","drama"] },
+        { id:"chaos_13", text:"Токсичный карьерист: Сим получает повышение, но вместе с ним — завистливого коллегу.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"single", requires:[], tags:["drama"] },
+        { id:"chaos_14", text:"Привет из прошлого: Случайная встреча с бывшим партнёром переворачивает все планы.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"single", requires:[], tags:["drama","love"] },
+        { id:"chaos_15", text:"Предательство друга: Друг рассказывает общий секрет посторонним.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"pair", requires:["friend"], tags:["drama","conflict"] },
+        { id:"chaos_16", text:"Займ, который не вернули: Один друг занял у другого крупную сумму и не возвращает.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"pair", requires:["friend"], tags:["drama","conflict"] },
+        { id:"chaos_17", text:"Вечеринка вышла из-под контроля: Кто-то пригласил чужих. Соседи жалуются, полиция приезжает.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"group", requires:["friend"], tags:["drama"] },
+        { id:"chaos_18", text:"Компрометирующее фото: Друга сфотографировали в неловкий момент и выложили в сеть.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"pair", requires:["friend"], tags:["drama","conflict"] },
+        { id:"chaos_19", text:"Разбитая машина: Друг взял машину покататься и вернул её помятой.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"pair", requires:["friend"], tags:["drama","conflict"] },
+        { id:"chaos_20", text:"Ревность к новому другу: Один из друзей завёл нового близкого друга, старый чувствует себя брошенным.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"pair", requires:["friend"], tags:["drama"] },
+        { id:"chaos_21", text:"Анонимное любовное письмо: Партнёру приходит письмо от тайного поклонника.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["partner"], tags:["drama","love","conflict"] },
+        { id:"chaos_22", text:"Сообщение не тому адресату: Партнёр случайно отправляет флирт-сообщение другому человеку.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["partner"], tags:["drama","love","conflict"] },
+        { id:"chaos_23", text:"Бывшая/бывший на горизонте: На вечеринке появляется бывший партнёр.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["partner"], tags:["drama","love"] },
+        { id:"chaos_24", text:"Отменённая помолвка: Один из пары отменяет помолвку в последний момент.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["partner"], tags:["drama","love"] },
+        { id:"chaos_25", text:"Разные спальни: Пара решает спать в разных комнатах «на время».", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"pair", requires:["partner"], tags:["drama","love"] },
+        { id:"chaos_26", text:"Пропавший на три дня: Один из партнёров исчезает без объяснений на 3 дня.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["partner"], tags:["drama","love"] },
+        { id:"chaos_27", text:"Семейный долг: Один родственник влез в долги и просит всех скинуться.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_28", text:"Проваленный экзамен подростка: Подросток провалил экзамены и скрывает это.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"group", requires:["family","teen"], tags:["drama","family"] },
+        { id:"chaos_29", text:"Уход из дома: Подросток или взрослый ребёнок собирает вещи и уходит после ссоры.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_30", text:"Завещание бабушки: После болезни родственника семья читает завещание.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["family","elder"], tags:["drama","family"] },
+        { id:"chaos_31", text:"Сорванный юбилей: Организатор в последний момент отменяет всё из-за конфликта.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_32", text:"Пьяный родственник на празднике: Праздник превращается в скандал.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_33", text:"Публичный позор: Родственник попал в неприятную историю, о которой узнал весь район.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_34", text:"Родственник, который не уезжает: Дальний родственник приехал «на пару дней» и живёт уже месяц.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_35", text:"Спор о воспитании: Родители расходятся во мнениях о воспитании ребёнка.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"group", requires:["family","child"], tags:["drama","family"] },
+        { id:"chaos_36", text:"Ребёнок в интернете: Родители узнают, что ребёнок завёл тайный аккаунт.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"group", requires:["family","child"], tags:["drama","family"] },
+        { id:"chaos_37", text:"Подросток попал в неприятности: Подростка задержали за мелкое хулиганство.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["family","teen"], tags:["drama","family"] },
+        { id:"chaos_38", text:"Брат против брата: Двое сиблингов не могут поделить комнату или наследство.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["family"], tags:["drama","family","conflict"] },
+        { id:"chaos_39", text:"Бабушка против матери: Пожилая родственница вмешивается в воспитание внуков.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"group", requires:["family","elder"], tags:["drama","family","conflict"] },
+        { id:"chaos_40", text:"Конкурент на работе: Соперник получает должность, которую сим ждал годами.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["rival"], tags:["drama","conflict"] },
+        { id:"chaos_41", text:"Соперничество в учёбе: Двое соперников соревнуются за первое место. Один решается на подлость.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"pair", requires:["rival"], tags:["drama","conflict"] },
+        { id:"chaos_42", text:"Любовный треугольник: Двое соперников влюблены в одного и того же сима.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["rival"], tags:["drama","love","conflict"] },
+        { id:"chaos_43", text:"Сплетни от соперника: Соперник распускает слухи о персонаже.", category:"chaos", subcategory:"hard-drama", intensity:2, source:"default", targetType:"pair", requires:["rival"], tags:["drama","conflict"] },
+        { id:"chaos_44", text:"Публичная ссора: Соперники выясняют отношения при всех на вечеринке.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"pair", requires:["rival"], tags:["drama","conflict"] },
+        { id:"chaos_45", text:"Крупный счёт за ремонт: Прорвало трубу или сломалась техника.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"single", requires:[], tags:["drama","family"] },
+        { id:"chaos_46", text:"Пожар на кухне: Что-то подгорело, начался пожар.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_47", text:"Увольнение: Сима увольняют с работы. Он скрывает это от близких пару дней.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"single", requires:[], tags:["drama"] },
+        { id:"chaos_48", text:"Инвестиции прогорели: Семья вложила деньги в «верное дело» и потеряла почти всё.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_49", text:"Травма в спортзале: Сим ломает ногу и на месяц выпадает из активной жизни.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"single", requires:[], tags:["drama"] },
+        { id:"chaos_50", text:"Ураган повредил дом: Ночью разыгралась буря, ветром снесло крышу.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_51", text:"Нашествие вредителей: В доме завелись тараканы. Все вынуждены временно переехать.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] },
+        { id:"chaos_52", text:"Внезапная болезнь: Один из симов серьёзно заболевает.", category:"chaos", subcategory:"hard-drama", intensity:3, source:"default", targetType:"group", requires:["family"], tags:["drama","family"] }
+    ];
+
+    const defaultSoftDrama = [
+        { id:"soft_1", text:"Незваный гость: На пороге появляется дальний родственник с чемоданом.", category:"chaos", subcategory:"soft-drama", intensity:1, source:"default", targetType:"group", requires:["family"], tags:["family","drama"] },
+        { id:"soft_2", text:"Семейная реликвия: Ребёнок находит пожелтевшее письмо, раскрывающее давнюю семейную тайну.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"single", requires:["family"], tags:["family","drama"] },
+        { id:"soft_3", text:"Непредвиденные расходы: Крупный счёт заставляет всю семью пересмотреть бюджет.", category:"chaos", subcategory:"soft-drama", intensity:2, source:"default", targetType:"group", requires:["family"], tags:["family","drama"] }
+    ];
+
+    return { todayIdeasPool, defaultCozy, defaultChaos, defaultSoftDrama };
+})();
+
+/* ============================================================
+ * STORAGE — работа с localStorage
+ * ============================================================ */
+const Storage = (() => {
+    const K = Config.LS_KEYS;
+
+    function safeParse(raw, fallback) {
+        try { return JSON.parse(raw); } catch { return fallback; }
+    }
+
+    function getRaw(key) { return localStorage.getItem(key); }
+    function setRaw(key, val) { localStorage.setItem(key, val); }
+    function remove(key) { localStorage.removeItem(key); }
+
+    function loadMembers() { return safeParse(getRaw(K.members), []) || []; }
+    function saveMembers(m) { setRaw(K.members, JSON.stringify(m)); }
+
+    function loadRelationships() { return safeParse(getRaw(K.relationships), []) || []; }
+    function saveRelationships(r) { setRaw(K.relationships, JSON.stringify(r)); }
+
+    function loadFamilyName() { return getRaw(K.familyName) || "Список персонажей"; }
+    function saveFamilyName(n) { setRaw(K.familyName, n); }
+
+    function loadPresets() { return safeParse(getRaw(K.presets), {}) || {}; }
+    function savePresets(p) { setRaw(K.presets, JSON.stringify(p)); }
+
+    function loadCustomEvents() { return safeParse(getRaw(K.customEvents), []) || []; }
+    function saveCustomEvents(e) { setRaw(K.customEvents, JSON.stringify(e)); }
+
+    function loadHistory() { return safeParse(getRaw(K.history), []) || []; }
+    function saveHistory(h) { setRaw(K.history, JSON.stringify(h)); }
+    function clearHistory() { remove(K.history); }
+
+    function loadCounter() { return parseInt(getRaw(K.counter) || '0', 10) || 0; }
+    function saveCounter(n) { setRaw(K.counter, String(n)); }
+
+    function loadTheme() { return getRaw(K.theme) || 'light'; }
+    function saveTheme(t) { setRaw(K.theme, t); }
+
+    function loadSound() { return getRaw(K.sound) !== 'false'; }
+    function saveSound(v) { setRaw(K.sound, String(v)); }
+
+    function loadCursor() { return getRaw(K.cursor) !== 'false'; }
+    function saveCursor(v) { setRaw(K.cursor, String(v)); }
+
+    function loadOnboarding() { return getRaw(K.onboarding) === 'true'; }
+    function saveOnboarding() { setRaw(K.onboarding, 'true'); }
+
+    function loadFlag(key, def = true) { return getRaw(key) !== String(!def); }
+    function saveFlag(key, val) { setRaw(key, String(val)); }
+
+    return {
+        getRaw, setRaw, remove,
+        loadMembers, saveMembers,
+        loadRelationships, saveRelationships,
+        loadFamilyName, saveFamilyName,
+        loadPresets, savePresets,
+        loadCustomEvents, saveCustomEvents,
+        loadHistory, saveHistory, clearHistory,
+        loadCounter, saveCounter,
+        loadTheme, saveTheme,
+        loadSound, saveSound,
+        loadCursor, saveCursor,
+        loadOnboarding, saveOnboarding,
+        loadFlag, saveFlag
+    };
+})();
+
+/* ============================================================
+ * STATE — текущее состояние и миграции
+ * ============================================================ */
+const State = (() => {
+    const K = Config.LS_KEYS;
+
+    function normalizeMembers(members) {
+        return (Array.isArray(members) ? members : []).map(sim => {
+            if (!sim || typeof sim !== 'object') return null;
+            const { focus, avatar, ...rest } = sim;
+            if (!rest.role) rest.role = 'adult';
+            return rest;
+        }).filter(Boolean);
+    }
+
+    function normalizeCustom(item, index) {
+        if (typeof item === 'string') {
+            const cleanText = item.replace(/^⭐ Кастомное событие:\s*/, '');
+            return { id: 'custom_' + Date.now() + '_' + index, text: cleanText, category: 'custom', subcategory: 'custom', intensity: 1, source: 'custom', targetType: 'single', requires: [], tags: [], enabled: true };
+        }
+        if (item && typeof item === 'object') {
+            return {
+                id: item.id || ('custom_' + Date.now() + '_' + index),
+                text: item.text || String(item),
+                category: item.category || 'custom',
+                subcategory: item.subcategory || 'custom',
+                intensity: item.intensity || 1,
+                source: 'custom',
+                targetType: item.targetType || 'single',
+                requires: item.requires || [],
+                tags: item.tags || [],
+                enabled: item.enabled !== false
+            };
+        }
+        return null;
+    }
+
+    function runMigrations() {
+        const savedVersion = parseInt(Storage.getRaw(K.schema) || '1', 10);
+        if (savedVersion < 2) {
+            Storage.remove('sims_family_relationships');
+            Storage.remove('sims_current_family_name');
+            const oldCounter = Storage.getRaw('sims_days_counter');
+            if (oldCounter !== null && Storage.getRaw('sims_counter') === null) {
+                Storage.setRaw('sims_counter', oldCounter);
+            }
+            Storage.remove('sims_days_counter');
+        }
+        if (savedVersion < 4) {
+            try {
+                const raw = Storage.loadMembers();
+                const migrated = (Array.isArray(raw) ? raw : []).map(sim => {
+                    if (!sim || typeof sim !== 'object') return sim;
+                    if (!sim.role) sim.role = 'adult';
+                    return sim;
+                });
+                Storage.setRaw(K.members, JSON.stringify(migrated));
+            } catch (e) {}
+            if (Storage.getRaw(K.relationships) === null) {
+                Storage.setRaw(K.relationships, '[]');
+            }
+        }
+        if (savedVersion < 5) {
+            try {
+                const raw = Storage.loadCustomEvents();
+                const migrated = (Array.isArray(raw) ? raw : []).map(item => {
+                    if (item && typeof item === 'object') {
+                        if (item.enabled === undefined) item.enabled = true;
+                    }
+                    return item;
+                });
+                Storage.setRaw(K.customEvents, JSON.stringify(migrated));
+            } catch (e) {}
+        }
+        if (savedVersion < 6) {
+            try {
+                const raw = Storage.loadMembers();
+                const migrated = (Array.isArray(raw) ? raw : []).map(sim => {
+                    if (!sim || typeof sim !== 'object') return sim;
+                    delete sim.avatar;
+                    return sim;
+                });
+                Storage.setRaw(K.members, JSON.stringify(migrated));
+            } catch (e) {}
+            try {
+                const rawP = Storage.loadPresets();
+                Object.keys(rawP).forEach(name => {
+                    const preset = rawP[name];
+                    if (!preset || typeof preset !== 'object') return;
+                    if (Array.isArray(preset.members)) {
+                        preset.members = preset.members.map(sim => {
+                            if (!sim || typeof sim !== 'object') return sim;
+                            delete sim.avatar;
+                            return sim;
+                        });
+                    }
+                });
+                Storage.setRaw(K.presets, JSON.stringify(rawP));
+            } catch (e) {}
+        }
+        Storage.setRaw(K.schema, String(Config.SCHEMA_VERSION));
+    }
+
+    function buildInitialState() {
+        runMigrations();
+
+        let familyMembers = normalizeMembers(Storage.loadMembers());
+        let familyRelationships = Storage.loadRelationships();
+        let currentFamilyName = Storage.loadFamilyName();
+        let savedPresets = Storage.loadPresets();
+        Object.keys(savedPresets).forEach(name => {
+            const preset = savedPresets[name];
+            if (!preset || typeof preset !== 'object') return;
+            if (Array.isArray(preset.members)) preset.members = normalizeMembers(preset.members);
+        });
+
+        const rawCustomEvents = Storage.loadCustomEvents();
+        let customEvents = rawCustomEvents.map(normalizeCustom).filter(Boolean);
+
+        let enableDefaultEvents = Storage.loadFlag(K.enableDefault, true);
+        let enableCustomEvents = Storage.loadFlag(K.enableCustom, true);
+        let enableCozy = Storage.loadFlag(K.modeCozy, true);
+        let enableChaos = Storage.loadFlag(K.modeChaos, true);
+        let enableCustomCursor = Storage.loadCursor();
+
+        let historyLog = Storage.loadHistory();
+        let currentTheme = Storage.loadTheme();
+        if (!Config.THEMES.includes(currentTheme)) currentTheme = 'light';
+        let soundEnabled = Storage.loadSound();
+
+        return {
+            familyMembers,
+            familyRelationships,
+            currentFamilyName,
+            savedPresets,
+            customEvents,
+            enableDefaultEvents,
+            enableCustomEvents,
+            enableCozy,
+            enableChaos,
+            enableCustomCursor,
+            historyLog,
+            currentTheme,
+            soundEnabled,
+            activeEvents: [],
+            editingCustomIndex: null,
+            editingSimId: null,
+            wheelRotation: 0,
+            isSpinning: false,
+            spinTimer: null,
+            lastSpinParticipants: null,
+            lastResultWasTodayIdea: false,
+            relSelectedIds: new Set(),
+            confirmCallback: null,
+            activeModalId: null,
+            modalLastFocus: null,
+            logoTapCount: 0,
+            logoTapTimer: null
+        };
+    }
+
+    return { buildInitialState, normalizeMembers, normalizeCustom, runMigrations };
+})();
+
+/* ============================================================
+ * LOGIC — бизнес-логика (выбор событий, участников, баланс)
+ * ============================================================ */
+const Logic = (() => {
+    function getRelationBetween(idA, idB) {
+        const a = String(idA), b = String(idB);
+        return App.state.familyRelationships.find(r =>
+            (String(r.a) === a && String(r.b) === b) ||
+            (String(r.a) === b && String(r.b) === a)
+        ) || null;
+    }
+
+    function getActiveSims() {
+        return App.state.familyMembers.filter(s => s.active);
+    }
+
+    function participantsSatisfy(participants, requiresList) {
+        if (!requiresList || requiresList.length === 0) return true;
+        const ids = participants.map(p => String(p.id));
+        const roles = participants.map(p => p.role || 'adult');
+        for (const req of requiresList) {
+            if (req === 'family') {
+                if (participants.length < 2) continue;
+                const allConnected = ids.every(id =>
+                    ids.some(otherId => {
+                        if (id === otherId) return false;
+                        const rel = getRelationBetween(id, otherId);
+                        return rel && (rel.type === 'parent-child' || rel.type === 'sibling' || rel.type === 'partner');
+                    })
+                );
+                if (!allConnected) return false;
+            } else if (req === 'partner') {
+                if (participants.length !== 2) return false;
+                const rel = getRelationBetween(ids[0], ids[1]);
+                if (!rel || rel.type !== 'partner') return false;
+            } else if (req === 'child') { if (!roles.includes('child')) return false; }
+            else if (req === 'teen') { if (!roles.includes('teen')) return false; }
+            else if (req === 'elder') { if (!roles.includes('elder')) return false; }
+            else if (req === 'friend') {
+                if (participants.length < 2) return false;
+                const allConnected = ids.every(id =>
+                    ids.some(otherId => {
+                        if (id === otherId) return false;
+                        const rel = getRelationBetween(id, otherId);
+                        return rel && rel.type === 'friend';
+                    })
+                );
+                if (!allConnected) return false;
+            } else if (req === 'rival') {
+                if (participants.length < 2) return false;
+                const allConnected = ids.every(id =>
+                    ids.some(otherId => {
+                        if (id === otherId) return false;
+                        const rel = getRelationBetween(id, otherId);
+                        return rel && rel.type === 'rival';
+                    })
+                );
+                if (!allConnected) return false;
+            }
+        }
+        return true;
+    }
+
+    function getRelevantRelations(participants, eventObj) {
+        if (participants.length < 2) return [];
+        const requires = eventObj && eventObj.requires ? eventObj.requires : [];
+        if (requires.length === 0) return [];
+        const ids = participants.map(p => String(p.id));
+        const mapReqToType = { partner: ['partner'], family: ['partner','parent-child','sibling'], friend: ['friend'], rival: ['rival'] };
+        const allowedTypes = new Set();
+        requires.forEach(req => (mapReqToType[req] || []).forEach(t => allowedTypes.add(t)));
+        if (allowedTypes.size === 0) return [];
+        const seen = new Set();
+        const result = [];
+        for (let i = 0; i < ids.length; i++) {
+            for (let j = i + 1; j < ids.length; j++) {
+                const rel = getRelationBetween(ids[i], ids[j]);
+                if (!rel || !allowedTypes.has(rel.type)) continue;
+                const key = rel.type + '_' + ids[i] + '_' + ids[j];
+                if (seen.has(key)) continue;
+                seen.add(key);
+                result.push({ type: rel.type, label: Config.REL_LABEL[rel.type] || rel.type });
+            }
+        }
+        return result;
+    }
+
+    function buildParticipantsForEvent(ev) {
+        const state = App.state;
+        const active = getActiveSims();
+        if (active.length === 0) return null;
+        const recentParticipantIds = new Set(
+            state.historyLog.slice(0, Config.PARTICIPANT_COOLDOWN * 3).flatMap(item => (item.participantIds || []))
+        );
+        const weights = active.map(sim => {
+            let w = 1;
+            const countInHistory = state.historyLog.slice(0, Config.RECENT_BAN_WINDOW * 3)
+                .filter(item => item.sim && item.sim.includes(sim.name)).length;
+            w = 1 / (1 + countInHistory * 0.4);
+            if (recentParticipantIds.has(String(sim.id))) w *= 0.4;
+            return { sim, weight: w };
+        });
+        const targetType = ev.targetType || "single";
+        const requires = ev.requires || [];
+        const candidateSets = generateCandidateSets(active, targetType, requires);
+        if (candidateSets.length === 0) return null;
+        const setWeights = candidateSets.map(set => {
+            const w = set.reduce((acc, sim) => {
+                const rec = weights.find(x => x.sim.id === sim.id);
+                return acc + (rec ? rec.weight : 1);
+            }, 0);
+            return w / set.length;
+        });
+        const total = setWeights.reduce((s, w) => s + w, 0);
+        if (total <= 0) return candidateSets[Math.floor(Math.random() * candidateSets.length)];
+        let roll = Math.random() * total;
+        for (let i = 0; i < candidateSets.length; i++) {
+            roll -= setWeights[i];
+            if (roll <= 0) return candidateSets[i];
+        }
+        return candidateSets[candidateSets.length - 1];
+    }
+
+    function generateCandidateSets(active, targetType, requires) {
+        const result = [];
+        const needsPartner = requires.includes('partner');
+        const needsFamily = requires.includes('family');
+        const needsFriend = requires.includes('friend');
+        const needsRival = requires.includes('rival');
+        const needsChild = requires.includes('child');
+        const needsTeen = requires.includes('teen');
+        const needsElder = requires.includes('elder');
+
+        function allHaveRelation(set, type) {
+            const ids = set.map(s => String(s.id));
+            return ids.every(id => ids.some(other => {
+                if (id === other) return false;
+                const rel = getRelationBetween(id, other);
+                return rel && rel.type === type;
+            }));
+        }
+        function allHaveFamilyRelation(set) {
+            const ids = set.map(s => String(s.id));
+            return ids.every(id => ids.some(other => {
+                if (id === other) return false;
+                const rel = getRelationBetween(id, other);
+                return rel && (rel.type === 'partner' || rel.type === 'parent-child' || rel.type === 'sibling');
+            }));
+        }
+        function setSatisfies(set) {
+            if (needsPartner) {
+                if (set.length !== 2) return false;
+                const rel = getRelationBetween(set[0].id, set[1].id);
+                if (!rel || rel.type !== 'partner') return false;
+            }
+            if (needsFamily) { if (set.length < 2 || !allHaveFamilyRelation(set)) return false; }
+            if (needsFriend) { if (set.length < 2 || !allHaveRelation(set, 'friend')) return false; }
+            if (needsRival) { if (set.length < 2 || !allHaveRelation(set, 'rival')) return false; }
+            if (needsChild && !set.some(s => (s.role || 'adult') === 'child')) return false;
+            if (needsTeen && !set.some(s => (s.role || 'adult') === 'teen')) return false;
+            if (needsElder && !set.some(s => (s.role || 'adult') === 'elder')) return false;
+            return true;
+        }
+        if (targetType === 'single') {
+            for (const sim of active) if (setSatisfies([sim])) result.push([sim]);
+            if (result.length === 0 && (needsChild || needsTeen || needsElder)) {
+                for (const sim of active) {
+                    const onlyRoleReqs = [...requires].filter(r => r !== 'child' && r !== 'teen' && r !== 'elder');
+                    if (participantsSatisfy([sim], onlyRoleReqs)) result.push([sim]);
+                }
+            }
+            return result;
+        }
+        if (targetType === 'pair') {
+            for (let i = 0; i < active.length; i++)
+                for (let j = i + 1; j < active.length; j++)
+                    if (setSatisfies([active[i], active[j]])) result.push([active[i], active[j]]);
+            return result;
+        }
+        if (targetType === 'group') {
+            if (active.length >= 3 && setSatisfies(active)) result.push([...active]);
+            if (active.length >= 3) {
+                for (let i = 0; i < active.length; i++)
+                    for (let j = i + 1; j < active.length; j++)
+                        for (let k = j + 1; k < active.length; k++) {
+                            const trio = [active[i], active[j], active[k]];
+                            if (setSatisfies(trio)) result.push(trio);
+                        }
+            }
+            return result;
+        }
+        return result;
+    }
+
+    function tryBuildWithForcedSim(ev, sim) {
+        const active = getActiveSims();
+        const targetType = ev.targetType || 'single';
+        const requires = ev.requires || [];
+        if (targetType === 'single') return [sim];
+        const others = active.filter(s => s.id !== sim.id);
+        if (targetType === 'pair') {
+            for (const other of others) {
+                if (participantsSatisfy([sim, other], requires)) return [sim, other];
+            }
+            return null;
+        }
+        if (targetType === 'group') {
+            if (others.length >= 2) {
+                for (let i = 0; i < others.length; i++)
+                    for (let j = i + 1; j < others.length; j++) {
+                        const trio = [sim, others[i], others[j]];
+                        if (participantsSatisfy(trio, requires)) return trio;
+                    }
+            }
+            if (participantsSatisfy(active, requires)) return [...active];
+            return null;
+        }
+        return null;
+    }
+
+    function getRecentCategoryRatio() {
+        const recent = App.state.historyLog.slice(0, Config.RECENT_BALANCE_WINDOW);
+        let cozy = 0, chaos = 0;
+        recent.forEach(item => {
+            if (item.eventCategory === 'cozy') cozy++;
+            else if (item.eventCategory === 'chaos') chaos++;
+        });
+        const total = cozy + chaos;
+        if (total === 0) return null;
+        return cozy / total;
+    }
+
+    function getBalanceMultipliers() {
+        const ratio = getRecentCategoryRatio();
+        if (ratio === null) return { cozy: 1.2, chaos: 0.9, custom: 1 };
+        if (ratio > Config.TARGET_COZY_RATIO + 0.15) return { cozy: 0.6, chaos: 1.8, custom: 1 };
+        if (ratio < Config.TARGET_COZY_RATIO - 0.15) return { cozy: 1.8, chaos: 0.6, custom: 1 };
+        return { cozy: 1, chaos: 1, custom: 1 };
+    }
+
+    function getRecentEventIds() {
+        return App.state.historyLog.slice(0, Config.RECENT_BAN_WINDOW).map(item => item.eventId).filter(Boolean);
+    }
+
+    function calcEventWeight(ev, multipliers) {
+        const base = Config.INTENSITY_WEIGHTS[ev.intensity] || Config.INTENSITY_WEIGHTS[1];
+        const catMul = multipliers[ev.category] || 1;
+        return base * catMul;
+    }
+
+    function pickEventAndParticipants(forcedSimId = null) {
+        const state = App.state;
+        const active = getActiveSims();
+        if (active.length === 0) return null;
+
+        if (forcedSimId !== null) {
+            const sim = active.find(s => s.id === forcedSimId);
+            if (!sim) return null;
+            const banned = getRecentEventIds();
+            const multipliers = getBalanceMultipliers();
+            const compatible = [];
+            state.activeEvents.forEach(ev => {
+                const sets = generateCandidateSets(active, ev.targetType || 'single', ev.requires || []);
+                if (sets.some(set => set.some(s => s.id === sim.id))) compatible.push(ev);
+            });
+            let pool = compatible.filter(ev => !banned.includes(ev.id));
+            if (pool.length < 3) pool = compatible;
+            if (pool.length === 0) pool = state.activeEvents.slice();
+            const weights = pool.map(ev => calcEventWeight(ev, multipliers));
+            const totalW = weights.reduce((s, w) => s + w, 0);
+            let chosen = pool[pool.length - 1];
+            if (totalW > 0) {
+                let roll = Math.random() * totalW;
+                for (let i = 0; i < pool.length; i++) { roll -= weights[i]; if (roll <= 0) { chosen = pool[i]; break; } }
+            } else chosen = pool[Math.floor(Math.random() * pool.length)];
+            let participants = buildParticipantsForEvent(chosen);
+            if (!participants) participants = [sim];
+            else if (!participants.some(p => p.id === sim.id)) {
+                const alt = tryBuildWithForcedSim(chosen, sim);
+                participants = alt || [sim];
+            }
+            return { event: chosen, participants };
+        }
+
+        const multipliers = getBalanceMultipliers();
+        const banned = getRecentEventIds();
+        const candidateEvents = [];
+        for (const ev of state.activeEvents) {
+            const participants = buildParticipantsForEvent(ev);
+            if (participants && participants.length > 0) candidateEvents.push({ ev, participants });
+        }
+        if (candidateEvents.length === 0) {
+            const ev = state.activeEvents[Math.floor(Math.random() * state.activeEvents.length)];
+            if (!ev) return null;
+            const sim = active[Math.floor(Math.random() * active.length)];
+            return { event: ev, participants: [sim] };
+        }
+        let pool = candidateEvents.filter(x => !banned.includes(x.ev.id));
+        if (pool.length < 3) pool = candidateEvents;
+        const weights = pool.map(x => calcEventWeight(x.ev, multipliers));
+        const totalW = weights.reduce((s, w) => s + w, 0);
+        let chosen = pool[pool.length - 1];
+        if (totalW > 0) {
+            let roll = Math.random() * totalW;
+            for (let i = 0; i < pool.length; i++) { roll -= weights[i]; if (roll <= 0) { chosen = pool[i]; break; } }
+        } else chosen = pool[Math.floor(Math.random() * pool.length)];
+        return { event: chosen.ev, participants: chosen.participants };
+    }
+
+    return {
+        getRelationBetween,
+        getActiveSims,
+        participantsSatisfy,
+        getRelevantRelations,
+        buildParticipantsForEvent,
+        generateCandidateSets,
+        tryBuildWithForcedSim,
+        getRecentCategoryRatio,
+        getBalanceMultipliers,
+        getRecentEventIds,
+        calcEventWeight,
+        pickEventAndParticipants
+    };
+})();
+
+/* ============================================================
+ * MODALS — управление модалками + focus trap
+ * ============================================================ */
+const Modals = (() => {
+    const FOCUSABLE_SELECTOR = [
+        'a[href]','button:not([disabled])','input:not([disabled])',
+        'select:not([disabled])','textarea:not([disabled])','[tabindex]:not([tabindex="-1"])'
+    ].join(',');
+
+    function getFocusable(container) {
+        return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR))
+            .filter(el => el.offsetParent !== null || el === document.activeElement);
+    }
+    function activateFocusTrap(modalEl) {
+        App.state.modalLastFocus = document.activeElement;
+        const content = modalEl.querySelector('.modal-content') || modalEl;
+        requestAnimationFrame(() => {
+            const focusables = getFocusable(content);
+            if (focusables.length > 0) focusables[0].focus();
+            else { content.setAttribute('tabindex','-1'); content.focus(); }
+        });
+    }
+    function deactivateFocusTrap() {
+        if (App.state.modalLastFocus && typeof App.state.modalLastFocus.focus === 'function') {
+            try { App.state.modalLastFocus.focus(); } catch (e) {}
+        }
+        App.state.modalLastFocus = null;
+    }
+
+    function open(id) {
+        $(id).classList.add('active');
+        App.state.activeModalId = id;
+        activateFocusTrap($(id));
+    }
+    function close(id) {
+        $(id).classList.remove('active');
+        if (App.state.activeModalId === id) {
+            App.state.activeModalId = null;
+            deactivateFocusTrap();
+        }
+    }
+
+    function openConfirm(text, onYes) {
+        $('confirmModalText').textContent = text;
+        App.state.confirmCallback = onYes;
+        open('confirmModal');
+    }
+    function closeConfirm() {
+        close('confirmModal');
+        App.state.confirmCallback = null;
+    }
+
+    function handleTab(e) {
+        if (e.key !== 'Tab' || !App.state.activeModalId) return;
+        const modal = $(App.state.activeModalId);
+        if (!modal || !modal.classList.contains('active')) return;
+        const content = modal.querySelector('.modal-content') || modal;
+        const focusables = getFocusable(content);
+        if (focusables.length === 0) { e.preventDefault(); return; }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey) {
+            if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+            if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    }
+
+    return { open, close, openConfirm, closeConfirm, handleTab };
+})();
+
+/* ============================================================
+ * VIEW — рендер интерфейса
+ * ============================================================ */
+const View = (() => {
+    function setModalCategory(category) {
+        const wrap = $('resultModalContent');
+        wrap.classList.remove('cat-cozy','cat-chaos','cat-custom','cat-idea');
+        const catEl = $('modalCategory');
+        catEl.classList.remove('is-cozy','is-chaos','is-custom','is-idea');
+        const use = $('modalCategoryIcon');
+        const label = $('modalCategoryLabel');
+        const iconId = Config.CAT_ICON[category] || 'icon-sparkle';
+        use.setAttribute('href', '#' + iconId);
+        label.textContent = Config.CAT_LABEL[category] || 'Событие';
+        if (category === 'cozy')  { catEl.classList.add('is-cozy');   wrap.classList.add('cat-cozy'); }
+        else if (category === 'chaos') { catEl.classList.add('is-chaos');  wrap.classList.add('cat-chaos'); }
+        else if (category === 'custom'){ catEl.classList.add('is-custom'); wrap.classList.add('cat-custom'); }
+        else { catEl.classList.add('is-idea'); wrap.classList.add('cat-idea'); }
+    }
+
+    function renderFamily() {
+        const state = App.state;
+        const list = $('simsList');
+        $('familyTitleDisplay').textContent = state.currentFamilyName;
+        $('familyCount').textContent = state.familyMembers.length;
+        $('familyScreenTitle').textContent = state.currentFamilyName;
+        list.innerHTML = '';
+        if (state.familyMembers.length === 0) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">${svgUse('icon-users','icon-32')}</div>
+                    <div class="empty-title">Семья пока пуста</div>
+                    <div class="empty-sub">Добавьте первого персонажа, чтобы начать.</div>
+                </div>
+            `;
+            return;
+        }
+        state.familyMembers.forEach(sim => {
+            const row = document.createElement('div');
+            row.className = 'sim-row' + (sim.active ? '' : ' disabled');
+            const roleLabel = Config.ROLE_LABEL[sim.role] || Config.ROLE_LABEL.adult;
+            row.innerHTML = `
+                <div class="sim-row-avatar" style="background:${avatarColor(sim.id)}">${escapeHtml(initials(sim.name))}</div>
+                <div class="sim-row-body">
+                    <div class="sim-row-name">${escapeHtml(sim.name)}</div>
+                    <div class="sim-row-role">${svgUse('icon-users','icon-14')} ${escapeHtml(roleLabel)}</div>
+                </div>
+                <div class="sim-row-actions">
+                    <button type="button" class="icon-btn-sm" data-action="edit-sim" data-id="${sim.id}" aria-label="Редактировать">${svgUse('icon-pencil')}</button>
+                    <button type="button" class="icon-btn-sm danger" data-action="del-sim" data-id="${sim.id}" aria-label="Удалить">${svgUse('icon-trash')}</button>
+                </div>
+            `;
+            row.addEventListener('click', (e) => {
+                if (e.target.closest('button')) return;
+                sim.active = !sim.active;
+                Actions.saveAndRenderFamily();
+            });
+            list.appendChild(row);
+        });
+    }
+
+    function renderRelationTargetGrid() {
+        const state = App.state;
+        const grid = $('relTargetGrid');
+        const mainId = $('relMainSim').value;
+        grid.innerHTML = '';
+        if (!mainId) {
+            grid.innerHTML = `<div class="empty-hint" style="grid-column:1/-1;">Сначала выберите главного персонажа</div>`;
+            updateRelSelectedCount();
+            return;
+        }
+        const mainIdStr = String(mainId);
+        const others = state.familyMembers.filter(s => String(s.id) !== mainIdStr);
+        if (others.length === 0) {
+            grid.innerHTML = `<div class="empty-hint" style="grid-column:1/-1;">Нет других персонажей для связи</div>`;
+            updateRelSelectedCount();
+            return;
+        }
+        others.forEach(sim => {
+            const simIdStr = String(sim.id);
+            const isSelected = state.relSelectedIds.has(simIdStr);
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.className = 'rel-chip' + (isSelected ? ' selected' : '');
+            chip.dataset.simId = simIdStr;
+            chip.innerHTML = `
+                <span class="rel-check">${svgUse('icon-check')}</span>
+                <span class="rel-avatar" style="background:${avatarColor(sim.id)}">${escapeHtml(initials(sim.name))}</span>
+                <span class="rel-name">${escapeHtml(sim.name)}</span>
+            `;
+            chip.addEventListener('click', () => {
+                if (state.relSelectedIds.has(simIdStr)) state.relSelectedIds.delete(simIdStr);
+                else state.relSelectedIds.add(simIdStr);
+                chip.classList.toggle('selected');
+                updateRelSelectedCount();
+            });
+            grid.appendChild(chip);
+        });
+        updateRelSelectedCount();
+    }
+
+    function updateRelSelectedCount() {
+        const counter = $('relSelectedCount');
+        if (!counter) return;
+        const n = App.state.relSelectedIds.size;
+        counter.textContent = n === 0 ? '' : (n === 1 ? 'выбран 1' : `выбрано ${n}`);
+    }
+
+    function renderRelationshipsList() {
+        const state = App.state;
+        const container = $('relationsManageList');
+        if (!container) return;
+        container.innerHTML = '';
+        if (state.familyRelationships.length === 0) {
+            container.innerHTML = `<div class="empty-hint">Нет заданных связей</div>`;
+            return;
+        }
+        state.familyRelationships.forEach(rel => {
+            const simA = state.familyMembers.find(s => String(s.id) === String(rel.a));
+            const simB = state.familyMembers.find(s => String(s.id) === String(rel.b));
+            if (!simA || !simB) return;
+            const label = Config.REL_LABEL[rel.type] || rel.type;
+            const item = document.createElement('div');
+            item.className = 'manage-item';
+            item.innerHTML = `
+                <div class="mi-icon">${svgUse('icon-heart')}</div>
+                <div class="mi-text"><b>${escapeHtml(simA.name)}</b> — <b>${escapeHtml(simB.name)}</b> · ${escapeHtml(label)}</div>
+                <button type="button" class="icon-btn-sm danger" data-action="del-rel" data-id="${rel.id}" aria-label="Удалить связь">
+                    ${svgUse('icon-trash')}
+                </button>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function updateRelationForm() {
+        const state = App.state;
+        const mainSel = $('relMainSim');
+        const prevMain = mainSel.value;
+        mainSel.innerHTML = '<option value="" disabled selected>Выберите персонажа…</option>';
+        state.familyMembers.forEach(sim => {
+            const opt = document.createElement('option');
+            opt.value = sim.id;
+            opt.textContent = sim.name;
+            mainSel.appendChild(opt);
+        });
+        if (prevMain && state.familyMembers.some(s => String(s.id) === String(prevMain))) {
+            mainSel.value = prevMain;
+        } else {
+            mainSel.value = '';
+            state.relSelectedIds.clear();
+        }
+        renderRelationTargetGrid();
+    }
+
+    function renderCustomEventsManager() {
+        const state = App.state;
+        const container = $('customEventsManageList');
+        if (!container) return;
+        container.innerHTML = '';
+        $('customEventsCount').textContent = state.customEvents.length;
+        if (state.customEvents.length === 0) {
+            container.innerHTML = `<div class="empty-hint">У вас пока нет своих событий</div>`;
+            return;
+        }
+        state.customEvents.forEach((evObj, index) => {
+            const cleanText = evObj.text.replace(/^⭐ Кастомное событие:\s*/, '');
+            const isEnabled = evObj.enabled !== false;
+            const item = document.createElement('div');
+            item.className = 'manage-item' + (isEnabled ? '' : ' disabled');
+            const eyeIcon = isEnabled ? 'icon-eye' : 'icon-eye-off';
+            item.innerHTML = `
+                <div class="mi-icon">${svgUse('icon-pencil')}</div>
+                <div class="mi-text" title="${escapeHtml(cleanText)}">${escapeHtml(cleanText)}</div>
+                <button type="button" class="custom-event-toggle ${isEnabled ? 'on' : ''}" data-action="toggle-ev" data-index="${index}" aria-label="${isEnabled ? 'Выключить' : 'Включить'}">
+                    ${svgUse(eyeIcon)}
+                </button>
+                <button type="button" class="icon-btn-sm" data-action="edit-ev" data-index="${index}" aria-label="Редактировать">${svgUse('icon-pencil')}</button>
+                <button type="button" class="icon-btn-sm danger" data-action="del-ev" data-index="${index}" aria-label="Удалить">${svgUse('icon-trash')}</button>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function historyItemHTML(item) {
+        const catKey = item.eventCategory || item.categoryKey || (item.type && item.type.includes('Совет') ? 'idea' : 'custom');
+        const iconId = Config.CAT_ICON[catKey] || 'icon-sparkle';
+        const cls = 'cat-' + (catKey === 'idea' ? 'idea' : (catKey === 'chaos' ? 'chaos' : (catKey === 'cozy' ? 'cozy' : 'custom')));
+        return `
+            <div class="history-item">
+                <div class="hi-cat ${cls}">${svgUse(iconId)}</div>
+                <div class="hi-body">
+                    <div class="hi-meta">${escapeHtml(item.date)} ${escapeHtml(item.time)} · ${escapeHtml(item.sim)}</div>
+                    <div class="hi-text">${escapeHtml(item.text)}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderHistory() {
+        const state = App.state;
+        const listEl = $('historyList');
+        if (state.historyLog.length === 0) {
+            listEl.innerHTML = `
+                <div class="empty-state" style="padding:14px 6px;">
+                    <div class="empty-icon">${svgUse('icon-history','icon-32')}</div>
+                    <div class="empty-title">История пуста</div>
+                    <div class="empty-sub">Крутите колесо, чтобы здесь появились события.</div>
+                </div>
+            `;
+            return;
+        }
+        listEl.innerHTML = state.historyLog.slice(0, 5).map(historyItemHTML).join('');
+    }
+
+    function renderFullHistory() {
+        const state = App.state;
+        const listEl = $('fullHistoryList');
+        listEl.innerHTML = '';
+        if (state.historyLog.length === 0) {
+            listEl.innerHTML = `<div class="empty-hint" style="padding:20px;">История пуста</div>`;
+            return;
+        }
+        listEl.innerHTML = state.historyLog.map(historyItemHTML).join('');
+    }
+
+    function renderParticipantTags(participants) {
+        const container = $('modalParticipants');
+        container.innerHTML = '';
+        participants.forEach(p => {
+            const tag = document.createElement('span');
+            tag.className = 'participant-tag';
+            tag.innerHTML = `
+                <span class="avatar-circle" style="background:${avatarColor(p.id)}">${escapeHtml(initials(p.name))}</span>
+                ${escapeHtml(p.name)}
+            `;
+            container.appendChild(tag);
+        });
+    }
+
+    function renderRelationChips(participants, eventObj) {
+        const block = $('modalRelationsBlock');
+        const container = $('modalRelationChips');
+        container.innerHTML = '';
+        const relations = Logic.getRelevantRelations(participants, eventObj);
+        if (relations.length === 0) { block.style.display = 'none'; return; }
+        block.style.display = '';
+        relations.forEach(rel => {
+            const chip = document.createElement('span');
+            chip.className = 'relation-chip';
+            chip.innerHTML = `${svgUse('icon-heart')}${escapeHtml(rel.label)}`;
+            container.appendChild(chip);
+        });
+    }
+
+    function showEventResult(eventObj, participants, opts = {}) {
+        setModalCategory(eventObj.category);
+        const { title, description } = splitEventText(eventObj.text);
+        $('modalEventTitle').textContent = title;
+        const descEl = $('modalEventDescription');
+        descEl.textContent = description;
+        descEl.style.display = description ? '' : 'none';
+        $('modalParticipantsTitle').style.display = '';
+        renderParticipantTags(participants);
+        renderRelationChips(participants, eventObj);
+        Modals.open('resultModal');
+
+        if (!opts.silentHistory) {
+            const participantsStr = participants.map(p => p.name).join(' & ');
+            Actions.addToHistory(eventObj.category, participantsStr, eventObj.text, {
+                eventId: eventObj.id,
+                eventCategory: eventObj.category,
+                participantIds: participants.map(p => String(p.id))
+            });
+        }
+    }
+
+    function updatePresetDropdown() {
+        const state = App.state;
+        const select = $('presetSelect');
+        const names = Object.keys(state.savedPresets);
+        select.innerHTML = '<option value="" disabled selected>Выберите семью…</option>';
+        names.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name; opt.textContent = name;
+            select.appendChild(opt);
+        });
+        const hint = $('presetEmptyHint');
+        const deleteBtn = $('deletePresetBtn');
+        const hasPresets = names.length > 0;
+        select.style.display = hasPresets ? '' : 'none';
+        deleteBtn.style.display = hasPresets ? '' : 'none';
+        hint.style.display = hasPresets ? 'none' : '';
+    }
+
+    function applyTheme(theme) {
+        document.body.classList.toggle('theme-dark', theme === 'dark');
+        const iconUse = $('themeIconUse');
+        if (iconUse) iconUse.setAttribute('href', theme === 'dark' ? '#icon-moon' : '#icon-sun');
+    }
+
+    function updateSoundIcon() {
+        const btn = $('soundToggleBtn');
+        const use = $('soundIconUse');
+        const sound = App.state.soundEnabled;
+        if (use) use.setAttribute('href', sound ? '#icon-volume-on' : '#icon-volume-off');
+        btn.setAttribute('aria-pressed', String(sound));
+        btn.title = sound ? 'Звук включен' : 'Звук выключен';
+    }
+
+    function applyCustomCursor(value) {
+        document.body.classList.toggle('custom-cursor-on', value === true);
+    }
+
+    function updateEventsList() {
+        const state = App.state;
+        state.activeEvents = [];
+        if (state.enableDefaultEvents) {
+            if (state.enableCozy) state.activeEvents.push(...EventsData.defaultCozy);
+            if (state.enableChaos) state.activeEvents.push(...EventsData.defaultChaos, ...EventsData.defaultSoftDrama);
+        }
+        if (state.enableCustomEvents) {
+            state.customEvents.forEach(ev => { if (ev.enabled !== false) state.activeEvents.push(ev); });
+        }
+        if (state.activeEvents.length === 0) {
+            state.activeEvents.push({
+                id: "empty_warning",
+                text: "Внимание: все события отключены. Включите стандартные события или добавьте свои.",
+                category: "custom", subcategory: "custom", intensity: 1, source: "default",
+                targetType: "single", requires: [], tags: []
+            });
+        }
+    }
+
+    function switchFamilyTab(tabName) {
+        document.querySelectorAll('#familyScreen .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+        document.querySelectorAll('#familyScreen .tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tabName));
+    }
+
+    function openFamilyScreen() {
+        const screen = $('familyScreen');
+        screen.classList.add('active');
+        screen.setAttribute('aria-hidden', 'false');
+        switchFamilyTab('characters');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeFamilyScreen() {
+        const screen = $('familyScreen');
+        screen.classList.remove('active');
+        screen.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    function openDebugPanel() {
+        const state = App.state;
+        const active = Logic.getActiveSims();
+        const stats = {
+            total: state.activeEvents.length,
+            cozy: state.activeEvents.filter(e => e.category === 'cozy').length,
+            chaos: state.activeEvents.filter(e => e.category === 'chaos').length,
+            custom: state.activeEvents.filter(e => e.category === 'custom').length,
+            defaultOn: state.enableDefaultEvents, customOn: state.enableCustomEvents,
+            cozyOn: state.enableCozy, chaosOn: state.enableChaos,
+            activeSims: active.length, totalSims: state.familyMembers.length,
+            relationships: state.familyRelationships.length
+        };
+        $('debugStats').innerHTML = `
+            <div class="debug-stat"><div class="ds-num">${stats.total}</div><div class="ds-label">Всего</div></div>
+            <div class="debug-stat"><div class="ds-num">${stats.cozy}</div><div class="ds-label">Уютных</div></div>
+            <div class="debug-stat"><div class="ds-num">${stats.chaos}</div><div class="ds-label">Драм</div></div>
+            <div class="debug-stat"><div class="ds-num">${stats.custom}</div><div class="ds-label">Своих</div></div>
+            <div class="debug-stat"><div class="ds-num">${stats.activeSims}</div><div class="ds-label">Активных</div></div>
+            <div class="debug-stat"><div class="ds-num">${stats.relationships}</div><div class="ds-label">Связей</div></div>
+        `;
+        const multipliers = Logic.getBalanceMultipliers();
+        const ratio = Logic.getRecentCategoryRatio();
+        const banned = Logic.getRecentEventIds();
+        const accessibleSets = state.activeEvents.map(ev => ({ ev, participants: Logic.buildParticipantsForEvent(ev) }));
+        const accessible = accessibleSets.filter(x => x.participants && x.participants.length > 0).length;
+        const inaccessible = state.activeEvents.length - accessible;
+        const rows = [
+            ['Стандартные', stats.defaultOn ? 'вкл' : 'выкл'],
+            ['Свои', stats.customOn ? 'вкл' : 'выкл'],
+            ['Уютные', stats.cozyOn ? 'вкл' : 'выкл'],
+            ['Драмы', stats.chaosOn ? 'вкл' : 'выкл'],
+            ['Всего симов', stats.totalSims],
+            ['Активных', stats.activeSims],
+            ['cozy/chaos ratio', ratio === null ? '—' : ratio.toFixed(2)],
+            ['cozy mul', multipliers.cozy.toFixed(2)],
+            ['chaos mul', multipliers.chaos.toFixed(2)],
+            ['Забанено ID', banned.length ? banned.join(', ') : '—'],
+            ['С участниками', accessible],
+            ['БЕЗ участников', inaccessible]
+        ];
+        $('debugList').innerHTML = rows.map(([k, v]) => `
+            <div class="debug-row"><span class="debug-key">${escapeHtml(k)}</span><span class="debug-val">${escapeHtml(v)}</span></div>
+        `).join('');
+        Modals.open('debugModal');
+    }
+
+    function maybeShowOnboarding() {
+        if (Storage.loadOnboarding()) return;
+        Modals.open('onboardingModal');
+    }
+    function closeOnboarding() {
+        Storage.saveOnboarding();
+        Modals.close('onboardingModal');
+    }
+
+    return {
+        setModalCategory,
+        renderFamily, renderRelationTargetGrid, updateRelSelectedCount, renderRelationshipsList, updateRelationForm,
+        renderCustomEventsManager, renderHistory, renderFullHistory,
+        renderParticipantTags, renderRelationChips, showEventResult,
+        updatePresetDropdown, applyTheme, updateSoundIcon, applyCustomCursor, updateEventsList,
+        switchFamilyTab, openFamilyScreen, closeFamilyScreen,
+        openDebugPanel, maybeShowOnboarding, closeOnboarding
+    };
+})();
+
+/* ============================================================
+ * ACTIONS — действия пользователя
+ * ============================================================ */
+const Actions = (() => {
+    function saveAndRenderFamily() {
+        Storage.saveMembers(App.state.familyMembers);
+        View.renderFamily();
+    }
+
+    function saveRelationships() {
+        Storage.saveRelationships(App.state.familyRelationships);
+    }
+
+    function addToHistory(categoryKey, simInfoStr, text, meta = {}) {
+        const state = App.state;
+        const now = new Date();
+        const dateStr = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth()+1).padStart(2, '0') + '.' + now.getFullYear();
+        const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+        state.historyLog.unshift({
+            id: 'id_' + Date.now() + Math.random().toString(36).slice(2, 7),
+            date: dateStr, time: timeStr,
+            type: Config.CAT_LABEL[categoryKey] || categoryKey,
+            categoryKey: categoryKey,
+            sim: simInfoStr, text,
+            eventId: meta.eventId || null,
+            eventCategory: meta.eventCategory || null,
+            participantIds: meta.participantIds || []
+        });
+        if (state.historyLog.length > 100) state.historyLog.pop();
+        Storage.saveHistory(state.historyLog);
+        View.renderHistory();
+    }
+
+    function saveRelation() {
+        const state = App.state;
+        const mainId = $('relMainSim').value;
+        const type = $('relType').value;
+        if (!mainId) { showNotification("Выберите главного персонажа"); return; }
+        if (state.relSelectedIds.size === 0) { showNotification("Отметьте хотя бы одного персонажа"); return; }
+        const mainIdStr = String(mainId);
+        let added = 0;
+        let updated = 0;
+        state.relSelectedIds.forEach(targetId => {
+            if (targetId === mainIdStr) return;
+            const existing = Logic.getRelationBetween(mainIdStr, targetId);
+            if (existing) {
+                existing.type = type;
+                updated++;
+            } else {
+                state.familyRelationships.push({
+                    id: 'rel_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                    a: mainIdStr,
+                    b: String(targetId),
+                    type
+                });
+                added++;
+            }
+        });
+        saveRelationships();
+        View.renderRelationshipsList();
+        if (added > 0 && updated > 0) showNotification(`Добавлено ${added}, обновлено ${updated}`);
+        else if (added > 0) showNotification(added === 1 ? "Связь добавлена" : `Добавлено связей: ${added}`);
+        else if (updated > 0) showNotification(updated === 1 ? "Связь обновлена" : `Обновлено связей: ${updated}`);
+        state.relSelectedIds.clear();
+        $('relMainSim').value = '';
+        View.renderRelationTargetGrid();
+        View.updateRelSelectedCount();
+        $('addRelationForm').classList.remove('open');
+    }
+
+    function confirmDeleteRelation(id) {
+        const state = App.state;
+        Modals.openConfirm("Удалить эту связь?", () => {
+            const removed = state.familyRelationships.find(r => r.id === id);
+            const removedIndex = state.familyRelationships.findIndex(r => r.id === id);
+            if (!removed) return;
+            state.familyRelationships = state.familyRelationships.filter(r => r.id !== id);
+            saveRelationships();
+            View.renderRelationshipsList();
+            Modals.closeConfirm();
+            showNotification("Связь удалена", {
+                undoLabel: 'Отменить',
+                onUndo: () => {
+                    state.familyRelationships.splice(removedIndex, 0, removed);
+                    saveRelationships();
+                    View.renderRelationshipsList();
+                }
+            });
+        });
+    }
+
+    function toggleCustomEvent(index) {
+        const state = App.state;
+        if (!state.customEvents[index]) return;
+        state.customEvents[index].enabled = state.customEvents[index].enabled === false ? true : false;
+        Storage.saveCustomEvents(state.customEvents);
+        View.updateEventsList();
+        View.renderCustomEventsManager();
+    }
+
+    function startEditCustomEvent(index) {
+        const state = App.state;
+        state.editingCustomIndex = index;
+        const cleanText = state.customEvents[index].text.replace(/^⭐ Кастомное событие:\s*/, '');
+        $('customEventText').value = cleanText;
+        $('customEventActionBtn').textContent = "Сохранить";
+        $('customEventForm').classList.add('open');
+    }
+
+    function confirmDeleteCustomEvent(index) {
+        const state = App.state;
+        Modals.openConfirm("Удалить это событие?", () => {
+            const removed = state.customEvents[index];
+            state.customEvents.splice(index, 1);
+            Storage.saveCustomEvents(state.customEvents);
+            if (state.editingCustomIndex === index) cancelEditCustomEvent();
+            View.updateEventsList();
+            View.renderCustomEventsManager();
+            Modals.closeConfirm();
+            showNotification("Событие удалено", {
+                undoLabel: 'Отменить',
+                onUndo: () => {
+                    state.customEvents.splice(index, 0, removed);
+                    Storage.saveCustomEvents(state.customEvents);
+                    View.updateEventsList();
+                    View.renderCustomEventsManager();
+                }
+            });
+        });
+    }
+
+    function cancelEditCustomEvent() {
+        App.state.editingCustomIndex = null;
+        $('customEventText').value = '';
+        $('customEventActionBtn').textContent = "Добавить в колесо";
+    }
+
+    function addCustomEvent() {
+        const state = App.state;
+        const textInput = $('customEventText');
+        const val = textInput.value.trim();
+        if (!val) return;
+        if (state.editingCustomIndex !== null) {
+            state.customEvents[state.editingCustomIndex].text = val;
+            Storage.saveCustomEvents(state.customEvents);
+            showNotification("Событие обновлено");
+            cancelEditCustomEvent();
+        } else {
+            const newEvent = {
+                id: 'custom_' + Date.now(), text: val, category: 'custom',
+                subcategory: 'custom', intensity: 1, source: 'custom',
+                targetType: 'single', requires: [], tags: [], enabled: true
+            };
+            state.customEvents.push(newEvent);
+            Storage.saveCustomEvents(state.customEvents);
+            showNotification("Событие добавлено", {
+                undoLabel: 'Отменить',
+                onUndo: () => {
+                    const idx = state.customEvents.findIndex(e => e.id === newEvent.id);
+                    if (idx !== -1) state.customEvents.splice(idx, 1);
+                    Storage.saveCustomEvents(state.customEvents);
+                    View.updateEventsList();
+                    View.renderCustomEventsManager();
+                }
+            });
+        }
+        textInput.value = '';
+        View.updateEventsList();
+        View.renderCustomEventsManager();
+    }
+
+    function addCustomSim() {
+        const state = App.state;
+        const nameInput = $('newSimName');
+        const name = nameInput.value.trim();
+        const role = $('newSimRole').value || 'adult';
+        if (!name) { showNotification("Введите имя персонажа"); return; }
+        const newId = state.familyMembers.length > 0
+            ? Math.max(...state.familyMembers.map(s => Number(s.id) || 0)) + 1
+            : 1;
+        const newSim = { id: newId, name, active: true, role };
+        state.familyMembers.push(newSim);
+        saveAndRenderFamily();
+        nameInput.value = '';
+        $('newSimRole').value = 'adult';
+        View.updateRelationForm();
+        showNotification(`Сим «${name}» добавлен`, {
+            undoLabel: 'Отменить',
+            onUndo: () => {
+                state.familyMembers = state.familyMembers.filter(s => s.id !== newId);
+                state.familyRelationships = state.familyRelationships.filter(r =>
+                    String(r.a) !== String(newId) && String(r.b) !== String(newId));
+                saveRelationships();
+                saveAndRenderFamily();
+                View.updateRelationForm();
+                View.renderRelationshipsList();
+            }
+        });
+    }
+
+    function deleteSim(id) {
+        const state = App.state;
+        const simIndex = state.familyMembers.findIndex(s => s.id === id);
+        if (simIndex === -1) return;
+        const sim = state.familyMembers[simIndex];
+        const removedSim = { ...sim };
+        const removedRels = state.familyRelationships.filter(r =>
+            String(r.a) === String(id) || String(r.b) === String(id));
+        Modals.openConfirm(`Удалить персонажа «${sim.name}»?`, () => {
+            state.familyMembers = state.familyMembers.filter(s => s.id !== id);
+            state.familyRelationships = state.familyRelationships.filter(r =>
+                String(r.a) !== String(id) && String(r.b) !== String(id));
+            saveRelationships();
+            saveAndRenderFamily();
+            View.updateRelationForm();
+            View.renderRelationshipsList();
+            Modals.closeConfirm();
+            showNotification("Персонаж удалён", {
+                undoLabel: 'Отменить',
+                onUndo: () => {
+                    state.familyMembers.splice(simIndex, 0, removedSim);
+                    removedRels.forEach(r => {
+                        if (!state.familyRelationships.find(x => x.id === r.id)) state.familyRelationships.push(r);
+                    });
+                    saveRelationships();
+                    saveAndRenderFamily();
+                    View.updateRelationForm();
+                    View.renderRelationshipsList();
+                }
+            });
+        });
+    }
+
+    function clearAllSims() {
+        const state = App.state;
+        if (state.familyMembers.length === 0) { showNotification("Список уже пуст"); return; }
+        const snapshotMembers = JSON.parse(JSON.stringify(state.familyMembers));
+        const snapshotRels = JSON.parse(JSON.stringify(state.familyRelationships));
+        Modals.openConfirm(`Удалить всех персонажей (${state.familyMembers.length})?`, () => {
+            state.familyMembers = [];
+            state.familyRelationships = [];
+            saveRelationships();
+            saveAndRenderFamily();
+            View.updateRelationForm();
+            View.renderRelationshipsList();
+            Modals.closeConfirm();
+            showNotification("Все персонажи удалены", {
+                undoLabel: 'Отменить',
+                onUndo: () => {
+                    state.familyMembers = snapshotMembers;
+                    state.familyRelationships = snapshotRels;
+                    saveRelationships();
+                    saveAndRenderFamily();
+                    View.updateRelationForm();
+                    View.renderRelationshipsList();
+                }
+            });
+        });
+    }
+
+    function openEditSimModal(id) {
+        const state = App.state;
+        const sim = state.familyMembers.find(s => s.id === id);
+        if (!sim) return;
+        state.editingSimId = id;
+        $('editSimNameInput').value = sim.name;
+        $('editSimRoleInput').value = sim.role || 'adult';
+        Modals.open('editSimModal');
+    }
+    function closeEditSimModal() {
+        Modals.close('editSimModal');
+        App.state.editingSimId = null;
+    }
+    function saveEditedSim() {
+        const state = App.state;
+        if (state.editingSimId === null) return;
+        const sim = state.familyMembers.find(s => s.id === state.editingSimId);
+        if (sim) {
+            const newName = $('editSimNameInput').value.trim();
+            const newRole = $('editSimRoleInput').value || 'adult';
+            if (newName) {
+                sim.name = newName;
+                sim.role = newRole;
+                saveAndRenderFamily();
+                View.updateRelationForm();
+                View.renderRelationshipsList();
+                showNotification("Персонаж изменён");
+            }
+        }
+        closeEditSimModal();
+    }
+
+    function saveCurrentPreset() {
+        const state = App.state;
+        const nameInput = $('presetNameInput');
+        const name = nameInput.value.trim() || state.currentFamilyName;
+        if (state.familyMembers.length === 0) { showNotification("Список пуст, нечего сохранять"); return; }
+        state.savedPresets[name] = {
+            name,
+            members: JSON.parse(JSON.stringify(state.familyMembers)),
+            relationships: JSON.parse(JSON.stringify(state.familyRelationships)),
+            customEvents: JSON.parse(JSON.stringify(state.customEvents))
+        };
+        Storage.savePresets(state.savedPresets);
+        View.updatePresetDropdown();
+        $('presetSelect').value = name;
+        nameInput.value = '';
+        showNotification(`Семья «${name}» сохранена`);
+    }
+
+    function loadPreset(name) {
+        const state = App.state;
+        if (!state.savedPresets[name]) return;
+        const data = state.savedPresets[name];
+        const loadedMembers = data.members || data;
+        state.familyMembers = State.normalizeMembers(loadedMembers);
+        state.currentFamilyName = data.name || name;
+        Storage.saveFamilyName(state.currentFamilyName);
+        state.familyRelationships = Array.isArray(data.relationships) ? data.relationships : [];
+        saveRelationships();
+        if (data.customEvents) {
+            state.customEvents = data.customEvents.map(State.normalizeCustom).filter(Boolean);
+            Storage.saveCustomEvents(state.customEvents);
+            View.renderCustomEventsManager();
+            View.updateEventsList();
+        }
+        saveAndRenderFamily();
+        View.updateRelationForm();
+        View.renderRelationshipsList();
+        showNotification(`Семья «${state.currentFamilyName}» загружена`);
+    }
+
+    function confirmDeletePreset() {
+        const state = App.state;
+        const name = $('presetSelect').value;
+        if (!name) { showNotification("Выберите пресет для удаления"); return; }
+        Modals.openConfirm(`Удалить пресет «${name}»?`, () => {
+            const removed = state.savedPresets[name];
+            delete state.savedPresets[name];
+            Storage.savePresets(state.savedPresets);
+            View.updatePresetDropdown();
+            Modals.closeConfirm();
+            showNotification("Пресет удалён", {
+                undoLabel: 'Отменить',
+                onUndo: () => {
+                    state.savedPresets[name] = removed;
+                    Storage.savePresets(state.savedPresets);
+                    View.updatePresetDropdown();
+                }
+            });
+        });
+    }
+
+    function exportFamilyFile() {
+        const state = App.state;
+        const dataToExport = {
+            version: Config.SCHEMA_VERSION,
+            familyName: state.currentFamilyName,
+            familyMembers: state.familyMembers,
+            familyRelationships: state.familyRelationships,
+            customEvents: state.customEvents
+        };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataToExport, null, 2));
+        const a = document.createElement('a');
+        a.href = dataStr;
+        a.download = "sims_family_preset.json";
+        document.body.appendChild(a); a.click(); a.remove();
+        showNotification("Файл семьи скачан");
+    }
+
+    function importFamilyFile(event) {
+        const state = App.state;
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = (e) => {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (!imported.familyMembers) { showNotification("Неверный формат файла"); return; }
+                state.familyMembers = State.normalizeMembers(imported.familyMembers);
+                if (imported.familyName) {
+                    state.currentFamilyName = imported.familyName;
+                    Storage.saveFamilyName(state.currentFamilyName);
+                }
+                state.familyRelationships = Array.isArray(imported.familyRelationships) ? imported.familyRelationships : [];
+                saveRelationships();
+                if (imported.customEvents) {
+                    state.customEvents = imported.customEvents.map(State.normalizeCustom).filter(Boolean);
+                    Storage.saveCustomEvents(state.customEvents);
+                    View.renderCustomEventsManager();
+                    View.updateEventsList();
+                }
+                saveAndRenderFamily();
+                View.updateRelationForm();
+                View.renderRelationshipsList();
+                showNotification("Семья успешно загружена");
+            } catch { showNotification("Ошибка чтения файла JSON"); }
+        };
+        event.target.value = '';
+    }
+
+    function rotateWheelToSector(sectorIndex) {
+        const state = App.state;
+        const wheelEl = $('wheel');
+        if (!wheelEl) return;
+        const degreesPerSector = 360 / Config.SECTOR_COUNT;
+        const targetSector = (typeof sectorIndex === 'number' && sectorIndex >= 0 && sectorIndex < Config.SECTOR_COUNT)
+            ? sectorIndex
+            : Math.floor(Math.random() * Config.SECTOR_COUNT);
+        const sectorCenter = targetSector * degreesPerSector + degreesPerSector / 2;
+        const maxJitter = degreesPerSector * 0.35;
+        const jitter = (Math.random() - 0.5) * 2 * maxJitter;
+        let targetMod = (360 - sectorCenter + jitter) % 360;
+        if (targetMod < 0) targetMod += 360;
+        const currentMod = ((state.wheelRotation % 360) + 360) % 360;
+        let diff = targetMod - currentMod;
+        if (diff <= 0) diff += 360;
+        const fullSpins = Config.MIN_FULL_SPINS + Math.floor(Math.random() * (Config.MAX_FULL_SPINS - Config.MIN_FULL_SPINS + 1));
+        state.wheelRotation += fullSpins * 360 + diff;
+        wheelEl.style.transform = `rotate(${state.wheelRotation}deg)`;
+    }
+
+    function triggerEvent(forcedSimId = null, opts = {}) {
+        const state = App.state;
+        if (state.isSpinning) {
+            if (state.spinTimer) { clearTimeout(state.spinTimer); state.spinTimer = null; }
+            state.isSpinning = false;
+            $('spinBtn').disabled = false;
+            $('rerollBtn').disabled = false;
+        }
+        View.updateEventsList();
+        const activeSims = Logic.getActiveSims();
+        if (activeSims.length === 0) {
+            showNotification("Добавьте хотя бы одного активного персонажа");
+            return;
+        }
+        const picked = Logic.pickEventAndParticipants(forcedSimId);
+        if (!picked) {
+            showNotification("Не удалось подобрать событие, попробуйте ещё раз");
+            return;
+        }
+        const { event: selectedEvent, participants } = picked;
+        state.lastSpinParticipants = participants;
+        state.lastResultWasTodayIdea = false;
+        state.isSpinning = true;
+        $('spinBtn').disabled = true;
+        $('rerollBtn').disabled = true;
+        const randomSector = Math.floor(Math.random() * Config.SECTOR_COUNT);
+        requestAnimationFrame(() => rotateWheelToSector(randomSector));
+        Utils.playTickSound();
+        if (state.spinTimer) clearTimeout(state.spinTimer);
+        state.spinTimer = setTimeout(() => {
+            state.spinTimer = null;
+            Utils.playWinSound();
+            if (!opts.skipCounter) bumpCounter();
+            View.showEventResult(selectedEvent, participants);
+            state.isSpinning = false;
+            $('spinBtn').disabled = false;
+            $('rerollBtn').disabled = false;
+        }, Config.SPIN_DURATION);
+        setTimeout(() => {
+            if (state.isSpinning) {
+                state.isSpinning = false;
+                $('spinBtn').disabled = false;
+                $('rerollBtn').disabled = false;
+            }
+        }, Config.SPIN_DURATION + 500);
+    }
+
+    function rerollSameParticipants() {
+        const state = App.state;
+        if (state.isSpinning) {
+            if (state.spinTimer) { clearTimeout(state.spinTimer); state.spinTimer = null; }
+            state.isSpinning = false;
+            $('spinBtn').disabled = false;
+            $('rerollBtn').disabled = false;
+        }
+        if (state.lastResultWasTodayIdea) { triggerTodayIdea(); return; }
+        View.updateEventsList();
+        const picked = Logic.pickEventAndParticipants();
+        if (!picked) { showNotification("Нет активных персонажей"); closeResultModal(); return; }
+        const { event: selectedEvent, participants } = picked;
+        state.lastSpinParticipants = participants;
+        state.isSpinning = true;
+        $('spinBtn').disabled = true;
+        $('rerollBtn').disabled = true;
+        const randomSector = Math.floor(Math.random() * Config.SECTOR_COUNT);
+        requestAnimationFrame(() => rotateWheelToSector(randomSector));
+        Utils.playTickSound();
+        if (state.spinTimer) clearTimeout(state.spinTimer);
+        state.spinTimer = setTimeout(() => {
+            state.spinTimer = null;
+            Utils.playWinSound();
+            View.showEventResult(selectedEvent, participants);
+            state.isSpinning = false;
+            $('spinBtn').disabled = false;
+            $('rerollBtn').disabled = false;
+        }, Config.SPIN_DURATION);
+    }
+
+    function closeResultModal() {
+        const state = App.state;
+        Modals.close('resultModal');
+        if (state.spinTimer) {
+            clearTimeout(state.spinTimer);
+            state.spinTimer = null;
+            state.isSpinning = false;
+            $('spinBtn').disabled = false;
+            $('rerollBtn').disabled = false;
+        }
+        state.lastSpinParticipants = null;
+        state.lastResultWasTodayIdea = false;
+    }
+
+    function triggerTodayIdea() {
+        const state = App.state;
+        const idea = EventsData.todayIdeasPool[Math.floor(Math.random() * EventsData.todayIdeasPool.length)];
+        View.setModalCategory('idea');
+        const { title, description } = splitEventText(idea.text);
+        $('modalEventTitle').textContent = title;
+        const descEl = $('modalEventDescription');
+        descEl.textContent = description;
+        descEl.style.display = description ? '' : 'none';
+        $('modalParticipants').innerHTML = '';
+        $('modalParticipantsTitle').style.display = 'none';
+        $('modalRelationChips').innerHTML = '';
+        $('modalRelationsBlock').style.display = 'none';
+        Modals.open('resultModal');
+        addToHistory('idea', "Вся семья", idea.text);
+        state.lastResultWasTodayIdea = true;
+        state.lastSpinParticipants = null;
+        Utils.playWinSound();
+    }
+
+    function bumpCounter() {
+        const n = Storage.loadCounter() + 1;
+        Storage.saveCounter(n);
+        return n;
+    }
+
+    function clearHistory() {
+        const state = App.state;
+        const snapshot = JSON.parse(JSON.stringify(state.historyLog));
+        Modals.openConfirm("Очистить всю историю?", () => {
+            state.historyLog = [];
+            Storage.clearHistory();
+            View.renderHistory();
+            Modals.closeConfirm();
+            showNotification("История очищена", {
+                undoLabel: 'Отменить',
+                onUndo: () => {
+                    state.historyLog = snapshot;
+                    Storage.saveHistory(state.historyLog);
+                    View.renderHistory();
+                }
+            });
+        });
+    }
+
+    return {
+        saveAndRenderFamily, saveRelationships, addToHistory,
+        saveRelation, confirmDeleteRelation,
+        toggleCustomEvent, startEditCustomEvent, confirmDeleteCustomEvent,
+        cancelEditCustomEvent, addCustomEvent,
+        addCustomSim, deleteSim, clearAllSims,
+        openEditSimModal, closeEditSimModal, saveEditedSim,
+        saveCurrentPreset, loadPreset, confirmDeletePreset,
+        exportFamilyFile, importFamilyFile,
+        rotateWheelToSector, triggerEvent, rerollSameParticipants,
+        closeResultModal, triggerTodayIdea, bumpCounter, clearHistory
+    };
+})();
+
+/* ============================================================
+ * APP — инициализация, state и обработчики событий
+ * ============================================================ */
+const App = (() => {
+    const state = State.buildInitialState();
+
+    function init() {
+        View.renderFamily();
+        View.updateEventsList();
+        View.renderCustomEventsManager();
+        View.renderHistory();
+        View.updatePresetDropdown();
+        View.updateRelationForm();
+        View.renderRelationshipsList();
+
+        View.applyTheme(state.currentTheme);
+        View.updateSoundIcon();
+        View.applyCustomCursor(state.enableCustomCursor);
+
+        $('enableDefaultEvents').checked = state.enableDefaultEvents;
+        $('enableCustomEvents').checked = state.enableCustomEvents;
+        $('modeCozy').checked = state.enableCozy;
+        $('modeChaos').checked = state.enableChaos;
+        $('enableCustomCursor').checked = state.enableCustomCursor;
+
+        if (state.familyMembers.length === 0) {
+            setTimeout(View.maybeShowOnboarding, 400);
+        } else {
+            Storage.saveOnboarding();
+        }
+
+        bindEvents();
+    }
+
+    function bindEvents() {
+        $('soundToggleBtn').addEventListener('click', () => {
+            Utils.initAudio();
+            state.soundEnabled = !state.soundEnabled;
+            Storage.saveSound(state.soundEnabled);
+            View.updateSoundIcon();
+        });
+        $('themeToggleBtn').addEventListener('click', () => {
+            state.currentTheme = state.currentTheme === 'light' ? 'dark' : 'light';
+            Storage.saveTheme(state.currentTheme);
+            View.applyTheme(state.currentTheme);
+        });
+        $('settingsBtn').addEventListener('click', () => Modals.open('settingsModal'));
+        $('closeSettingsModalX').addEventListener('click', () => Modals.close('settingsModal'));
+        $('closeResultX').addEventListener('click', Actions.closeResultModal);
+        $('closeResultBtn').addEventListener('click', Actions.closeResultModal);
+        $('rerollBtn').addEventListener('click', () => { Utils.initAudio(); Actions.rerollSameParticipants(); });
+        $('closeFullHistoryBtn').addEventListener('click', () => Modals.close('fullHistoryModal'));
+        $('closeDebugBtn').addEventListener('click', () => Modals.close('debugModal'));
+
+        $('familyStripBtn').addEventListener('click', View.openFamilyScreen);
+        $('familyBackBtn').addEventListener('click', View.closeFamilyScreen);
+
+        document.querySelectorAll('#familyScreen .tab').forEach(tab => {
+            tab.addEventListener('click', () => View.switchFamilyTab(tab.dataset.tab));
+        });
+
+        $('spinBtn').addEventListener('click', () => {
+            Utils.initAudio();
+            Actions.triggerEvent();
+        });
+        $('todayIdeaBtn').addEventListener('click', () => {
+            Utils.initAudio();
+            Actions.triggerTodayIdea();
+        });
+        $('clearAllSimsBtn').addEventListener('click', Actions.clearAllSims);
+
+        $('simsList').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            const id = parseInt(btn.dataset.id, 10);
+            if (btn.dataset.action === 'edit-sim') Actions.openEditSimModal(id);
+            else if (btn.dataset.action === 'del-sim') Actions.deleteSim(id);
+        });
+
+        $('toggleAddSimForm').addEventListener('click', () => {
+            $('addSimForm').classList.toggle('open');
+        });
+        $('addSimBtn').addEventListener('click', () => {
+            Actions.addCustomSim();
+            $('addSimForm').classList.remove('open');
+        });
+
+        $('toggleAddRelationForm').addEventListener('click', () => {
+            $('addRelationForm').classList.toggle('open');
+        });
+        $('saveRelationBtn').addEventListener('click', Actions.saveRelation);
+
+        $('relMainSim').addEventListener('change', () => {
+            state.relSelectedIds.clear();
+            View.renderRelationTargetGrid();
+        });
+
+        $('relationsManageList').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            if (btn.dataset.action === 'del-rel') Actions.confirmDeleteRelation(btn.dataset.id);
+        });
+
+        $('toggleCustomForm').addEventListener('click', () => {
+            $('customEventForm').classList.toggle('open');
+        });
+        $('customEventActionBtn').addEventListener('click', Actions.addCustomEvent);
+        $('customEventsManageList').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+            const index = parseInt(btn.dataset.index, 10);
+            if (btn.dataset.action === 'toggle-ev') Actions.toggleCustomEvent(index);
+            else if (btn.dataset.action === 'edit-ev') Actions.startEditCustomEvent(index);
+            else if (btn.dataset.action === 'del-ev') Actions.confirmDeleteCustomEvent(index);
+        });
+
+        $('enableCustomCursor').addEventListener('change', (e) => {
+            state.enableCustomCursor = e.target.checked;
+            Storage.saveCursor(state.enableCustomCursor);
+            View.applyCustomCursor(state.enableCustomCursor);
+            showNotification(state.enableCustomCursor ? "Кастомный курсор включён" : "Кастомный курсор выключен");
+        });
+
+        $('enableDefaultEvents').addEventListener('change', (e) => {
+            state.enableDefaultEvents = e.target.checked;
+            Storage.saveFlag(Config.LS_KEYS.enableDefault, state.enableDefaultEvents);
+            View.updateEventsList();
+        });
+        $('enableCustomEvents').addEventListener('change', (e) => {
+            state.enableCustomEvents = e.target.checked;
+            Storage.saveFlag(Config.LS_KEYS.enableCustom, state.enableCustomEvents);
+            View.updateEventsList();
+        });
+        $('modeCozy').addEventListener('change', (e) => {
+            state.enableCozy = e.target.checked;
+            Storage.saveFlag(Config.LS_KEYS.modeCozy, state.enableCozy);
+            View.updateEventsList();
+        });
+        $('modeChaos').addEventListener('change', (e) => {
+            state.enableChaos = e.target.checked;
+            Storage.saveFlag(Config.LS_KEYS.modeChaos, state.enableChaos);
+            View.updateEventsList();
+        });
+
+        $('presetSelect').addEventListener('change', (e) => { if (e.target.value) Actions.loadPreset(e.target.value); });
+        $('savePresetBtn').addEventListener('click', Actions.saveCurrentPreset);
+        $('deletePresetBtn').addEventListener('click', Actions.confirmDeletePreset);
+        $('exportFileBtn').addEventListener('click', Actions.exportFamilyFile);
+        $('importFileBtn').addEventListener('click', () => $('importFile').click());
+        $('importFile').addEventListener('change', Actions.importFamilyFile);
+
+        $('saveEditSimBtn').addEventListener('click', Actions.saveEditedSim);
+        $('cancelEditSimBtn').addEventListener('click', Actions.closeEditSimModal);
+
+        $('confirmYesBtn').addEventListener('click', () => {
+            if (typeof state.confirmCallback === 'function') state.confirmCallback();
+        });
+        $('confirmCancelBtn').addEventListener('click', Modals.closeConfirm);
+
+        $('openFullHistoryBtn').addEventListener('click', () => {
+            View.renderFullHistory();
+            Modals.open('fullHistoryModal');
+        });
+        $('clearHistoryBtn').addEventListener('click', Actions.clearHistory);
+
+        $('onboardingSkipBtn').addEventListener('click', View.closeOnboarding);
+        $('onboardingGoBtn').addEventListener('click', () => {
+            View.closeOnboarding();
+            View.openFamilyScreen();
+            View.switchFamilyTab('characters');
+            $('addSimForm').classList.add('open');
+            setTimeout(() => $('newSimName').focus(), 80);
+        });
+
+        $('siteLogo').addEventListener('click', () => {
+            state.logoTapCount++;
+            if (state.logoTapTimer) clearTimeout(state.logoTapTimer);
+            state.logoTapTimer = setTimeout(() => { state.logoTapCount = 0; }, 900);
+            if (state.logoTapCount >= 3) {
+                state.logoTapCount = 0;
+                View.openDebugPanel();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                Modals.handleTab(e);
+                return;
+            }
+            if (e.key !== 'Escape') return;
+            document.querySelectorAll('.modal.active').forEach(m => {
+                if (m.id === 'resultModal') Actions.closeResultModal();
+                else if (m.id === 'onboardingModal') View.closeOnboarding();
+                else Modals.close(m.id);
+            });
+            if (!state.activeModalId && $('familyScreen').classList.contains('active')) {
+                View.closeFamilyScreen();
+            }
+        });
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target !== modal) return;
+                if (modal.id === 'resultModal') Actions.closeResultModal();
+                else if (modal.id === 'onboardingModal') View.closeOnboarding();
+                else Modals.close(modal.id);
+            });
+        });
+    }
+
+    return { state, init };
+})();
+
+// Запуск
+App.init();
+</script>
+
+</body>
+</html>
