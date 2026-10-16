@@ -473,6 +473,12 @@
     .history-item .hi-cat.cat-custom { background: var(--custom); }
     .history-item .hi-cat.cat-idea   { background: var(--gold); color: #4A3A0A; }
     .history-item .hi-cat.cat-pack   { background: var(--gold); color: #4A3A0A; }
+    .history-item .hi-cat.cat-romance { background: #C97F9E; }
+    .history-item .hi-cat.cat-adventure { background: #6BB5C4; }
+    .history-item .hi-cat.cat-social { background: #D68A5A; }
+    .history-item .hi-cat.cat-mischief { background: #8F7BB3; }
+    .history-item .hi-cat.cat-conflict { background: #C76158; }
+    .history-item .hi-cat.cat-creative { background: #8A9E5A; }
     .history-item .hi-body { min-width: 0; }
     .history-item .hi-meta {
         font-size: 10.5px; color: var(--ink-soft); font-weight: 800;
@@ -557,6 +563,13 @@
     .modal-content.result-layout.cat-chaos::before  { background: var(--chaos); }
     .modal-content.result-layout.cat-custom::before { background: var(--custom); }
     .modal-content.result-layout.cat-idea::before   { background: var(--gold); }
+    .modal-content.result-layout.cat-pack::before   { background: var(--gold); }
+    .modal-content.result-layout.cat-romance::before { background: #C97F9E; }
+    .modal-content.result-layout.cat-adventure::before { background: #6BB5C4; }
+    .modal-content.result-layout.cat-social::before { background: #D68A5A; }
+    .modal-content.result-layout.cat-mischief::before { background: #8F7BB3; }
+    .modal-content.result-layout.cat-conflict::before { background: #C76158; }
+    .modal-content.result-layout.cat-creative::before { background: #8A9E5A; }
     .modal-header {
         display: flex; align-items: center; justify-content: space-between;
         gap: 10px; padding: 18px 20px 12px;
@@ -572,10 +585,22 @@
     .modal-category.is-custom { background: rgba(143,123,179,0.18); color: #6E52A8; }
     .modal-category.is-idea   { background: rgba(217,169,63,0.20); color: #8A6E10; }
     .modal-category.is-pack   { background: rgba(217,169,63,0.20); color: #8A6E10; }
+    .modal-category.is-romance { background: rgba(201,127,158,0.18); color: #A5567A; }
+    .modal-category.is-adventure { background: rgba(107,181,196,0.18); color: #3D7E8B; }
+    .modal-category.is-social { background: rgba(214,138,90,0.18); color: #A66330; }
+    .modal-category.is-mischief { background: rgba(143,123,179,0.20); color: #6E52A8; }
+    .modal-category.is-conflict { background: rgba(199,97,88,0.18); color: #A94A3F; }
+    .modal-category.is-creative { background: rgba(138,158,90,0.20); color: #66763E; }
     body.theme-dark .modal-category.is-chaos  { color: #F3A198; }
     body.theme-dark .modal-category.is-custom { color: #C7B2EE; }
     body.theme-dark .modal-category.is-idea   { color: #EBCB6E; }
     body.theme-dark .modal-category.is-pack   { color: #EBCB6E; }
+    body.theme-dark .modal-category.is-romance { color: #EFB3CB; }
+    body.theme-dark .modal-category.is-adventure { color: #9BD5DF; }
+    body.theme-dark .modal-category.is-social { color: #EBB48D; }
+    body.theme-dark .modal-category.is-mischief { color: #C7B2EE; }
+    body.theme-dark .modal-category.is-conflict { color: #F3A198; }
+    body.theme-dark .modal-category.is-creative { color: #BACF8F; }
     .close-x {
         background: none; border: none; color: var(--ink-soft); cursor: pointer;
         padding: 6px; border-radius: var(--radius-xs); display: grid;
@@ -629,6 +654,7 @@
     .modal-text {
         font-size: 14.5px; font-weight: 600; margin-bottom: 22px;
         line-height: 1.5; text-align: left; color: var(--ink);
+        white-space: pre-line;
     }
     .modal-actions {
         display: flex; gap: 10px; justify-content: stretch; flex-wrap: wrap;
@@ -1144,6 +1170,29 @@
             <path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
             <path d="M2 7l10 5 10-5M12 12v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
         </symbol>
+        <symbol id="icon-compass" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+            <polygon points="16 8 14 14 8 16 10 10 16 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></polygon>
+        </symbol>
+        <symbol id="icon-mask" viewBox="0 0 24 24">
+            <path d="M4 8c0-2 1-3 3-3s3 1 5 1 3-1 5-1 3 1 3 3c0 4-3 10-8 10S4 12 4 8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <circle cx="9" cy="11" r="1" fill="currentColor"></circle>
+            <circle cx="15" cy="11" r="1" fill="currentColor"></circle>
+        </symbol>
+        <symbol id="icon-brush" viewBox="0 0 24 24">
+            <path d="M4 20s3-1 4-5l3-3 6-8 2 2-8 6-3 3c-4 1-5 4-5 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-cup" viewBox="0 0 24 24">
+            <path d="M5 8h12v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M17 9h2a2 2 0 0 1 0 4h-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+            <path d="M7 3v2M11 3v2M15 3v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </symbol>
+        <symbol id="icon-sword" viewBox="0 0 24 24">
+            <path d="M20 4l-9 9-4 1-1 4-2 2 2-2 4-1 1-4 9-9z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24">
+            <path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1L3.2 9.4l6.1-.9L12 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+        </symbol>
     </defs>
 </svg>
 
@@ -1421,7 +1470,7 @@
                     </div>
                     <input type="file" id="importPackInput" class="visually-hidden" accept=".json,.pack">
                     <div style="font-size:11px;color:var(--ink-soft);margin-top:8px;line-height:1.5;">
-                        Поддерживается формат JSON. 
+                        Поддерживается формат JSON. Файл должен содержать поля <b>packId</b>, <b>packName</b>, <b>packVersion</b> и список <b>events</b>.
                     </div>
                 </div>
 
@@ -1628,12 +1677,64 @@
  * CONFIG
  * ============================================================ */
 const Config = (() => {
-    const CAT_ICON = { cozy: 'icon-leaf', chaos: 'icon-flame', custom: 'icon-pencil', idea: 'icon-sparkle', pack: 'icon-package' };
-    const CAT_LABEL = { cozy: 'Уютное событие', chaos: 'Драма / Форс-мажор', custom: 'Своё событие', idea: 'Совет дня', pack: 'Пак событий' };
+    // Иконки для встроенных категорий
+    const CAT_ICON = {
+        cozy: 'icon-leaf',
+        chaos: 'icon-flame',
+        custom: 'icon-pencil',
+        idea: 'icon-sparkle',
+        pack: 'icon-package',
+        // Расширенные категории для паков
+        romance: 'icon-heart',
+        adventure: 'icon-compass',
+        social: 'icon-users',
+        mischief: 'icon-mask',
+        conflict: 'icon-sword',
+        creative: 'icon-brush'
+    };
+    // Лейблы для встроенных категорий
+    const CAT_LABEL = {
+        cozy: 'Уютное событие',
+        chaos: 'Драма / Форс-мажор',
+        custom: 'Своё событие',
+        idea: 'Совет дня',
+        pack: 'Пак событий',
+        romance: 'Романтика',
+        adventure: 'Приключение',
+        social: 'Общение',
+        mischief: 'Пакости',
+        conflict: 'Конфликт',
+        creative: 'Творчество'
+    };
     const ROLE_LABEL = { adult: 'Взрослый', teen: 'Подросток', child: 'Ребёнок', elder: 'Пожилой' };
     const REL_LABEL = { partner: 'Партнёры', 'parent-child': 'Родитель — ребёнок', sibling: 'Братья/сёстры', friend: 'Друзья', rival: 'Соперники' };
+
+    // Алиасы для requires — чтобы паки могли писать по-человечески
+    const REQUIRES_ALIASES = {
+        couple: 'partner',
+        couples: 'partner',
+        spouses: 'partner',
+        lovers: 'partner',
+        friends: 'friend',
+        enemies: 'rival',
+        enemy: 'rival',
+        rivals: 'rival',
+        children: 'child',
+        kids: 'child',
+        teens: 'teen',
+        teenagers: 'teen',
+        elders: 'elder',
+        parents: 'family',
+        relatives: 'family'
+    };
+
+    // Категории — считаются «базовыми», у них своя обработка (cozy/chaos делят пул)
+    const BASE_CATEGORIES = ['cozy', 'chaos', 'custom', 'idea'];
+    // Категории, которые влияют на балансировку cozy/chaos
+    const BALANCE_CATEGORIES = ['cozy', 'chaos'];
+
     const AVATAR_COLORS = ['#5CA227','#D9A93F','#C76158','#8F7BB3','#6BB5C4','#D68A5A','#C97F9E','#8A9E5A'];
-    const SCHEMA_VERSION = 7;
+    const SCHEMA_VERSION = 8;
     const SPIN_DURATION = 4000;
     const THEMES = ['light', 'dark'];
     const INTENSITY_WEIGHTS = { 1: 10, 2: 5, 3: 2 };
@@ -1646,15 +1747,8 @@ const Config = (() => {
     const MAX_FULL_SPINS = 9;
     const PACK_FORMAT_VERSION = 1;
     const THEME_ICONS = {
-        autumn: '🍂',
-        winter: '❄️',
-        spring: '🌸',
-        summer: '☀️',
-        occult: '🔮',
-        pets: '🐾',
-        seasons: '🌦️',
-        holiday: '🎉',
-        custom: '✨'
+        autumn: '🍂', winter: '❄️', spring: '🌸', summer: '☀️',
+        occult: '🔮', pets: '🐾', seasons: '🌦️', holiday: '🎉', custom: '✨'
     };
     const LS_KEYS = {
         schema: 'sims_schema_version',
@@ -1676,12 +1770,12 @@ const Config = (() => {
         modeChaos: 'sims_modeChaos'
     };
     return {
-        CAT_ICON, CAT_LABEL, ROLE_LABEL, REL_LABEL, AVATAR_COLORS,
+        CAT_ICON, CAT_LABEL, ROLE_LABEL, REL_LABEL, REQUIRES_ALIASES,
+        BASE_CATEGORIES, BALANCE_CATEGORIES, AVATAR_COLORS,
         SCHEMA_VERSION, SPIN_DURATION, THEMES, INTENSITY_WEIGHTS,
         TARGET_COZY_RATIO, RECENT_BALANCE_WINDOW, RECENT_BAN_WINDOW,
         PARTICIPANT_COOLDOWN, SECTOR_COUNT, MIN_FULL_SPINS, MAX_FULL_SPINS,
-        PACK_FORMAT_VERSION, THEME_ICONS,
-        LS_KEYS
+        PACK_FORMAT_VERSION, THEME_ICONS, LS_KEYS
     };
 })();
 
@@ -1697,18 +1791,15 @@ const Utils = (() => {
         for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
         return Config.AVATAR_COLORS[h % Config.AVATAR_COLORS.length];
     }
-
     function initials(name) {
         const parts = String(name || '?').trim().split(/\s+/);
         const a = (parts[0] || '?')[0] || '?';
         const b = (parts[1] || '')[0] || '';
         return (a + b).toUpperCase();
     }
-
     function svgUse(id, cls) {
         return `<svg class="icon ${cls || ''}" aria-hidden="true"><use href="#${id}"></use></svg>`;
     }
-
     function escapeHtml(str) {
         return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
@@ -1744,9 +1835,7 @@ const Utils = (() => {
         if (!audioCtx) {
             try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
         }
-        if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume().catch(() => {});
-        }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
     }
     function playTickSound() {
         if (!App.state.soundEnabled || !audioCtx) return;
@@ -1778,13 +1867,11 @@ const Utils = (() => {
             });
         } catch(e) {}
     }
-
     function splitEventText(fullText) {
         const match = fullText.match(/^([^:]{2,80}):\s*(.+)$/s);
         if (match) return { title: match[1].trim(), description: match[2].trim() };
         return { title: fullText, description: '' };
     }
-
     function formatDate(ts) {
         const d = new Date(ts);
         const dd = String(d.getDate()).padStart(2, '0');
@@ -1793,7 +1880,40 @@ const Utils = (() => {
         return `${dd}.${mm}.${yyyy}`;
     }
 
-    return { $, avatarColor, initials, svgUse, escapeHtml, showNotification, initAudio, playTickSound, playWinSound, splitEventText, formatDate };
+    // Применяет алиасы к requires, возвращает массив известных ролей/связей
+    function normalizeRequires(requires) {
+        if (!Array.isArray(requires)) return [];
+        const result = [];
+        requires.forEach(req => {
+            const r = String(req).toLowerCase().trim();
+            const mapped = Config.REQUIRES_ALIASES[r] || r;
+            result.push(mapped);
+        });
+        return result;
+    }
+
+    // Возвращает иконку для категории (встроенной или кастомной)
+    function categoryIcon(category) {
+        return Config.CAT_ICON[category] || 'icon-sparkle';
+    }
+    // Возвращает читаемый лейбл категории
+    function categoryLabel(category) {
+        return Config.CAT_LABEL[category] || (category.charAt(0).toUpperCase() + category.slice(1));
+    }
+    // CSS класс для модалки/истории по категории
+    function categoryClass(category) {
+        return 'cat-' + String(category).replace(/[^a-z0-9-]/gi, '').toLowerCase();
+    }
+    // CSS класс для плашки категории в модалке
+    function categoryBadgeClass(category) {
+        return 'is-' + String(category).replace(/[^a-z0-9-]/gi, '').toLowerCase();
+    }
+
+    return {
+        $, avatarColor, initials, svgUse, escapeHtml, showNotification,
+        initAudio, playTickSound, playWinSound, splitEventText, formatDate,
+        normalizeRequires, categoryIcon, categoryLabel, categoryClass, categoryBadgeClass
+    };
 })();
 
 const $ = Utils.$;
@@ -1804,7 +1924,7 @@ const { avatarColor, initials, svgUse, escapeHtml, showNotification, splitEventT
  * ============================================================ */
 const EventsData = (() => {
     const todayIdeasPool = [
-        { text: "Приготовь вкусный ужин для всей семьи и устрой совместный уютный вечер за столом." },
+        { text: "Приготовь вкусный ужин для всей семьи и устрой совместный уютный вечер за столом без телефонов." },
         { text: "Выбери одного сима и удели весь день прокачке его текущего навыка до нового уровня." },
         { text: "Отправь сима в локацию или парк, в котором он давно не бывал, чтобы пофотографировать окрестности." },
         { text: "Позвони старому другу или родственнику и пригласи его в гости на настольные игры или чашечку кофе." },
@@ -1931,70 +2051,47 @@ const EventsData = (() => {
  * ============================================================ */
 const Storage = (() => {
     const K = Config.LS_KEYS;
-
-    function safeParse(raw, fallback) {
-        try { return JSON.parse(raw); } catch { return fallback; }
-    }
-
+    function safeParse(raw, fallback) { try { return JSON.parse(raw); } catch { return fallback; } }
     function getRaw(key) { return localStorage.getItem(key); }
     function setRaw(key, val) { localStorage.setItem(key, val); }
     function remove(key) { localStorage.removeItem(key); }
 
     function loadMembers() { return safeParse(getRaw(K.members), []) || []; }
     function saveMembers(m) { setRaw(K.members, JSON.stringify(m)); }
-
     function loadRelationships() { return safeParse(getRaw(K.relationships), []) || []; }
     function saveRelationships(r) { setRaw(K.relationships, JSON.stringify(r)); }
-
     function loadFamilyName() { return getRaw(K.familyName) || "Список персонажей"; }
     function saveFamilyName(n) { setRaw(K.familyName, n); }
-
     function loadPresets() { return safeParse(getRaw(K.presets), {}) || {}; }
     function savePresets(p) { setRaw(K.presets, JSON.stringify(p)); }
-
     function loadCustomEvents() { return safeParse(getRaw(K.customEvents), []) || []; }
     function saveCustomEvents(e) { setRaw(K.customEvents, JSON.stringify(e)); }
-
     function loadPacks() { return safeParse(getRaw(K.installedPacks), []) || []; }
     function savePacks(p) { setRaw(K.installedPacks, JSON.stringify(p)); }
-
     function loadHistory() { return safeParse(getRaw(K.history), []) || []; }
     function saveHistory(h) { setRaw(K.history, JSON.stringify(h)); }
     function clearHistory() { remove(K.history); }
-
     function loadCounter() { return parseInt(getRaw(K.counter) || '0', 10) || 0; }
     function saveCounter(n) { setRaw(K.counter, String(n)); }
-
     function loadTheme() { return getRaw(K.theme) || 'light'; }
     function saveTheme(t) { setRaw(K.theme, t); }
-
     function loadSound() { return getRaw(K.sound) !== 'false'; }
     function saveSound(v) { setRaw(K.sound, String(v)); }
-
     function loadCursor() { return getRaw(K.cursor) !== 'false'; }
     function saveCursor(v) { setRaw(K.cursor, String(v)); }
-
     function loadOnboarding() { return getRaw(K.onboarding) === 'true'; }
     function saveOnboarding() { setRaw(K.onboarding, 'true'); }
-
     function loadFlag(key, def = true) { return getRaw(key) !== String(!def); }
     function saveFlag(key, val) { setRaw(key, String(val)); }
 
     return {
         getRaw, setRaw, remove,
-        loadMembers, saveMembers,
-        loadRelationships, saveRelationships,
-        loadFamilyName, saveFamilyName,
-        loadPresets, savePresets,
-        loadCustomEvents, saveCustomEvents,
-        loadPacks, savePacks,
-        loadHistory, saveHistory, clearHistory,
-        loadCounter, saveCounter,
-        loadTheme, saveTheme,
-        loadSound, saveSound,
-        loadCursor, saveCursor,
-        loadOnboarding, saveOnboarding,
-        loadFlag, saveFlag
+        loadMembers, saveMembers, loadRelationships, saveRelationships,
+        loadFamilyName, saveFamilyName, loadPresets, savePresets,
+        loadCustomEvents, saveCustomEvents, loadPacks, savePacks,
+        loadHistory, saveHistory, clearHistory, loadCounter, saveCounter,
+        loadTheme, saveTheme, loadSound, saveSound, loadCursor, saveCursor,
+        loadOnboarding, saveOnboarding, loadFlag, saveFlag
     };
 })();
 
@@ -2003,7 +2100,6 @@ const Storage = (() => {
  * ============================================================ */
 const State = (() => {
     const K = Config.LS_KEYS;
-
     function normalizeMembers(members) {
         return (Array.isArray(members) ? members : []).map(sim => {
             if (!sim || typeof sim !== 'object') return null;
@@ -2012,7 +2108,6 @@ const State = (() => {
             return rest;
         }).filter(Boolean);
     }
-
     function normalizeCustom(item, index) {
         if (typeof item === 'string') {
             const cleanText = item.replace(/^⭐ Кастомное событие:\s*/, '');
@@ -2099,10 +2194,29 @@ const State = (() => {
             } catch (e) {}
         }
         if (savedVersion < 7) {
-            // Добавляем пустой массив паков, если ещё нет
             if (Storage.getRaw(K.installedPacks) === null) {
                 Storage.setRaw(K.installedPacks, '[]');
             }
+        }
+        if (savedVersion < 8) {
+            // Нормализуем requires у уже установленных паков — на случай, если там были алиасы
+            try {
+                const rawPacks = Storage.loadPacks();
+                const migrated = (Array.isArray(rawPacks) ? rawPacks : []).map(pack => {
+                    if (!pack || typeof pack !== 'object') return pack;
+                    if (Array.isArray(pack.events)) {
+                        pack.events = pack.events.map(ev => {
+                            if (!ev || typeof ev !== 'object') return ev;
+                            if (Array.isArray(ev.requires)) {
+                                ev.requires = Utils.normalizeRequires(ev.requires);
+                            }
+                            return ev;
+                        });
+                    }
+                    return pack;
+                });
+                Storage.setRaw(K.installedPacks, JSON.stringify(migrated));
+            } catch (e) {}
         }
         Storage.setRaw(K.schema, String(Config.SCHEMA_VERSION));
     }
@@ -2138,34 +2252,16 @@ const State = (() => {
         let soundEnabled = Storage.loadSound();
 
         return {
-            familyMembers,
-            familyRelationships,
-            currentFamilyName,
-            savedPresets,
-            customEvents,
-            installedPacks,
-            enableDefaultEvents,
-            enableCustomEvents,
-            enableCozy,
-            enableChaos,
-            enableCustomCursor,
-            historyLog,
-            currentTheme,
-            soundEnabled,
-            activeEvents: [],
-            editingCustomIndex: null,
-            editingSimId: null,
-            wheelRotation: 0,
-            isSpinning: false,
-            spinTimer: null,
-            lastSpinParticipants: null,
-            lastResultWasTodayIdea: false,
-            relSelectedIds: new Set(),
-            confirmCallback: null,
-            activeModalId: null,
-            modalLastFocus: null,
-            logoTapCount: 0,
-            logoTapTimer: null
+            familyMembers, familyRelationships, currentFamilyName,
+            savedPresets, customEvents, installedPacks,
+            enableDefaultEvents, enableCustomEvents, enableCozy, enableChaos,
+            enableCustomCursor, historyLog, currentTheme, soundEnabled,
+            activeEvents: [], editingCustomIndex: null, editingSimId: null,
+            wheelRotation: 0, isSpinning: false, spinTimer: null,
+            lastSpinParticipants: null, lastResultWasTodayIdea: false,
+            relSelectedIds: new Set(), confirmCallback: null,
+            activeModalId: null, modalLastFocus: null,
+            logoTapCount: 0, logoTapTimer: null
         };
     }
 
@@ -2178,6 +2274,12 @@ const State = (() => {
 const Packs = (() => {
     const REQUIRED_FIELDS = ['packId', 'packName', 'packVersion', 'events'];
 
+    // Категории в паках теперь могут быть ЛЮБЫМИ — не ограничиваем.
+    // Только проверяем, что это непустая строка без пробелов.
+    function isValidCategory(cat) {
+        return typeof cat === 'string' && cat.trim().length > 0 && !/\s/.test(cat);
+    }
+
     function validatePack(data) {
         if (!data || typeof data !== 'object') {
             return { ok: false, error: 'Файл не является объектом JSON' };
@@ -2187,16 +2289,12 @@ const Packs = (() => {
                 return { ok: false, error: `Отсутствует поле «${field}»` };
             }
         }
-        if (typeof data.packId !== 'string' && typeof data.packId !== 'number') {
-            return { ok: false, error: 'Поле packId должно быть строкой или числом' };
-        }
         if (data.packFormatVersion && data.packFormatVersion > Config.PACK_FORMAT_VERSION) {
             return { ok: false, error: 'Этот пак требует более новой версии колеса' };
         }
         if (!Array.isArray(data.events) || data.events.length === 0) {
             return { ok: false, error: 'В паке нет событий' };
         }
-        const validCategories = ['cozy', 'chaos', 'custom'];
         const validTargets = ['single', 'pair', 'group'];
         for (let i = 0; i < data.events.length; i++) {
             const ev = data.events[i];
@@ -2206,11 +2304,11 @@ const Packs = (() => {
             if (!ev.id || !ev.text) {
                 return { ok: false, error: `Событие #${i + 1}: нет id или текста` };
             }
-            if (!validCategories.includes(ev.category)) {
+            if (!isValidCategory(ev.category)) {
                 return { ok: false, error: `Событие #${i + 1}: неверная категория «${ev.category}»` };
             }
             if (ev.targetType && !validTargets.includes(ev.targetType)) {
-                return { ok: false, error: `Событие #${i + 1}: неверный targetType` };
+                return { ok: false, error: `Событие #${i + 1}: неверный targetType «${ev.targetType}»` };
             }
         }
         return { ok: true, pack: normalizePack(data) };
@@ -2230,13 +2328,13 @@ const Packs = (() => {
             events: data.events.map((ev, i) => ({
                 id: String(ev.id || `pack_${data.packId}_${i}`),
                 text: String(ev.text),
-                category: ev.category || 'custom',
+                category: String(ev.category).toLowerCase().trim(),
                 subcategory: ev.subcategory || 'pack',
                 intensity: ev.intensity || 1,
                 source: 'pack',
                 packId: String(data.packId),
                 targetType: ev.targetType || 'single',
-                requires: Array.isArray(ev.requires) ? ev.requires : [],
+                requires: Utils.normalizeRequires(ev.requires || []),
                 tags: Array.isArray(ev.tags) ? ev.tags : [],
                 enabled: true
             }))
@@ -2251,15 +2349,7 @@ const Packs = (() => {
         const existing = state.installedPacks.find(p => p.packId === pack.packId);
         let replaced = false;
         if (existing) {
-            existing.packName = pack.packName;
-            existing.packAuthor = pack.packAuthor;
-            existing.packVersion = pack.packVersion;
-            existing.packDescription = pack.packDescription;
-            existing.theme = pack.theme;
-            existing.icon = pack.icon;
-            existing.installedAt = pack.installedAt;
-            existing.events = pack.events;
-            existing.enabled = true;
+            Object.assign(existing, pack);
             replaced = true;
         } else {
             state.installedPacks.push(pack);
@@ -2318,7 +2408,6 @@ const Packs = (() => {
     }
 
     function importFromBundle(data) {
-        // Поддержка двух форматов: одиночный пак и bundle из нескольких
         if (data && Array.isArray(data.packs)) {
             const results = [];
             let okCount = 0;
@@ -2339,8 +2428,7 @@ const Packs = (() => {
 
     return {
         validatePack, installPack, uninstallPack, togglePack,
-        getEnabledPackEvents, exportAllPacks, importFromBundle,
-        getThemeIcon
+        getEnabledPackEvents, exportAllPacks, importFromBundle, getThemeIcon
     };
 })();
 
@@ -2355,10 +2443,7 @@ const Logic = (() => {
             (String(r.a) === b && String(r.b) === a)
         ) || null;
     }
-
-    function getActiveSims() {
-        return App.state.familyMembers.filter(s => s.active);
-    }
+    function getActiveSims() { return App.state.familyMembers.filter(s => s.active); }
 
     function participantsSatisfy(participants, requiresList) {
         if (!requiresList || requiresList.length === 0) return true;
@@ -2403,6 +2488,7 @@ const Logic = (() => {
                 );
                 if (!allConnected) return false;
             }
+            // Неизвестные requires игнорируются — событие может выпасть кому угодно
         }
         return true;
     }
@@ -2576,18 +2662,18 @@ const Logic = (() => {
         return cozy / total;
     }
 
+    // Учитываем только базовые категории (cozy/chaos) для множителей.
+    // Все остальные (romance, social, mischief...) получают множитель 1.
     function getBalanceMultipliers() {
         const ratio = getRecentCategoryRatio();
-        if (ratio === null) return { cozy: 1.2, chaos: 0.9, custom: 1 };
-        if (ratio > Config.TARGET_COZY_RATIO + 0.15) return { cozy: 0.6, chaos: 1.8, custom: 1 };
-        if (ratio < Config.TARGET_COZY_RATIO - 0.15) return { cozy: 1.8, chaos: 0.6, custom: 1 };
-        return { cozy: 1, chaos: 1, custom: 1 };
+        if (ratio === null) return { cozy: 1.2, chaos: 0.9 };
+        if (ratio > Config.TARGET_COZY_RATIO + 0.15) return { cozy: 0.6, chaos: 1.8 };
+        if (ratio < Config.TARGET_COZY_RATIO - 0.15) return { cozy: 1.8, chaos: 0.6 };
+        return { cozy: 1, chaos: 1 };
     }
-
     function getRecentEventIds() {
         return App.state.historyLog.slice(0, Config.RECENT_BAN_WINDOW).map(item => item.eventId).filter(Boolean);
     }
-
     function calcEventWeight(ev, multipliers) {
         const base = Config.INTENSITY_WEIGHTS[ev.intensity] || Config.INTENSITY_WEIGHTS[1];
         const catMul = multipliers[ev.category] || 1;
@@ -2669,7 +2755,6 @@ const Modals = (() => {
         'a[href]','button:not([disabled])','input:not([disabled])',
         'select:not([disabled])','textarea:not([disabled])','[tabindex]:not([tabindex="-1"])'
     ].join(',');
-
     function getFocusable(container) {
         return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR))
             .filter(el => el.offsetParent !== null || el === document.activeElement);
@@ -2689,7 +2774,6 @@ const Modals = (() => {
         }
         App.state.modalLastFocus = null;
     }
-
     function open(id) {
         $(id).classList.add('active');
         App.state.activeModalId = id;
@@ -2702,7 +2786,6 @@ const Modals = (() => {
             deactivateFocusTrap();
         }
     }
-
     function openConfirm(text, onYes) {
         $('confirmModalText').textContent = text;
         App.state.confirmCallback = onYes;
@@ -2712,7 +2795,6 @@ const Modals = (() => {
         close('confirmModal');
         App.state.confirmCallback = null;
     }
-
     function handleTab(e) {
         if (e.key !== 'Tab' || !App.state.activeModalId) return;
         const modal = $(App.state.activeModalId);
@@ -2728,7 +2810,6 @@ const Modals = (() => {
             if (document.activeElement === last) { e.preventDefault(); first.focus(); }
         }
     }
-
     return { open, close, openConfirm, closeConfirm, handleTab };
 })();
 
@@ -2738,19 +2819,21 @@ const Modals = (() => {
 const View = (() => {
     function setModalCategory(category) {
         const wrap = $('resultModalContent');
-        wrap.classList.remove('cat-cozy','cat-chaos','cat-custom','cat-idea');
+        // Снимаем все возможные классы категорий
+        wrap.className = wrap.className.replace(/\bcat-[a-z0-9-]+\b/gi, '').trim();
         const catEl = $('modalCategory');
-        catEl.classList.remove('is-cozy','is-chaos','is-custom','is-idea','is-pack');
+        catEl.className = catEl.className.replace(/\bis-[a-z0-9-]+\b/gi, '').trim();
+
         const use = $('modalCategoryIcon');
         const label = $('modalCategoryLabel');
-        const iconId = Config.CAT_ICON[category] || 'icon-sparkle';
+        const iconId = Utils.categoryIcon(category);
         use.setAttribute('href', '#' + iconId);
-        label.textContent = Config.CAT_LABEL[category] || 'Событие';
-        if (category === 'cozy')  { catEl.classList.add('is-cozy');   wrap.classList.add('cat-cozy'); }
-        else if (category === 'chaos') { catEl.classList.add('is-chaos');  wrap.classList.add('cat-chaos'); }
-        else if (category === 'custom'){ catEl.classList.add('is-custom'); wrap.classList.add('cat-custom'); }
-        else if (category === 'pack')  { catEl.classList.add('is-pack');   wrap.classList.add('cat-idea'); }
-        else { catEl.classList.add('is-idea'); wrap.classList.add('cat-idea'); }
+        label.textContent = Utils.categoryLabel(category);
+
+        const wrapCls = Utils.categoryClass(category);
+        const badgeCls = Utils.categoryBadgeClass(category);
+        if (wrapCls !== 'cat-') wrap.classList.add(wrapCls);
+        if (badgeCls !== 'is-') catEl.classList.add(badgeCls);
     }
 
     function renderFamily() {
@@ -2922,7 +3005,6 @@ const View = (() => {
         const container = $('packsList');
         const badge = $('packsTabBadge');
         if (!container) return;
-
         const activeCount = state.installedPacks.filter(p => p.enabled !== false).length;
         if (badge) {
             if (activeCount > 0) {
@@ -2932,19 +3014,19 @@ const View = (() => {
                 badge.classList.add('hidden');
             }
         }
-
         container.innerHTML = '';
         if (state.installedPacks.length === 0) {
             container.innerHTML = `<div class="empty-hint">Пока нет установленных паков</div>`;
             return;
         }
-
         state.installedPacks.forEach(pack => {
             const isEnabled = pack.enabled !== false;
             const icon = Packs.getThemeIcon(pack.theme, pack.icon);
             const eventsCount = pack.events ? pack.events.length : 0;
             const installedDate = pack.installedAt ? formatDate(pack.installedAt) : '—';
-
+            // Собираем список уникальных категорий в паке — для мета-строки
+            const cats = Array.from(new Set((pack.events || []).map(e => e.category))).slice(0, 4);
+            const catsStr = cats.map(c => Utils.categoryLabel(c)).join(', ');
             const card = document.createElement('div');
             card.className = 'pack-card' + (isEnabled ? '' : ' disabled');
             card.innerHTML = `
@@ -2960,6 +3042,7 @@ const View = (() => {
                         <span class="sep">·</span>
                         <span>${escapeHtml(installedDate)}</span>
                     </div>
+                    ${catsStr ? `<div class="pack-meta" style="margin-top:2px;"><span style="opacity:0.7;">${escapeHtml(catsStr)}</span></div>` : ''}
                     ${pack.packDescription ? `<div class="pack-desc">${escapeHtml(pack.packDescription)}</div>` : ''}
                 </div>
                 <div class="pack-actions">
@@ -2980,8 +3063,8 @@ const View = (() => {
 
     function historyItemHTML(item) {
         const catKey = item.eventCategory || item.categoryKey || (item.type && item.type.includes('Совет') ? 'idea' : 'custom');
-        const iconId = Config.CAT_ICON[catKey] || 'icon-sparkle';
-        const cls = 'cat-' + (catKey === 'idea' ? 'idea' : (catKey === 'chaos' ? 'chaos' : (catKey === 'cozy' ? 'cozy' : (catKey === 'pack' ? 'pack' : 'custom'))));
+        const iconId = Utils.categoryIcon(catKey);
+        const cls = Utils.categoryClass(catKey);
         return `
             <div class="history-item">
                 <div class="hi-cat ${cls}">${svgUse(iconId)}</div>
@@ -3060,7 +3143,6 @@ const View = (() => {
         renderParticipantTags(participants);
         renderRelationChips(participants, eventObj);
         Modals.open('resultModal');
-
         if (!opts.silentHistory) {
             const participantsStr = participants.map(p => p.name).join(' & ');
             Actions.addToHistory(eventObj.category, participantsStr, eventObj.text, {
@@ -3094,7 +3176,6 @@ const View = (() => {
         const iconUse = $('themeIconUse');
         if (iconUse) iconUse.setAttribute('href', theme === 'dark' ? '#icon-moon' : '#icon-sun');
     }
-
     function updateSoundIcon() {
         const btn = $('soundToggleBtn');
         const use = $('soundIconUse');
@@ -3103,7 +3184,6 @@ const View = (() => {
         btn.setAttribute('aria-pressed', String(sound));
         btn.title = sound ? 'Звук включен' : 'Звук выключен';
     }
-
     function applyCustomCursor(value) {
         document.body.classList.toggle('custom-cursor-on', value === true);
     }
@@ -3118,9 +3198,7 @@ const View = (() => {
         if (state.enableCustomEvents) {
             state.customEvents.forEach(ev => { if (ev.enabled !== false) state.activeEvents.push(ev); });
         }
-        // События из паков
         Packs.getEnabledPackEvents().forEach(ev => state.activeEvents.push(ev));
-
         if (state.activeEvents.length === 0) {
             state.activeEvents.push({
                 id: "empty_warning",
@@ -3135,7 +3213,6 @@ const View = (() => {
         document.querySelectorAll('#familyScreen .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
         document.querySelectorAll('#familyScreen .tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tabName));
     }
-
     function openFamilyScreen() {
         const screen = $('familyScreen');
         screen.classList.add('active');
@@ -3158,7 +3235,7 @@ const View = (() => {
             cozy: state.activeEvents.filter(e => e.category === 'cozy').length,
             chaos: state.activeEvents.filter(e => e.category === 'chaos').length,
             custom: state.activeEvents.filter(e => e.category === 'custom').length,
-            pack: state.activeEvents.filter(e => e.category === 'pack' || e.source === 'pack').length,
+            pack: state.activeEvents.filter(e => e.source === 'pack').length,
             defaultOn: state.enableDefaultEvents, customOn: state.enableCustomEvents,
             cozyOn: state.enableCozy, chaosOn: state.enableChaos,
             activeSims: active.length, totalSims: state.familyMembers.length,
@@ -3179,6 +3256,8 @@ const View = (() => {
         const accessibleSets = state.activeEvents.map(ev => ({ ev, participants: Logic.buildParticipantsForEvent(ev) }));
         const accessible = accessibleSets.filter(x => x.participants && x.participants.length > 0).length;
         const inaccessible = state.activeEvents.length - accessible;
+        // Список категорий в пуле
+        const cats = Array.from(new Set(state.activeEvents.map(e => e.category)));
         const rows = [
             ['Стандартные', stats.defaultOn ? 'вкл' : 'выкл'],
             ['Свои', stats.customOn ? 'вкл' : 'выкл'],
@@ -3191,7 +3270,8 @@ const View = (() => {
             ['chaos mul', multipliers.chaos.toFixed(2)],
             ['Забанено ID', banned.length ? banned.join(', ') : '—'],
             ['С участниками', accessible],
-            ['БЕЗ участников', inaccessible]
+            ['БЕЗ участников', inaccessible],
+            ['Категории в пуле', cats.join(', ') || '—']
         ];
         $('debugList').innerHTML = rows.map(([k, v]) => `
             <div class="debug-row"><span class="debug-key">${escapeHtml(k)}</span><span class="debug-val">${escapeHtml(v)}</span></div>
@@ -3229,7 +3309,6 @@ const Actions = (() => {
         Storage.saveMembers(App.state.familyMembers);
         View.renderFamily();
     }
-
     function saveRelationships() {
         Storage.saveRelationships(App.state.familyRelationships);
     }
@@ -3242,7 +3321,7 @@ const Actions = (() => {
         state.historyLog.unshift({
             id: 'id_' + Date.now() + Math.random().toString(36).slice(2, 7),
             date: dateStr, time: timeStr,
-            type: Config.CAT_LABEL[categoryKey] || categoryKey,
+            type: Utils.categoryLabel(categoryKey),
             categoryKey: categoryKey,
             sim: simInfoStr, text,
             eventId: meta.eventId || null,
@@ -3261,20 +3340,15 @@ const Actions = (() => {
         if (!mainId) { showNotification("Выберите главного персонажа"); return; }
         if (state.relSelectedIds.size === 0) { showNotification("Отметьте хотя бы одного персонажа"); return; }
         const mainIdStr = String(mainId);
-        let added = 0;
-        let updated = 0;
+        let added = 0, updated = 0;
         state.relSelectedIds.forEach(targetId => {
             if (targetId === mainIdStr) return;
             const existing = Logic.getRelationBetween(mainIdStr, targetId);
-            if (existing) {
-                existing.type = type;
-                updated++;
-            } else {
+            if (existing) { existing.type = type; updated++; }
+            else {
                 state.familyRelationships.push({
                     id: 'rel_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-                    a: mainIdStr,
-                    b: String(targetId),
-                    type
+                    a: mainIdStr, b: String(targetId), type
                 });
                 added++;
             }
@@ -3320,7 +3394,6 @@ const Actions = (() => {
         View.updateEventsList();
         View.renderCustomEventsManager();
     }
-
     function startEditCustomEvent(index) {
         const state = App.state;
         state.editingCustomIndex = index;
@@ -3329,7 +3402,6 @@ const Actions = (() => {
         $('customEventActionBtn').textContent = "Сохранить";
         $('customEventForm').classList.add('open');
     }
-
     function confirmDeleteCustomEvent(index) {
         const state = App.state;
         Modals.openConfirm("Удалить это событие?", () => {
@@ -3351,13 +3423,11 @@ const Actions = (() => {
             });
         });
     }
-
     function cancelEditCustomEvent() {
         App.state.editingCustomIndex = null;
         $('customEventText').value = '';
         $('customEventActionBtn').textContent = "Добавить в колесо";
     }
-
     function addCustomEvent() {
         const state = App.state;
         const textInput = $('customEventText');
@@ -3420,7 +3490,6 @@ const Actions = (() => {
             }
         });
     }
-
     function deleteSim(id) {
         const state = App.state;
         const simIndex = state.familyMembers.findIndex(s => s.id === id);
@@ -3453,7 +3522,6 @@ const Actions = (() => {
             });
         });
     }
-
     function clearAllSims() {
         const state = App.state;
         if (state.familyMembers.length === 0) { showNotification("Список уже пуст"); return; }
@@ -3480,7 +3548,6 @@ const Actions = (() => {
             });
         });
     }
-
     function openEditSimModal(id) {
         const state = App.state;
         const sim = state.familyMembers.find(s => s.id === id);
@@ -3530,7 +3597,6 @@ const Actions = (() => {
         nameInput.value = '';
         showNotification(`Семья «${name}» сохранена`);
     }
-
     function loadPreset(name) {
         const state = App.state;
         if (!state.savedPresets[name]) return;
@@ -3552,7 +3618,6 @@ const Actions = (() => {
         View.renderRelationshipsList();
         showNotification(`Семья «${state.currentFamilyName}» загружена`);
     }
-
     function confirmDeletePreset() {
         const state = App.state;
         const name = $('presetSelect').value;
@@ -3573,7 +3638,6 @@ const Actions = (() => {
             });
         });
     }
-
     function exportFamilyFile() {
         const state = App.state;
         const dataToExport = {
@@ -3590,7 +3654,6 @@ const Actions = (() => {
         document.body.appendChild(a); a.click(); a.remove();
         showNotification("Файл семьи скачан");
     }
-
     function importFamilyFile(event) {
         const state = App.state;
         const file = event.target.files[0];
@@ -3624,7 +3687,6 @@ const Actions = (() => {
     }
 
     // ===== PACKS ACTIONS =====
-
     function importPackFile(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -3633,7 +3695,6 @@ const Actions = (() => {
         reader.onload = (e) => {
             try {
                 const imported = JSON.parse(e.target.result);
-                // Поддержка одиночного пака и бандла паков
                 const result = Packs.importFromBundle(imported);
                 if (!result.ok) {
                     const err = result.error || (result.results && result.results.find(r => !r.ok)?.error) || "Не удалось загрузить пак";
@@ -3653,7 +3714,6 @@ const Actions = (() => {
         };
         event.target.value = '';
     }
-
     function togglePackAction(packId) {
         Packs.togglePack(packId);
         const pack = App.state.installedPacks.find(p => p.packId === packId);
@@ -3663,12 +3723,10 @@ const Actions = (() => {
                 : `Пак «${pack.packName}» включён`);
         }
     }
-
     function exportSinglePack(packId) {
         const state = App.state;
         const pack = state.installedPacks.find(p => p.packId === packId);
         if (!pack) return;
-        // Экспортируем как одиночный пак (без installedAt и enabled)
         const packData = {
             packFormatVersion: Config.PACK_FORMAT_VERSION,
             packId: pack.packId,
@@ -3679,14 +3737,9 @@ const Actions = (() => {
             theme: pack.theme,
             icon: pack.icon,
             events: pack.events.map(ev => ({
-                id: ev.id,
-                text: ev.text,
-                category: ev.category,
-                subcategory: ev.subcategory,
-                intensity: ev.intensity,
-                targetType: ev.targetType,
-                requires: ev.requires,
-                tags: ev.tags
+                id: ev.id, text: ev.text, category: ev.category,
+                subcategory: ev.subcategory, intensity: ev.intensity,
+                targetType: ev.targetType, requires: ev.requires, tags: ev.tags
             }))
         };
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(packData, null, 2));
@@ -3696,13 +3749,9 @@ const Actions = (() => {
         document.body.appendChild(a); a.click(); a.remove();
         showNotification(`Пак «${pack.packName}» скачан`);
     }
-
     function exportAllPacksAction() {
         const result = Packs.exportAllPacks();
-        if (!result.ok) {
-            showNotification(result.error, { error: true });
-            return;
-        }
+        if (!result.ok) { showNotification(result.error, { error: true }); return; }
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(result.data, null, 2));
         const a = document.createElement('a');
         a.href = dataStr;
@@ -3710,7 +3759,6 @@ const Actions = (() => {
         document.body.appendChild(a); a.click(); a.remove();
         showNotification("Все паки скачаны одним файлом");
     }
-
     function confirmDeletePack(packId) {
         const state = App.state;
         const pack = state.installedPacks.find(p => p.packId === packId);
@@ -3734,16 +3782,14 @@ const Actions = (() => {
         );
     }
 
-    // ===== SPIN / ROLL =====
-
+    // ===== SPIN =====
     function rotateWheelToSector(sectorIndex) {
         const state = App.state;
         const wheelEl = $('wheel');
         if (!wheelEl) return;
         const degreesPerSector = 360 / Config.SECTOR_COUNT;
         const targetSector = (typeof sectorIndex === 'number' && sectorIndex >= 0 && sectorIndex < Config.SECTOR_COUNT)
-            ? sectorIndex
-            : Math.floor(Math.random() * Config.SECTOR_COUNT);
+            ? sectorIndex : Math.floor(Math.random() * Config.SECTOR_COUNT);
         const sectorCenter = targetSector * degreesPerSector + degreesPerSector / 2;
         const maxJitter = degreesPerSector * 0.35;
         const jitter = (Math.random() - 0.5) * 2 * maxJitter;
@@ -3756,7 +3802,6 @@ const Actions = (() => {
         state.wheelRotation += fullSpins * 360 + diff;
         wheelEl.style.transform = `rotate(${state.wheelRotation}deg)`;
     }
-
     function triggerEvent(forcedSimId = null, opts = {}) {
         const state = App.state;
         if (state.isSpinning) {
@@ -3803,7 +3848,6 @@ const Actions = (() => {
             }
         }, Config.SPIN_DURATION + 500);
     }
-
     function rerollSameParticipants() {
         const state = App.state;
         if (state.isSpinning) {
@@ -3834,7 +3878,6 @@ const Actions = (() => {
             $('rerollBtn').disabled = false;
         }, Config.SPIN_DURATION);
     }
-
     function closeResultModal() {
         const state = App.state;
         Modals.close('resultModal');
@@ -3848,7 +3891,6 @@ const Actions = (() => {
         state.lastSpinParticipants = null;
         state.lastResultWasTodayIdea = false;
     }
-
     function triggerTodayIdea() {
         const state = App.state;
         const idea = EventsData.todayIdeasPool[Math.floor(Math.random() * EventsData.todayIdeasPool.length)];
@@ -3868,13 +3910,11 @@ const Actions = (() => {
         state.lastSpinParticipants = null;
         Utils.playWinSound();
     }
-
     function bumpCounter() {
         const n = Storage.loadCounter() + 1;
         Storage.saveCounter(n);
         return n;
     }
-
     function clearHistory() {
         const state = App.state;
         const snapshot = JSON.parse(JSON.stringify(state.historyLog));
@@ -3915,7 +3955,6 @@ const Actions = (() => {
  * ============================================================ */
 const App = (() => {
     const state = State.buildInitialState();
-
     function init() {
         View.renderFamily();
         View.updateEventsList();
@@ -3925,26 +3964,21 @@ const App = (() => {
         View.updatePresetDropdown();
         View.updateRelationForm();
         View.renderRelationshipsList();
-
         View.applyTheme(state.currentTheme);
         View.updateSoundIcon();
         View.applyCustomCursor(state.enableCustomCursor);
-
         $('enableDefaultEvents').checked = state.enableDefaultEvents;
         $('enableCustomEvents').checked = state.enableCustomEvents;
         $('modeCozy').checked = state.enableCozy;
         $('modeChaos').checked = state.enableChaos;
         $('enableCustomCursor').checked = state.enableCustomCursor;
-
         if (state.familyMembers.length === 0) {
             setTimeout(View.maybeShowOnboarding, 400);
         } else {
             Storage.saveOnboarding();
         }
-
         bindEvents();
     }
-
     function bindEvents() {
         $('soundToggleBtn').addEventListener('click', () => {
             Utils.initAudio();
@@ -3964,14 +3998,11 @@ const App = (() => {
         $('rerollBtn').addEventListener('click', () => { Utils.initAudio(); Actions.rerollSameParticipants(); });
         $('closeFullHistoryBtn').addEventListener('click', () => Modals.close('fullHistoryModal'));
         $('closeDebugBtn').addEventListener('click', () => Modals.close('debugModal'));
-
         $('familyStripBtn').addEventListener('click', View.openFamilyScreen);
         $('familyBackBtn').addEventListener('click', View.closeFamilyScreen);
-
         document.querySelectorAll('#familyScreen .tab').forEach(tab => {
             tab.addEventListener('click', () => View.switchFamilyTab(tab.dataset.tab));
         });
-
         $('spinBtn').addEventListener('click', () => {
             Utils.initAudio();
             Actions.triggerEvent();
@@ -3981,7 +4012,6 @@ const App = (() => {
             Actions.triggerTodayIdea();
         });
         $('clearAllSimsBtn').addEventListener('click', Actions.clearAllSims);
-
         $('simsList').addEventListener('click', (e) => {
             const btn = e.target.closest('button[data-action]');
             if (!btn) return;
@@ -3989,7 +4019,6 @@ const App = (() => {
             if (btn.dataset.action === 'edit-sim') Actions.openEditSimModal(id);
             else if (btn.dataset.action === 'del-sim') Actions.deleteSim(id);
         });
-
         $('toggleAddSimForm').addEventListener('click', () => {
             $('addSimForm').classList.toggle('open');
         });
@@ -3997,23 +4026,19 @@ const App = (() => {
             Actions.addCustomSim();
             $('addSimForm').classList.remove('open');
         });
-
         $('toggleAddRelationForm').addEventListener('click', () => {
             $('addRelationForm').classList.toggle('open');
         });
         $('saveRelationBtn').addEventListener('click', Actions.saveRelation);
-
         $('relMainSim').addEventListener('change', () => {
             state.relSelectedIds.clear();
             View.renderRelationTargetGrid();
         });
-
         $('relationsManageList').addEventListener('click', (e) => {
             const btn = e.target.closest('button[data-action]');
             if (!btn) return;
             if (btn.dataset.action === 'del-rel') Actions.confirmDeleteRelation(btn.dataset.id);
         });
-
         $('toggleCustomForm').addEventListener('click', () => {
             $('customEventForm').classList.toggle('open');
         });
@@ -4026,15 +4051,12 @@ const App = (() => {
             else if (btn.dataset.action === 'edit-ev') Actions.startEditCustomEvent(index);
             else if (btn.dataset.action === 'del-ev') Actions.confirmDeleteCustomEvent(index);
         });
-
-        // ===== PACKS =====
         $('toggleImportPackForm').addEventListener('click', () => {
             $('importPackForm').classList.toggle('open');
         });
         $('importPackBtn').addEventListener('click', () => $('importPackInput').click());
         $('importPackInput').addEventListener('change', Actions.importPackFile);
         $('exportPackBtn').addEventListener('click', Actions.exportAllPacksAction);
-
         $('packsList').addEventListener('click', (e) => {
             const btn = e.target.closest('button[data-action]');
             if (!btn) return;
@@ -4043,14 +4065,12 @@ const App = (() => {
             else if (btn.dataset.action === 'del-pack') Actions.confirmDeletePack(packId);
             else if (btn.dataset.action === 'export-pack') Actions.exportSinglePack(packId);
         });
-
         $('enableCustomCursor').addEventListener('change', (e) => {
             state.enableCustomCursor = e.target.checked;
             Storage.saveCursor(state.enableCustomCursor);
             View.applyCustomCursor(state.enableCustomCursor);
             showNotification(state.enableCustomCursor ? "Кастомный курсор включён" : "Кастомный курсор выключен");
         });
-
         $('enableDefaultEvents').addEventListener('change', (e) => {
             state.enableDefaultEvents = e.target.checked;
             Storage.saveFlag(Config.LS_KEYS.enableDefault, state.enableDefaultEvents);
@@ -4071,28 +4091,23 @@ const App = (() => {
             Storage.saveFlag(Config.LS_KEYS.modeChaos, state.enableChaos);
             View.updateEventsList();
         });
-
         $('presetSelect').addEventListener('change', (e) => { if (e.target.value) Actions.loadPreset(e.target.value); });
         $('savePresetBtn').addEventListener('click', Actions.saveCurrentPreset);
         $('deletePresetBtn').addEventListener('click', Actions.confirmDeletePreset);
         $('exportFileBtn').addEventListener('click', Actions.exportFamilyFile);
         $('importFileBtn').addEventListener('click', () => $('importFile').click());
         $('importFile').addEventListener('change', Actions.importFamilyFile);
-
         $('saveEditSimBtn').addEventListener('click', Actions.saveEditedSim);
         $('cancelEditSimBtn').addEventListener('click', Actions.closeEditSimModal);
-
         $('confirmYesBtn').addEventListener('click', () => {
             if (typeof state.confirmCallback === 'function') state.confirmCallback();
         });
         $('confirmCancelBtn').addEventListener('click', Modals.closeConfirm);
-
         $('openFullHistoryBtn').addEventListener('click', () => {
             View.renderFullHistory();
             Modals.open('fullHistoryModal');
         });
         $('clearHistoryBtn').addEventListener('click', Actions.clearHistory);
-
         $('onboardingSkipBtn').addEventListener('click', View.closeOnboarding);
         $('onboardingGoBtn').addEventListener('click', () => {
             View.closeOnboarding();
@@ -4101,7 +4116,6 @@ const App = (() => {
             $('addSimForm').classList.add('open');
             setTimeout(() => $('newSimName').focus(), 80);
         });
-
         $('siteLogo').addEventListener('click', () => {
             state.logoTapCount++;
             if (state.logoTapTimer) clearTimeout(state.logoTapTimer);
@@ -4111,12 +4125,8 @@ const App = (() => {
                 View.openDebugPanel();
             }
         });
-
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Tab') {
-                Modals.handleTab(e);
-                return;
-            }
+            if (e.key === 'Tab') { Modals.handleTab(e); return; }
             if (e.key !== 'Escape') return;
             document.querySelectorAll('.modal.active').forEach(m => {
                 if (m.id === 'resultModal') Actions.closeResultModal();
@@ -4127,7 +4137,6 @@ const App = (() => {
                 View.closeFamilyScreen();
             }
         });
-
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target !== modal) return;
@@ -4137,7 +4146,6 @@ const App = (() => {
             });
         });
     }
-
     return { state, init };
 })();
 
